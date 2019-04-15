@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,源码," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我们在Activity创建的时候，都用调用setContentView()函数来设置界面，下面我们通过源码来分析setContentView()的流程。我们先看Activity里面的setContentView进去查看：12345678910111213/**     * Set the activity content from a layout resource.  The resource">
+<meta name="keywords" content="android,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android setContentView()源码流程分析">
+<meta property="og:url" content="http://www.zengzhaowen.cn/Android setContentView()源码流程分析.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="我们在Activity创建的时候，都用调用setContentView()函数来设置界面，下面我们通过源码来分析setContentView()的流程。我们先看Activity里面的setContentView进去查看：12345678910111213/**     * Set the activity content from a layout resource.  The resource">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4658633-5bfed9f10177886b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.093Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android setContentView()源码流程分析">
+<meta name="twitter:description" content="我们在Activity创建的时候，都用调用setContentView()函数来设置界面，下面我们通过源码来分析setContentView()的流程。我们先看Activity里面的setContentView进去查看：12345678910111213/**     * Set the activity content from a layout resource.  The resource">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4658633-5bfed9f10177886b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/Android setContentView()源码流程分析.html"/>
+
+
+
+
+
+  <title>Android setContentView()源码流程分析 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/Android setContentView()源码流程分析.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android setContentView()源码流程分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-17T09:52:57+08:00">
+                2018-03-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Android setContentView()源码流程分析.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Android setContentView()源码流程分析.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,793字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  22分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们在<code>Activity</code>创建的时候，都用调用<code>setContentView()</code>函数来设置界面，下面我们通过源码来分析<code>setContentView()</code>的流程。<br>我们先看<code>Activity</code>里面的<code>setContentView</code>进去查看：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Set the activity content from a layout resource.  The resource will be</span></span><br><span class="line"><span class="comment">     * inflated, adding all top-level views to the activity.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> layoutResID Resource ID to be inflated.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> #setContentView(android.view.View)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> #setContentView(android.view.View, android.view.ViewGroup.LayoutParams)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(@LayoutRes <span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">        getWindow().setContentView(layoutResID);</span><br><span class="line">        initWindowDecorActionBar();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>函数如下:<br>我们再次点击<code>setContentView</code>进去查看发现是一个<code>Window</code>的抽象方法,所以我们要找到对应的实现类，我们点击<code>getWindow()</code>进去查看最终得到:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mWindow = <span class="keyword">new</span> PhoneWindow(<span class="keyword">this</span>, window);</span><br></pre></td></tr></table></figure></p>
+<p>我们得到了他的实现类<code>PhoneWindow</code>，然后在<code>PhoneWindow</code>找到<code>setContentView</code>函数:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window</span></span><br><span class="line">        <span class="comment">// decor, when theme attributes and the like are crystalized. Do not check the feature</span></span><br><span class="line">        <span class="comment">// before this happens.</span></span><br><span class="line">        <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            installDecor();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">            mContentParent.removeAllViews();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">            <span class="keyword">final</span> Scene newScene = Scene.getSceneForLayout(mContentParent, layoutResID,</span><br><span class="line">                    getContext());</span><br><span class="line">            transitionTo(newScene);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">        &#125;</span><br><span class="line">        mContentParent.requestApplyInsets();</span><br><span class="line">        <span class="keyword">final</span> Callback cb = getCallback();</span><br><span class="line">        <span class="keyword">if</span> (cb != <span class="keyword">null</span> &amp;&amp; !isDestroyed()) &#123;</span><br><span class="line">            cb.onContentChanged();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">        setContentView(view, <span class="keyword">new</span> ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(View view, ViewGroup.LayoutParams params)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window</span></span><br><span class="line">        <span class="comment">// decor, when theme attributes and the like are crystalized. Do not check the feature</span></span><br><span class="line">        <span class="comment">// before this happens.</span></span><br><span class="line">        <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            installDecor();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">            mContentParent.removeAllViews();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">            view.setLayoutParams(params);</span><br><span class="line">            <span class="keyword">final</span> Scene newScene = <span class="keyword">new</span> Scene(mContentParent, view);</span><br><span class="line">            transitionTo(newScene);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            mContentParent.addView(view, params);</span><br><span class="line">        &#125;</span><br><span class="line">        mContentParent.requestApplyInsets();</span><br><span class="line">        <span class="keyword">final</span> Callback cb = getCallback();</span><br><span class="line">        <span class="keyword">if</span> (cb != <span class="keyword">null</span> &amp;&amp; !isDestroyed()) &#123;</span><br><span class="line">            cb.onContentChanged();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以发现都是把这个<code>View</code>加到了<code>mContentParent</code>这个<code>ViewGroup</code>里面去了，这个<code>mContentParent</code>是什么呢？我们急着看源码,发现在<code>installDecor()</code>方法里面:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mContentParent = generateLayout(mDecor);</span><br></pre></td></tr></table></figure></p>
+<p>继续点进去:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ViewGroup <span class="title">generateLayout</span><span class="params">(DecorView decor)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Apply data from current theme.</span></span><br><span class="line"></span><br><span class="line">        TypedArray a = getWindowStyle();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">false</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"From style:"</span>);</span><br><span class="line">            String s = <span class="string">"Attrs:"</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; R.styleable.Window.length; i++) &#123;</span><br><span class="line">                s = s + <span class="string">" "</span> + Integer.toHexString(R.styleable.Window[i</span><br><span class="line">![无标题.png](http:<span class="comment">//upload-images.jianshu.io/upload_images/4658633-9a3a758cbac9f8aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span></span><br><span class="line">]) + <span class="string">"="</span></span><br><span class="line">                        + a.getString(i);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(s);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//根据style属性做一些列的判断...</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">//在做一些列的判断得到layoutResource</span></span><br><span class="line">        layoutResource=.... <span class="comment">//这里用R.layout.screen_simple来分析</span></span><br><span class="line">       </span><br><span class="line">        mDecor.startChanging();</span><br><span class="line"></span><br><span class="line">        View in = mLayoutInflater.inflate(layoutResource, <span class="keyword">null</span>);</span><br><span class="line">        decor.addView(in, <span class="keyword">new</span> ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));</span><br><span class="line">        mContentRoot = (ViewGroup) in;</span><br><span class="line"></span><br><span class="line">        ViewGroup contentParent = (ViewGroup)findViewById(ID_ANDROID_CONTENT);</span><br><span class="line">        <span class="keyword">if</span> (contentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Window couldn't find content container view"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">  </span><br><span class="line">       <span class="comment">//......</span></span><br><span class="line"></span><br><span class="line">        mDecor.finishChanging();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> contentParent;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>从这段代码可以知道，通过一系列的判断，得到相对于的<code>layoutResource</code>,然后通过<code>mLayoutInflater.inflate(layoutResource, null);</code>得到这个<code>View</code>,将其加入到<code>mDecor</code>,其中<code>mContentParent</code>最终为一个<code>ID_ANDROID_CONTENT = com.android.internal.R.id.content</code>的一个<code>ViewGroup</code>，在这里我们拿<code>R.layout.screen_simple</code>布局来看看<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">/* //device/apps/common/assets/res/layout/screen_simple.xml</span></span><br><span class="line"><span class="comment">**</span></span><br><span class="line"><span class="comment">** Copyright 2006, The Android Open Source Project</span></span><br><span class="line"><span class="comment">**</span></span><br><span class="line"><span class="comment">** Licensed under the Apache License, Version 2.0 (the "License"); </span></span><br><span class="line"><span class="comment">** you may not use this file except in compliance with the License. </span></span><br><span class="line"><span class="comment">** You may obtain a copy of the License at </span></span><br><span class="line"><span class="comment">**</span></span><br><span class="line"><span class="comment">**     http://www.apache.org/licenses/LICENSE-2.0 </span></span><br><span class="line"><span class="comment">**</span></span><br><span class="line"><span class="comment">** Unless required by applicable law or agreed to in writing, software </span></span><br><span class="line"><span class="comment">** distributed under the License is distributed on an "AS IS" BASIS, </span></span><br><span class="line"><span class="comment">** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. </span></span><br><span class="line"><span class="comment">** See the License for the specific language governing permissions and </span></span><br><span class="line"><span class="comment">** limitations under the License.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">This is an optimized layout for a screen, with the minimum set of features</span></span><br><span class="line"><span class="comment">enabled.</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:fitsSystemWindows</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:orientation</span>=<span class="string">"vertical"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ViewStub</span> <span class="attr">android:id</span>=<span class="string">"@+id/action_mode_bar_stub"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:inflatedId</span>=<span class="string">"@+id/action_mode_bar"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:layout</span>=<span class="string">"@layout/action_mode_bar"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:theme</span>=<span class="string">"?attr/actionBarTheme"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">FrameLayout</span></span></span><br><span class="line"><span class="tag">         <span class="attr">android:id</span>=<span class="string">"@android:id/content"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">android:foregroundInsidePadding</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">android:foregroundGravity</span>=<span class="string">"fill_horizontal|top"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">android:foreground</span>=<span class="string">"?android:attr/windowContentOverlay"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>可以知道这个<code>mContentParent</code>为一个<code>FrameLayout</code>，这时候我们应该知道，我们<code>setContentView</code>其实就是把那个<code>View</code>加入到一个<code>id</code>为<code>com.android.internal.R.id.content</code>的<code>FrameLayout</code>里面，而这个<code>id</code>为<code>com.android.internal.R.id.content</code>的<code>FrameLayout</code>有<code>parentView</code>又是加在<code>mDecor</code>里面，我们来看看这个<code>mDecor</code>是什么，在<code>installDecor()</code>函数中:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (mDecor == <span class="keyword">null</span>) &#123;</span><br><span class="line">      mDecor = generateDecor();</span><br><span class="line">      mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);</span><br><span class="line">      mDecor.setIsRootNamespace(<span class="keyword">true</span>);</span><br><span class="line">      <span class="keyword">if</span> (!mInvalidatePanelMenuPosted &amp;&amp; mInvalidatePanelMenuFeatures != <span class="number">0</span>) &#123;</span><br><span class="line">          mDecor.postOnAnimation(mInvalidatePanelMenuRunnable);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">protected DecorView generateDecor() &#123;</span><br><span class="line">       return new DecorView(getContext(), -1);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>可以发现这个<code>mDecor</code>就是一个<code>new</code>的一个<code>DecorView</code>,我们继续看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private final class DecorView extends FrameLayout</span><br></pre></td></tr></table></figure></p>
+<p>这个<code>DecorView</code>其实也是一个<code>FrameLayout</code>,这个时候我们就可以得到这样一张图:</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4658633-5bfed9f10177886b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>在这基础上我们看<code>AppCompatActivity</code>的<code>setContentView</code>函数:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(@LayoutRes <span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">      getDelegate().setContentView(layoutResID);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> The &#123;<span class="doctag">@link</span> AppCompatDelegate&#125; being used by this Activity.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@NonNull</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> AppCompatDelegate <span class="title">getDelegate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (mDelegate == <span class="keyword">null</span>) &#123;</span><br><span class="line">          mDelegate = AppCompatDelegate.create(<span class="keyword">this</span>, <span class="keyword">this</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> mDelegate;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Create a &#123;<span class="doctag">@link</span> android.support.v7.app.AppCompatDelegate&#125; to use with &#123;<span class="doctag">@code</span> activity&#125;.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> callback An optional callback for AppCompat specific events</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> AppCompatDelegate <span class="title">create</span><span class="params">(Activity activity, AppCompatCallback callback)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> create(activity, activity.getWindow(), callback);</span><br><span class="line">  &#125;</span><br><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> AppCompatDelegate <span class="title">create</span><span class="params">(Context context, Window window,</span></span></span><br><span class="line"><span class="function"><span class="params">          AppCompatCallback callback)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">final</span> <span class="keyword">int</span> sdk = Build.VERSION.SDK_INT;</span><br><span class="line">      <span class="keyword">if</span> (sdk &gt;= <span class="number">23</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> AppCompatDelegateImplV23(context, window, callback);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sdk &gt;= <span class="number">14</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> AppCompatDelegateImplV14(context, window, callback);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sdk &gt;= <span class="number">11</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> AppCompatDelegateImplV11(context, window, callback);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> AppCompatDelegateImplV7(context, window, callback);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到最终进入到了<code>AppCompatDelegate</code>的<code>create</code>方法,这个函数通过<code>new  23  14 11  7</code>就可以看出是为了兼容不同的版本,我们点进去就可以看到<code>AppCompatDelegateImplV23</code>–&gt;<code>AppCompatDelegateImplV14</code>–&gt;<code>AppCompatDelegateImplV11</code>–&gt;<code>AppCompatDelegateImplV7</code>依次继承的，我们最终查看到<code>AppCompatDelegateImplV7</code>的<code>setContentView</code>函数:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">        ensureSubDecor();</span><br><span class="line">        ViewGroup contentParent = (ViewGroup) mSubDecor.findViewById(android.R.id.content);</span><br><span class="line">        contentParent.removeAllViews();</span><br><span class="line">        contentParent.addView(v);</span><br><span class="line">        mOriginalWindowCallback.onContentChanged();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> resId)</span> </span>&#123;</span><br><span class="line">        ensureSubDecor();</span><br><span class="line">        ViewGroup contentParent = (ViewGroup) mSubDecor.findViewById(android.R.id.content);</span><br><span class="line">        contentParent.removeAllViews();</span><br><span class="line">        LayoutInflater.from(mContext).inflate(resId, contentParent);</span><br><span class="line">        mOriginalWindowCallback.onContentChanged();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(View v, ViewGroup.LayoutParams lp)</span> </span>&#123;</span><br><span class="line">        ensureSubDecor();</span><br><span class="line">        ViewGroup contentParent = (ViewGroup) mSubDecor.findViewById(android.R.id.content);</span><br><span class="line">        contentParent.removeAllViews();</span><br><span class="line">        contentParent.addView(v, lp);</span><br><span class="line">        mOriginalWindowCallback.onContentChanged();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>其实也就是把得到的<code>view</code>添加到<code>contentParent</code>里面。<br>比如说，在<code>android21</code>以前一般是使用控件<code>TextView</code>等控件，在<code>21</code>以后出了相关的<code>AppCompat</code>控件，这个时候怎么让开发者写的<code>TextView</code>自动转换为<code>AppCompatTextView</code>呢？所以在<code>AppCompatDelegateImplV7</code>重写了这样一个函数函数:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">installViewFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       LayoutInflater layoutInflater = LayoutInflater.from(mContext);</span><br><span class="line">       <span class="keyword">if</span> (layoutInflater.getFactory() == <span class="keyword">null</span>) &#123;</span><br><span class="line">           LayoutInflaterCompat.setFactory(layoutInflater, <span class="keyword">this</span>);</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">if</span> (!(LayoutInflaterCompat.getFactory(layoutInflater)</span><br><span class="line">                   <span class="keyword">instanceof</span> AppCompatDelegateImplV7)) &#123;</span><br><span class="line">               Log.i(TAG, <span class="string">"The Activity's LayoutInflater already has a Factory installed"</span></span><br><span class="line">                       + <span class="string">" so we can not install AppCompat's"</span>);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们查找<code>abstract</code>类，可以查看着方法注释:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Installs AppCompat's &#123;<span class="doctag">@link</span> android.view.LayoutInflater&#125; Factory so that it can replace</span></span><br><span class="line"><span class="comment">     * the framework widgets with compatible tinted versions. This should be called before</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@code</span> super.onCreate()&#125; as so:</span></span><br><span class="line"><span class="comment">     * &lt;pre class="prettyprint"&gt;</span></span><br><span class="line"><span class="comment">     * protected void onCreate(Bundle savedInstanceState) &#123;</span></span><br><span class="line"><span class="comment">     *     getDelegate().installViewFactory();</span></span><br><span class="line"><span class="comment">     *     getDelegate().onCreate(savedInstanceState);</span></span><br><span class="line"><span class="comment">     *     super.onCreate(savedInstanceState);</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     *     // ...</span></span><br><span class="line"><span class="comment">     * &#125;</span></span><br><span class="line"><span class="comment">     * &lt;/pre&gt;</span></span><br><span class="line"><span class="comment">     * If you are using your own &#123;<span class="doctag">@link</span> android.view.LayoutInflater.Factory Factory&#125; or</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@link</span> android.view.LayoutInflater.Factory2 Factory2&#125; then you can omit this call, and instead call</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@link</span> #createView(android.view.View, String, android.content.Context, android.util.AttributeSet)&#125;</span></span><br><span class="line"><span class="comment">     * from your factory to return any compatible widgets.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">installViewFactory</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>从意思可以看出，就是说我们可以通过这个方法然后给<code>LayoutInflater</code>设置一个<code>Factory</code>,这个<code>Factory</code>是干嘛的呢？从我的<a href="http://www.jianshu.com/p/f2f56526a930" target="_blank" rel="noopener">上篇文章</a>就知道，这个<code>Factory</code>是在<code>LayoutInflater</code>执行<code>inflate</code>函数生成<code>View</code>的时候用的，这个<code>Factory</code>可以拦截<code>View</code>的生成，通过这个<code>Factory</code>我们可以自己给<code>inflate</code>写一套解析<code>layout.xml</code>的规则，在换肤的时候就可以用到这个。我们实现<code>LayoutInflaterFactory</code>接口，重写<code>onCreateView</code>方法，就可以拦截相应的信息进行解析。比如在<code>AppCompatDelegateImplV7</code>类中:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * From &#123;<span class="doctag">@link</span> android.support.v4.view.LayoutInflaterFactory&#125;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> View <span class="title">onCreateView</span><span class="params">(View parent, String name,</span></span></span><br><span class="line"><span class="function"><span class="params">            Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// First let the Activity's Factory try and inflate the view</span></span><br><span class="line">        <span class="keyword">final</span> View view = callActivityOnCreateView(parent, name, context, attrs);</span><br><span class="line">        <span class="keyword">if</span> (view != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> view;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If the Factory didn't handle it, let our createView() method try</span></span><br><span class="line">        <span class="keyword">return</span> createView(parent, name, context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      <span class="function">View <span class="title">callActivityOnCreateView</span><span class="params">(View parent, String name, Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Let the Activity's LayoutInflater.Factory try and handle it</span></span><br><span class="line">        <span class="keyword">if</span> (mOriginalWindowCallback <span class="keyword">instanceof</span> LayoutInflater.Factory) &#123;</span><br><span class="line">            <span class="keyword">final</span> View result = ((LayoutInflater.Factory) mOriginalWindowCallback)</span><br><span class="line">                    .onCreateView(name, context, attrs);</span><br><span class="line">            <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> View <span class="title">createView</span><span class="params">(View parent, <span class="keyword">final</span> String name, @NonNull Context context,</span></span></span><br><span class="line"><span class="function"><span class="params">            @NonNull AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">boolean</span> isPre21 = Build.VERSION.SDK_INT &lt; <span class="number">21</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mAppCompatViewInflater == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mAppCompatViewInflater = <span class="keyword">new</span> AppCompatViewInflater();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// We only want the View to inherit its context if we're running pre-v21</span></span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">boolean</span> inheritContext = isPre21 &amp;&amp; shouldInheritContext((ViewParent) parent);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> mAppCompatViewInflater.createView(parent, name, context, attrs, inheritContext,</span><br><span class="line">                isPre21, <span class="comment">/* Only read android:theme pre-L (L+ handles this anyway) */</span></span><br><span class="line">                <span class="keyword">true</span> <span class="comment">/* Read read app:theme as a fallback at all times for legacy reasons */</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>它拦截下了<code>layoutt.xml</code>的解析，自己写了一个解析类<code>AppCompatViewInflater</code>，来解析<code>View</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Copyright (C) 2014 The Android Open Source Project</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Licensed under the Apache License, Version 2.0 (the "License");</span></span><br><span class="line"><span class="comment"> * you may not use this file except in compliance with the License.</span></span><br><span class="line"><span class="comment"> * You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"> * distributed under the License is distributed on an "AS IS" BASIS,</span></span><br><span class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"> * limitations under the License.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> android.support.v7.app;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.content.Context;</span><br><span class="line"><span class="keyword">import</span> android.content.ContextWrapper;</span><br><span class="line"><span class="keyword">import</span> android.content.res.TypedArray;</span><br><span class="line"><span class="keyword">import</span> android.os.Build;</span><br><span class="line"><span class="keyword">import</span> android.support.annotation.NonNull;</span><br><span class="line"><span class="keyword">import</span> android.support.annotation.Nullable;</span><br><span class="line"><span class="keyword">import</span> android.support.v4.util.ArrayMap;</span><br><span class="line"><span class="keyword">import</span> android.support.v4.view.ViewCompat;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.appcompat.R;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.view.ContextThemeWrapper;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatAutoCompleteTextView;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatButton;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatCheckBox;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatCheckedTextView;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatEditText;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatImageButton;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatImageView;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatMultiAutoCompleteTextView;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatRadioButton;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatRatingBar;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatSeekBar;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatSpinner;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.widget.AppCompatTextView;</span><br><span class="line"><span class="keyword">import</span> android.util.AttributeSet;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"><span class="keyword">import</span> android.view.InflateException;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Constructor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationTargetException;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * This class is responsible for manually inflating our tinted widgets which are used on devices</span></span><br><span class="line"><span class="comment"> * running &#123;<span class="doctag">@link</span> android.os.Build.VERSION_CODES#KITKAT KITKAT&#125; or below. As such, this class</span></span><br><span class="line"><span class="comment"> * should only be used when running on those devices.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;This class two main responsibilities: the first is to 'inject' our tinted views in place of</span></span><br><span class="line"><span class="comment"> * the framework versions in layout inflation; the second is backport the &#123;<span class="doctag">@code</span> android:theme&#125;</span></span><br><span class="line"><span class="comment"> * functionality for any inflated widgets. This include theme inheritance from it's parent.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppCompatViewInflater</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Class&lt;?&gt;[] sConstructorSignature = <span class="keyword">new</span> Class[]&#123;</span><br><span class="line">            Context.class, AttributeSet.class&#125;;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span>[] sOnClickAttrs = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;android.R.attr.onClick&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] sClassPrefixList = &#123;</span><br><span class="line">            <span class="string">"android.widget."</span>,</span><br><span class="line">            <span class="string">"android.view."</span>,</span><br><span class="line">            <span class="string">"android.webkit."</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String LOG_TAG = <span class="string">"AppCompatViewInflater"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, Constructor&lt;? extends View&gt;&gt; sConstructorMap</span><br><span class="line">            = <span class="keyword">new</span> ArrayMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Object[] mConstructorArgs = <span class="keyword">new</span> Object[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> View <span class="title">createView</span><span class="params">(View parent, <span class="keyword">final</span> String name, @NonNull Context context,</span></span></span><br><span class="line"><span class="function"><span class="params">            @NonNull AttributeSet attrs, <span class="keyword">boolean</span> inheritContext,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">boolean</span> readAndroidTheme, <span class="keyword">boolean</span> readAppTheme)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Context originalContext = context;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// We can emulate Lollipop's android:theme attribute propagating down the view hierarchy</span></span><br><span class="line">        <span class="comment">// by using the parent's context</span></span><br><span class="line">        <span class="keyword">if</span> (inheritContext &amp;&amp; parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">            context = parent.getContext();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (readAndroidTheme || readAppTheme) &#123;</span><br><span class="line">            <span class="comment">// We then apply the theme on the context, if specified</span></span><br><span class="line">            context = themifyContext(context, attrs, readAndroidTheme, readAppTheme);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        View view = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// We need to 'inject' our tint aware Views in place of the standard framework versions</span></span><br><span class="line">        <span class="keyword">switch</span> (name) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"TextView"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatTextView(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"ImageView"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatImageView(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"Button"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatButton(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"EditText"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatEditText(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"Spinner"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatSpinner(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"ImageButton"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatImageButton(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"CheckBox"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatCheckBox(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"RadioButton"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatRadioButton(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"CheckedTextView"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatCheckedTextView(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"AutoCompleteTextView"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatAutoCompleteTextView(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"MultiAutoCompleteTextView"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatMultiAutoCompleteTextView(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"RatingBar"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatRatingBar(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"SeekBar"</span>:</span><br><span class="line">                view = <span class="keyword">new</span> AppCompatSeekBar(context, attrs);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (view == <span class="keyword">null</span> &amp;&amp; originalContext != context) &#123;</span><br><span class="line">            <span class="comment">// If the original context does not equal our themed context, then we need to manually</span></span><br><span class="line">            <span class="comment">// inflate it using the name so that android:theme takes effect.</span></span><br><span class="line">            view = createViewFromTag(context, name, attrs);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (view != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// If we have created a view, check it's android:onClick</span></span><br><span class="line">            checkOnClickListener(view, attrs);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> view;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> View <span class="title">createViewFromTag</span><span class="params">(Context context, String name, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (name.equals(<span class="string">"view"</span>)) &#123;</span><br><span class="line">            name = attrs.getAttributeValue(<span class="keyword">null</span>, <span class="string">"class"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            mConstructorArgs[<span class="number">0</span>] = context;</span><br><span class="line">            mConstructorArgs[<span class="number">1</span>] = attrs;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (-<span class="number">1</span> == name.indexOf(<span class="string">'.'</span>)) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; sClassPrefixList.length; i++) &#123;</span><br><span class="line">                    <span class="keyword">final</span> View view = createView(context, name, sClassPrefixList[i]);</span><br><span class="line">                    <span class="keyword">if</span> (view != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        <span class="keyword">return</span> view;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> createView(context, name, <span class="keyword">null</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// We do not want to catch these, lets return null and let the actual LayoutInflater</span></span><br><span class="line">            <span class="comment">// try</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">// Don't retain references on context.</span></span><br><span class="line">            mConstructorArgs[<span class="number">0</span>] = <span class="keyword">null</span>;</span><br><span class="line">            mConstructorArgs[<span class="number">1</span>] = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * android:onClick doesn't handle views with a ContextWrapper context. This method</span></span><br><span class="line"><span class="comment">     * backports new framework functionality to traverse the Context wrappers to find a</span></span><br><span class="line"><span class="comment">     * suitable target.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkOnClickListener</span><span class="params">(View view, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Context context = view.getContext();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!(context <span class="keyword">instanceof</span> ContextWrapper) ||</span><br><span class="line">                (Build.VERSION.SDK_INT &gt;= <span class="number">15</span> &amp;&amp; !ViewCompat.hasOnClickListeners(view))) &#123;</span><br><span class="line">            <span class="comment">// Skip our compat functionality if: the Context isn't a ContextWrapper, or</span></span><br><span class="line">            <span class="comment">// the view doesn't have an OnClickListener (we can only rely on this on API 15+ so</span></span><br><span class="line">            <span class="comment">// always use our compat code on older devices)</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> TypedArray a = context.obtainStyledAttributes(attrs, sOnClickAttrs);</span><br><span class="line">        <span class="keyword">final</span> String handlerName = a.getString(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (handlerName != <span class="keyword">null</span>) &#123;</span><br><span class="line">            view.setOnClickListener(<span class="keyword">new</span> DeclaredOnClickListener(view, handlerName));</span><br><span class="line">        &#125;</span><br><span class="line">        a.recycle();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> View <span class="title">createView</span><span class="params">(Context context, String name, String prefix)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> ClassNotFoundException, InflateException </span>&#123;</span><br><span class="line">        Constructor&lt;? extends View&gt; constructor = sConstructorMap.get(name);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (constructor == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="comment">// Class not found in the cache, see if it's real, and try to add it</span></span><br><span class="line">                Class&lt;? extends View&gt; clazz = context.getClassLoader().loadClass(</span><br><span class="line">                        prefix != <span class="keyword">null</span> ? (prefix + name) : name).asSubclass(View.class);</span><br><span class="line"></span><br><span class="line">                constructor = clazz.getConstructor(sConstructorSignature);</span><br><span class="line">                sConstructorMap.put(name, constructor);</span><br><span class="line">            &#125;</span><br><span class="line">            constructor.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            <span class="keyword">return</span> constructor.newInstance(mConstructorArgs);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// We do not want to catch these, lets return null and let the actual LayoutInflater</span></span><br><span class="line">            <span class="comment">// try</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Allows us to emulate the &#123;<span class="doctag">@code</span> android:theme&#125; attribute for devices before L.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Context <span class="title">themifyContext</span><span class="params">(Context context, AttributeSet attrs,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">boolean</span> useAndroidTheme, <span class="keyword">boolean</span> useAppTheme)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.View, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> themeId = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (useAndroidTheme) &#123;</span><br><span class="line">            <span class="comment">// First try reading android:theme if enabled</span></span><br><span class="line">            themeId = a.getResourceId(R.styleable.View_android_theme, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (useAppTheme &amp;&amp; themeId == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// ...if that didn't work, try reading app:theme (for legacy reasons) if enabled</span></span><br><span class="line">            themeId = a.getResourceId(R.styleable.View_theme, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (themeId != <span class="number">0</span>) &#123;</span><br><span class="line">                Log.i(LOG_TAG, <span class="string">"app:theme is now deprecated. "</span></span><br><span class="line">                        + <span class="string">"Please move to using android:theme instead."</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        a.recycle();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (themeId != <span class="number">0</span> &amp;&amp; (!(context <span class="keyword">instanceof</span> ContextThemeWrapper)</span><br><span class="line">                || ((ContextThemeWrapper) context).getThemeResId() != themeId)) &#123;</span><br><span class="line">            <span class="comment">// If the context isn't a ContextThemeWrapper, or it is but does not have</span></span><br><span class="line">            <span class="comment">// the same theme as we need, wrap it in a new wrapper</span></span><br><span class="line">            context = <span class="keyword">new</span> ContextThemeWrapper(context, themeId);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * An implementation of OnClickListener that attempts to lazily load a</span></span><br><span class="line"><span class="comment">     * named click handling method from a parent or ancestor context.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">DeclaredOnClickListener</span> <span class="keyword">implements</span> <span class="title">View</span>.<span class="title">OnClickListener</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> View mHostView;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> String mMethodName;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> Method mResolvedMethod;</span><br><span class="line">        <span class="keyword">private</span> Context mResolvedContext;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">DeclaredOnClickListener</span><span class="params">(@NonNull View hostView, @NonNull String methodName)</span> </span>&#123;</span><br><span class="line">            mHostView = hostView;</span><br><span class="line">            mMethodName = methodName;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(@NonNull View v)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (mResolvedMethod == <span class="keyword">null</span>) &#123;</span><br><span class="line">                resolveMethod(mHostView.getContext(), mMethodName);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                mResolvedMethod.invoke(mResolvedContext, v);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</span><br><span class="line">                        <span class="string">"Could not execute non-public method for android:onClick"</span>, e);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</span><br><span class="line">                        <span class="string">"Could not execute method for android:onClick"</span>, e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@NonNull</span></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resolveMethod</span><span class="params">(@Nullable Context context, @NonNull String name)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (context != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (!context.isRestricted()) &#123;</span><br><span class="line">                        <span class="keyword">final</span> Method method = context.getClass().getMethod(mMethodName, View.class);</span><br><span class="line">                        <span class="keyword">if</span> (method != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            mResolvedMethod = method;</span><br><span class="line">                            mResolvedContext = context;</span><br><span class="line">                            <span class="keyword">return</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">                    <span class="comment">// Failed to find method, keep searching up the hierarchy.</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (context <span class="keyword">instanceof</span> ContextWrapper) &#123;</span><br><span class="line">                    context = ((ContextWrapper) context).getBaseContext();</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// Can't search up the hierarchy, null out and fail.</span></span><br><span class="line">                    context = <span class="keyword">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> id = mHostView.getId();</span><br><span class="line">            <span class="keyword">final</span> String idText = id == View.NO_ID ? <span class="string">""</span> : <span class="string">" with id '"</span></span><br><span class="line">                    + mHostView.getContext().getResources().getResourceEntryName(id) + <span class="string">"'"</span>;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Could not find method "</span> + mMethodName</span><br><span class="line">                    + <span class="string">"(View) in a parent or ancestor Context for android:onClick "</span></span><br><span class="line">                    + <span class="string">"attribute defined on view "</span> + mHostView.getClass() + idText);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就达到了将以前的<code>TextView</code>等转换为相关的<code>AppCompat</code>控件，达到兼容。</p>
+<p><code>setContentView()</code>源码流程就分析到这里,细看请自行查看源码。</p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          
+            <a href="/tags/源码/" rel="tag"><i class="fa fa-tag"></i> 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Android LayoutInflater.inflate()源码流程分析.html" rel="next" title="Android LayoutInflater.inflate()源码流程分析">
+                <i class="fa fa-chevron-left"></i> Android LayoutInflater.inflate()源码流程分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Android 通过自己创建Resources加载非身生apk的资源.html" rel="prev" title="Android 通过自己创建Resources加载非身生apk的资源">
+                Android 通过自己创建Resources加载非身生apk的资源 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

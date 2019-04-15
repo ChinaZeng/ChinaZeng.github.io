@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="音视频,ffmpeg," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="libswscale里面实现了各种图像像素格式的转换。 主要函数如下:123456//使用参数初始化SwsContext结构体sws_getContext()//转换一帧图像sws_scale()//释放SwsContext结构体sws_freeContext() 初始化函数: 123456//为SwsContext结构体分配内存sws_alloc_context()//设置SwsContext结">
+<meta name="keywords" content="音视频,ffmpeg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ffmpeg libswscale实现YUV转RGB">
+<meta property="og:url" content="http://www.zengzhaowen.cn/libswscale实现YUV转RGB.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="libswscale里面实现了各种图像像素格式的转换。 主要函数如下:123456//使用参数初始化SwsContext结构体sws_getContext()//转换一帧图像sws_scale()//释放SwsContext结构体sws_freeContext() 初始化函数: 123456//为SwsContext结构体分配内存sws_alloc_context()//设置SwsContext结">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.107Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ffmpeg libswscale实现YUV转RGB">
+<meta name="twitter:description" content="libswscale里面实现了各种图像像素格式的转换。 主要函数如下:123456//使用参数初始化SwsContext结构体sws_getContext()//转换一帧图像sws_scale()//释放SwsContext结构体sws_freeContext() 初始化函数: 123456//为SwsContext结构体分配内存sws_alloc_context()//设置SwsContext结">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/libswscale实现YUV转RGB.html"/>
+
+
+
+
+
+  <title>ffmpeg libswscale实现YUV转RGB | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/libswscale实现YUV转RGB.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ffmpeg libswscale实现YUV转RGB</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-22T10:05:08+08:00">
+                2018-06-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ffmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">ffmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/libswscale实现YUV转RGB.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/libswscale实现YUV转RGB.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,156字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>libswscale</code>里面实现了各种图像像素格式的转换。</p>
+<p>主要函数如下:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用参数初始化SwsContext结构体</span></span><br><span class="line">sws_getContext()</span><br><span class="line"><span class="comment">//转换一帧图像</span></span><br><span class="line">sws_scale()</span><br><span class="line"><span class="comment">//释放SwsContext结构体</span></span><br><span class="line">sws_freeContext()</span><br></pre></td></tr></table></figure></p>
+<p>初始化函数:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//为SwsContext结构体分配内存</span></span><br><span class="line">sws_alloc_context()</span><br><span class="line"><span class="comment">//设置SwsContext结构体的值</span></span><br><span class="line">av_opt_set()/av_opt_set_XXX()</span><br><span class="line"><span class="comment">//初始化SwsContext结构体。</span></span><br><span class="line">sws_init_context()</span><br></pre></td></tr></table></figure>
+<p>这种复杂的方法可以配置一些<code>sws_getContext()</code>配置不了的参数。比如说设置图像的<code>YUV</code>像素的取值范围是<code>JPEG</code>标准（Y、U、V取值范围都是0-255）还是<code>MPEG</code>标准（Y取值范围是16-235，U、V的取值范围是16-240）</p>
+<p>获取像素格式信息:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可以获得指定像素格式的AVPixFmtDescriptor结构体</span></span><br><span class="line">av_pix_fmt_desc_get()</span><br><span class="line"><span class="comment">//通过AVPixFmtDescriptor获取值</span></span><br><span class="line">av_get_bits_per_pixel() <span class="comment">//获取比特数（bpp）</span></span><br></pre></td></tr></table></figure></p>
+<p>图像拉伸:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SWS_BICUBIC性能比较好；SWS_FAST_BILINEAR在性能和速度之间有一个比好好的平衡。</span><br></pre></td></tr></table></figure>
+<hr>
+<p>示例将通过<code>yuv</code>文件生成<code>rgb</code>文件，代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdafx.h"</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;libswscale/swscale.h&gt;</span></span></span><br><span class="line">	<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;libavutil/opt.h&gt;</span></span></span><br><span class="line">	<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;libavutil/imgutils.h&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">p</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> * msg, <span class="keyword">int</span> d = <span class="number">-1123</span>)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (d == <span class="number">-1123</span>) &#123;</span><br><span class="line">		printf_s(<span class="string">"%s\n"</span>, msg);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		printf_s(<span class="string">"%s  %d \n"</span>, msg, d);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">yuv2Rgb</span><span class="params">(FILE *yuvFile,FILE * rgbFile)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	SwsContext *img_convert_ctx = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">const</span> AVPixelFormat srcPixelFormat = AV_PIX_FMT_YUV420P;</span><br><span class="line">	<span class="keyword">const</span> AVPixelFormat dstPixelFormat = AV_PIX_FMT_RGB24;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> srcW = <span class="number">1080</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> srcH= <span class="number">720</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> dstW = <span class="number">540</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> dstH = <span class="number">360</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint8_t</span> *src_data[<span class="number">4</span>];</span><br><span class="line">	<span class="keyword">int</span> src_linesize[<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint8_t</span> *dst_data[<span class="number">4</span>];</span><br><span class="line">	<span class="keyword">int</span> dst_linesize[<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">//1. 获得指定像素格式的AVPixFmtDescriptor结构体</span></span><br><span class="line">	<span class="keyword">const</span> AVPixFmtDescriptor * pSrcPixFmtDes = av_pix_fmt_desc_get(srcPixelFormat);</span><br><span class="line">	<span class="comment">//2. 获得指定像素格式每个像素占用的比特数bpp（Bit Per Pixel） </span></span><br><span class="line">	<span class="keyword">int</span> srcBpp=  av_get_bits_per_pixel(pSrcPixFmtDes);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">const</span> AVPixFmtDescriptor * pDstPixFmtDes = av_pix_fmt_desc_get(dstPixelFormat);</span><br><span class="line">	<span class="keyword">int</span> dstBpp = av_get_bits_per_pixel(pDstPixFmtDes);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	<span class="comment">//3. 根据宽高，像素格式分配buffer大小</span></span><br><span class="line">	<span class="keyword">if</span> (av_image_alloc(src_data, src_linesize, srcW, srcH, srcPixelFormat, <span class="number">1</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		p(<span class="string">"Could not allocate source image"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (av_image_alloc(dst_data, dst_linesize, dstW, dstH, dstPixelFormat, <span class="number">1</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		p(<span class="string">"Could not allocate source image"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//4. 为SwsContext结构体分配内存。</span></span><br><span class="line">	img_convert_ctx = sws_alloc_context();</span><br><span class="line">	<span class="comment">//Show AVOption</span></span><br><span class="line">	av_opt_show2(img_convert_ctx, <span class="built_in">stdout</span>, AV_OPT_FLAG_VIDEO_PARAM, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">//图像拉伸   SWS_BICUBIC性能比较好；SWS_FAST_BILINEAR在性能和速度之间有一个比好好的平衡。</span></span><br><span class="line">	<span class="comment">//const int rescale_method = SWS_BICUBIC;</span></span><br><span class="line">	<span class="comment">//5. 设置值</span></span><br><span class="line">	av_opt_set_int(img_convert_ctx, <span class="string">"sws_flags"</span>, SWS_BICUBIC | SWS_PRINT_INFO, <span class="number">0</span>);</span><br><span class="line">	av_opt_set_int(img_convert_ctx, <span class="string">"srcw"</span>, srcW, <span class="number">0</span>);</span><br><span class="line">	av_opt_set_int(img_convert_ctx, <span class="string">"srch"</span>, srcH, <span class="number">0</span>);</span><br><span class="line">	av_opt_set_int(img_convert_ctx, <span class="string">"src_format"</span>, srcPixelFormat, <span class="number">0</span>);</span><br><span class="line">	<span class="comment">//'0' for MPEG (Y:0-235);'1' for JPEG (Y:0-255)</span></span><br><span class="line">	av_opt_set_int(img_convert_ctx, <span class="string">"src_range"</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">	av_opt_set_int(img_convert_ctx, <span class="string">"dstw"</span>, dstW, <span class="number">0</span>);</span><br><span class="line">	av_opt_set_int(img_convert_ctx, <span class="string">"dsth"</span>, dstH, <span class="number">0</span>);</span><br><span class="line">	av_opt_set_int(img_convert_ctx, <span class="string">"dst_format"</span>, dstPixelFormat, <span class="number">0</span>);</span><br><span class="line">	av_opt_set_int(img_convert_ctx, <span class="string">"dst_range"</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">	sws_init_context(img_convert_ctx, <span class="literal">NULL</span>, <span class="literal">NULL</span>);<span class="comment">//对SwsContext中的各种变量进行赋值</span></span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">uint8_t</span> *temp_buffer = (<span class="keyword">uint8_t</span> *)<span class="built_in">malloc</span>(srcW *srcH *srcBpp / <span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> frame_idx = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> (fread(temp_buffer, <span class="number">1</span>, srcW*srcH*srcBpp / <span class="number">8</span>, yuvFile) != srcW * srcH*srcBpp / <span class="number">8</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">switch</span> (srcPixelFormat) &#123;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_GRAY8: &#123;</span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">0</span>], temp_buffer, srcW*srcH);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_YUV420P: &#123;</span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">0</span>], temp_buffer, srcW*srcH);                    <span class="comment">//Y</span></span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">1</span>], temp_buffer + srcW * srcH, srcW*srcH / <span class="number">4</span>);      <span class="comment">//U</span></span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">2</span>], temp_buffer + srcW * srcH * <span class="number">5</span> / <span class="number">4</span>, srcW*srcH / <span class="number">4</span>);  <span class="comment">//V</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_YUV422P: &#123;</span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">0</span>], temp_buffer, srcW*srcH);                    <span class="comment">//Y</span></span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">1</span>], temp_buffer + srcW * srcH, srcW*srcH / <span class="number">2</span>);      <span class="comment">//U</span></span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">2</span>], temp_buffer + srcW * srcH * <span class="number">3</span> / <span class="number">2</span>, srcW*srcH / <span class="number">2</span>);  <span class="comment">//V</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_YUV444P: &#123;</span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">0</span>], temp_buffer, srcW*srcH);                    <span class="comment">//Y</span></span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">1</span>], temp_buffer + srcW * srcH, srcW*srcH);        <span class="comment">//U</span></span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">2</span>], temp_buffer + srcW * srcH * <span class="number">2</span>, srcW*srcH);      <span class="comment">//V</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_YUYV422: &#123;</span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">0</span>], temp_buffer, srcW*srcH * <span class="number">2</span>);                  <span class="comment">//Packed</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_RGB24: &#123;</span><br><span class="line">				<span class="built_in">memcpy</span>(src_data[<span class="number">0</span>], temp_buffer, srcW*srcH * <span class="number">3</span>);                  <span class="comment">//Packed</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">default</span>: &#123;</span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">"Not Support Input Pixel Format.\n"</span>);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		sws_scale(img_convert_ctx, src_data, src_linesize, <span class="number">0</span>, srcH, dst_data, dst_linesize);<span class="comment">//转换像素</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"Finish process frame %5d\n"</span>, frame_idx);</span><br><span class="line">		frame_idx++;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">switch</span> (dstPixelFormat) &#123;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_GRAY8: &#123;</span><br><span class="line">				fwrite(dst_data[<span class="number">0</span>], <span class="number">1</span>, dstW*dstH, rgbFile);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_YUV420P: &#123;</span><br><span class="line">				fwrite(dst_data[<span class="number">0</span>], <span class="number">1</span>, dstW*dstH, rgbFile);                 <span class="comment">//Y</span></span><br><span class="line">				fwrite(dst_data[<span class="number">1</span>], <span class="number">1</span>, dstW*dstH / <span class="number">4</span>, rgbFile);               <span class="comment">//U</span></span><br><span class="line">				fwrite(dst_data[<span class="number">2</span>], <span class="number">1</span>, dstW*dstH / <span class="number">4</span>, rgbFile);               <span class="comment">//V</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_YUV422P: &#123;</span><br><span class="line">				fwrite(dst_data[<span class="number">0</span>], <span class="number">1</span>, dstW*dstH, rgbFile);                 <span class="comment">//Y</span></span><br><span class="line">				fwrite(dst_data[<span class="number">1</span>], <span class="number">1</span>, dstW*dstH / <span class="number">2</span>, rgbFile);               <span class="comment">//U</span></span><br><span class="line">				fwrite(dst_data[<span class="number">2</span>], <span class="number">1</span>, dstW*dstH / <span class="number">2</span>, rgbFile);               <span class="comment">//V</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_YUV444P: &#123;</span><br><span class="line">				fwrite(dst_data[<span class="number">0</span>], <span class="number">1</span>, dstW*dstH, rgbFile);                 <span class="comment">//Y</span></span><br><span class="line">				fwrite(dst_data[<span class="number">1</span>], <span class="number">1</span>, dstW*dstH, rgbFile);                 <span class="comment">//U</span></span><br><span class="line">				fwrite(dst_data[<span class="number">2</span>], <span class="number">1</span>, dstW*dstH, rgbFile);                 <span class="comment">//V</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_YUYV422: &#123;</span><br><span class="line">				fwrite(dst_data[<span class="number">0</span>], <span class="number">1</span>, dstW*dstH * <span class="number">2</span>, rgbFile);               <span class="comment">//Packed</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">case</span> AV_PIX_FMT_RGB24: &#123;</span><br><span class="line">				fwrite(dst_data[<span class="number">0</span>], <span class="number">1</span>, dstW*dstH * <span class="number">3</span>, rgbFile);               <span class="comment">//Packed</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">default</span>: &#123;</span><br><span class="line">				p(<span class="string">"Not Support Output Pixel Format.\n"</span>);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	sws_freeContext(img_convert_ctx);</span><br><span class="line">	<span class="built_in">free</span>(temp_buffer);</span><br><span class="line">	av_freep(&amp;src_data[<span class="number">0</span>]);</span><br><span class="line">	av_freep(&amp;dst_data[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	FILE* inFile;</span><br><span class="line">	FILE* outFile;</span><br><span class="line">	fopen_s(&amp;inFile,<span class="string">"F:/视频资源/gxsp.yuv"</span>, <span class="string">"rb"</span>);</span><br><span class="line">	fopen_s(&amp;outFile, <span class="string">"F:/视频资源/gxsp.rgb"</span>, <span class="string">"wb"</span>);</span><br><span class="line">	yuv2Rgb(inFile,outFile);</span><br><span class="line"></span><br><span class="line">	fclose(inFile);</span><br><span class="line">	fclose(outFile);</span><br><span class="line"></span><br><span class="line">	getchar();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>参考链接:<br><a href="https://blog.csdn.net/king1425/article/details/71215686" target="_blank" rel="noopener">libswscale实现YUV转RGB</a></p>
+<p>相关格式转换:<br><a href="https://blog.csdn.net/leixiaohua1020/article/details/50534150" target="_blank" rel="noopener">视音频数据处理入门：RGB、YUV像素数据处理</a></p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/音视频/" rel="tag"><i class="fa fa-tag"></i> 音视频</a>
+          
+            <a href="/tags/ffmpeg/" rel="tag"><i class="fa fa-tag"></i> ffmpeg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ffmpeg 封装格式转换 MP4转AVI.html" rel="next" title="ffmpeg 封装格式转换 MP4转AVI">
+                <i class="fa fa-chevron-left"></i> ffmpeg 封装格式转换 MP4转AVI
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/生产者消费者模型.html" rel="prev" title="生产者消费者模型">
+                生产者消费者模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

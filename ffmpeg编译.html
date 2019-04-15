@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="音视频,ffmpeg," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="环境   云主机 Centos 7 x86_64 bbr系统 ffmpeg-3.0.11库 android-ndk-r13b    ndk安装1234//下载wget https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip//解压unzip android-ndk-r13b-linux-x86_64.zi">
+<meta name="keywords" content="音视频,ffmpeg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ffmpeg编译">
+<meta property="og:url" content="http://www.zengzhaowen.cn/ffmpeg编译.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="环境   云主机 Centos 7 x86_64 bbr系统 ffmpeg-3.0.11库 android-ndk-r13b    ndk安装1234//下载wget https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip//解压unzip android-ndk-r13b-linux-x86_64.zi">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.105Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ffmpeg编译">
+<meta name="twitter:description" content="环境   云主机 Centos 7 x86_64 bbr系统 ffmpeg-3.0.11库 android-ndk-r13b    ndk安装1234//下载wget https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip//解压unzip android-ndk-r13b-linux-x86_64.zi">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/ffmpeg编译.html"/>
+
+
+
+
+
+  <title>ffmpeg编译 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/ffmpeg编译.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ffmpeg编译</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-06T09:25:57+08:00">
+                2018-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ffmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">ffmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ffmpeg编译.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ffmpeg编译.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,610字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>环境</strong></p>
+<blockquote>
+<ol>
+<li>云主机 Centos 7 x86_64 bbr系统</li>
+<li>ffmpeg-3.0.11库</li>
+<li>android-ndk-r13b</li>
+</ol>
+</blockquote>
+<ol>
+<li>ndk安装<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//下载</span><br><span class="line">wget https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip</span><br><span class="line">//解压</span><br><span class="line">unzip android-ndk-r13b-linux-x86_64.zip</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>ndk个版本下载地址选择：<a href="https://blog.csdn.net/shuzfan/article/details/52690554" target="_blank" rel="noopener">https://blog.csdn.net/shuzfan/article/details/52690554</a></p>
+<p>2.配置环境变量并为ndk授权</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//进入当前用户根目录</span><br><span class="line">cd ~ </span><br><span class="line">//编辑</span><br><span class="line">vim ~/.bashrc</span><br><span class="line"></span><br><span class="line">//编辑 ndk为例</span><br><span class="line">export NDKROOT=/usr/ndk/android-ndk-r13b</span><br><span class="line">export PATH=$NDKROOT:$PATH</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//更新环境变量</span><br><span class="line">source ~/.bashrc</span><br><span class="line"></span><br><span class="line">//授权</span><br><span class="line">chmod 777 -R /usr/ndk</span><br></pre></td></tr></table></figure>
+<p>3.下载ffmpge，解压授权<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//下载</span><br><span class="line">wget http://ffmpeg.org/releases/ffmpeg-3.0.11.tar.gz</span><br><span class="line">//解压</span><br><span class="line">tar zxvf ffmpeg-3.0.11.tar.gz</span><br><span class="line">//授权</span><br><span class="line">chmod 777 -R /usr/zzw/ffmpeg-3.0.11</span><br></pre></td></tr></table></figure></p>
+<p>ffmpeg各版本下载地址:<a href="http://ffmpeg.org/download.html" target="_blank" rel="noopener">http://ffmpeg.org/download.html</a></p>
+<ol start="4">
+<li>根目录创建ffmpegtemp文件夹，配置脚本build_android.sh,config我是windows+xftp的方式<br>4.1 在windows上新建build_android.sh,并书写<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">export TMPDIR=/usr/zzw/ffmpeg-3.0.11/ffmpegtemp</span><br><span class="line">NDK=/usr/ndk/android-ndk-r13b</span><br><span class="line">PLATFORM=$NDK/platforms/android-14/arch-arm/</span><br><span class="line">TOOLCHAIN=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64</span><br><span class="line"></span><br><span class="line">function build_one</span><br><span class="line">&#123;</span><br><span class="line">./configure \</span><br><span class="line">    --prefix=$PREFIX \</span><br><span class="line">    --target-os=linux \</span><br><span class="line">    --cross-prefix=$TOOLCHAIN/bin/arm-linux-androideabi- \</span><br><span class="line">    --arch=arm \</span><br><span class="line">    --sysroot=$PLATFORM \</span><br><span class="line">    --extra-cflags=&quot;-I$PLATFORM/usr/include&quot; \</span><br><span class="line">    --cc=$TOOLCHAIN/bin/arm-linux-androideabi-gcc \</span><br><span class="line">    --nm=$TOOLCHAIN/bin/arm-linux-androideabi-nm \</span><br><span class="line">    --enable-shared \</span><br><span class="line">    --enable-runtime-cpudetect \</span><br><span class="line">    --enable-gpl \</span><br><span class="line">    --enable-small \</span><br><span class="line">    --enable-cross-compile \</span><br><span class="line">    --disable-debug \</span><br><span class="line">    --disable-static \</span><br><span class="line">    --disable-doc \</span><br><span class="line">    --disable-asm \</span><br><span class="line">    --disable-ffmpeg \</span><br><span class="line">    --disable-ffplay \</span><br><span class="line">    --disable-ffprobe \</span><br><span class="line">    --disable-ffserver \</span><br><span class="line">    --disable-postproc \</span><br><span class="line">    --disable-avdevice \</span><br><span class="line">    --disable-symver \</span><br><span class="line">    --disable-stripping \</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">$ADDITIONAL_CONFIGURE_FLAG</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_LRINT 0/HAVE_LRINT 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_LRINTF 0/HAVE_LRINTF 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_ROUND 0/HAVE_ROUND 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_ROUNDF 0/HAVE_ROUNDF 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_TRUNC 0/HAVE_TRUNC 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_TRUNCF 0/HAVE_TRUNCF 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_CBRT 0/HAVE_CBRT 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_RINT 0/HAVE_RINT 1/g&apos; config.h</span><br><span class="line"></span><br><span class="line">make clean</span><br><span class="line">make -j4</span><br><span class="line">make install</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># arm v7vfp</span><br><span class="line">CPU=armv7-a</span><br><span class="line">OPTIMIZE_CFLAGS=&quot;-mfloat-abi=softfp -mfpu=vfp -marm -march=$CPU &quot;</span><br><span class="line">PREFIX=./android/$CPU-vfp</span><br><span class="line">ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line">build_one</span><br><span class="line"></span><br><span class="line"># CPU=armv</span><br><span class="line"># PREFIX=$(pwd)/android/$CPU</span><br><span class="line"># ADDI_CFLAGS=&quot;-marm&quot;</span><br><span class="line"># build_one</span><br><span class="line"></span><br><span class="line">#arm v6</span><br><span class="line">#CPU=armv6</span><br><span class="line">#OPTIMIZE_CFLAGS=&quot;-marm -march=$CPU&quot;</span><br><span class="line">#PREFIX=./android/$CPU </span><br><span class="line">#ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line">#build_one</span><br><span class="line"></span><br><span class="line">#arm v7vfpv3</span><br><span class="line"># CPU=armv7-a</span><br><span class="line"># OPTIMIZE_CFLAGS=&quot;-mfloat-abi=softfp -mfpu=vfpv3-d16 -marm -march=$CPU &quot;</span><br><span class="line"># PREFIX=./android/$CPU</span><br><span class="line"># ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line"># build_one</span><br><span class="line"></span><br><span class="line">#arm v7n</span><br><span class="line">#CPU=armv7-a</span><br><span class="line">#OPTIMIZE_CFLAGS=&quot;-mfloat-abi=softfp -mfpu=neon -marm -march=$CPU -mtune=cortex-a8&quot;</span><br><span class="line">#PREFIX=./android/$CPU </span><br><span class="line">#ADDITIONAL_CONFIGURE_FLAG=--enable-neon</span><br><span class="line">#build_one</span><br><span class="line"></span><br><span class="line">#arm v6+vfp</span><br><span class="line">#CPU=armv6</span><br><span class="line">#OPTIMIZE_CFLAGS=&quot;-DCMP_HAVE_VFP -mfloat-abi=softfp -mfpu=vfp -marm -march=$CPU&quot;</span><br><span class="line">#PREFIX=./android/$&#123;CPU&#125;_vfp </span><br><span class="line">#ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line">#build_one</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注意”\“后面不要放空格</p>
+<p>4.2 使用xftp传输到云主机的ffmpeg解压根目录，并将该文件改为linux的编码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim build_android.sh</span><br><span class="line"></span><br><span class="line">#vim下执行</span><br><span class="line">:set ff=unix</span><br><span class="line">:wq</span><br></pre></td></tr></table></figure></p>
+<p>4.3 修改configure</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#这段脚本的作用是使生成的静态库为.so为后缀，生成的库是这种格式:libavcodec-57.so ... </span><br><span class="line">#不加的话生成的库是这种格式:libavcodec.so.57 ...等等 </span><br><span class="line"></span><br><span class="line">#注释以下内容</span><br><span class="line">#SLIBNAME_WITH_MAJOR=&apos;$(SLIBNAME).$(LIBMAJOR)&apos;</span><br><span class="line">#LIB_INSTALL_EXTRA_CMD=&apos;$$(RANLIB) &quot;$(LIBDIR)/$(LIBNAME)&quot;&apos;</span><br><span class="line">#SLIB_INSTALL_NAME=&apos;$(SLIBNAME_WITH_VERSION)&apos;</span><br><span class="line">#SLIB_INSTALL_LINKS=&apos;$(SLIBNAME_WITH_MAJOR) $(SLIBNAME)&apos;</span><br><span class="line">#增加以下内容</span><br><span class="line">SLIBNAME_WITH_MAJOR=&apos;$(SLIBPREF)$(FULLNAME)-$(LIBMAJOR)$(SLIBSUF)&apos;</span><br><span class="line">LIB_INSTALL_EXTRA_CMD=&apos;$$(RANLIB)&quot;$(LIBDIR)/$(LIBNAME)&quot;&apos;</span><br><span class="line">SLIB_INSTALL_NAME=&apos;$(SLIBNAME_WITH_MAJOR)&apos;</span><br><span class="line">SLIB_INSTALL_LINKS=&apos;$(SLIBNAME)&apos;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>执行脚本<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./build_android.sh</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>6.上面生成的是so动态库，生成.a静态库只需在build_android.sh修改如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--enable-static \</span><br><span class="line">--disable-shared \</span><br></pre></td></tr></table></figure></p>
+<p>7.生成一个库,在第6步生成静态库.a文件下，在build_android.sh的函数build_one添加如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">export TMPDIR=/usr/zzw/ffmpeg-3.0.11/ffmpegtemp</span><br><span class="line">NDK=/usr/ndk/android-ndk-r13b</span><br><span class="line">PLATFORM=$NDK/platforms/android-14/arch-arm/</span><br><span class="line">TOOLCHAIN=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64</span><br><span class="line"></span><br><span class="line">function build_one</span><br><span class="line">&#123;</span><br><span class="line">./configure \</span><br><span class="line">    --prefix=$PREFIX \</span><br><span class="line">    --target-os=linux \</span><br><span class="line">    --cross-prefix=$TOOLCHAIN/bin/arm-linux-androideabi- \</span><br><span class="line">    --arch=arm \</span><br><span class="line">    --sysroot=$PLATFORM \</span><br><span class="line">    --extra-cflags=&quot;-I$PLATFORM/usr/include&quot; \</span><br><span class="line">    --cc=$TOOLCHAIN/bin/arm-linux-androideabi-gcc \</span><br><span class="line">    --nm=$TOOLCHAIN/bin/arm-linux-androideabi-nm \</span><br><span class="line">    --enable-static \</span><br><span class="line">    --enable-runtime-cpudetect \</span><br><span class="line">    --enable-gpl \</span><br><span class="line">    --enable-small \</span><br><span class="line">    --enable-cross-compile \</span><br><span class="line">    --disable-debug \</span><br><span class="line">    --disable-shared \</span><br><span class="line">    --disable-doc \</span><br><span class="line">    --disable-asm \</span><br><span class="line">    --disable-ffmpeg \</span><br><span class="line">    --disable-ffplay \</span><br><span class="line">    --disable-ffprobe \</span><br><span class="line">    --disable-ffserver \</span><br><span class="line">    --disable-postproc \</span><br><span class="line">    --disable-avdevice \</span><br><span class="line">    --disable-symver \</span><br><span class="line">    --disable-stripping \</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$ADDITIONAL_CONFIGURE_FLAG</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_LRINT 0/HAVE_LRINT 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_LRINTF 0/HAVE_LRINTF 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_ROUND 0/HAVE_ROUND 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_ROUNDF 0/HAVE_ROUNDF 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_TRUNC 0/HAVE_TRUNC 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_TRUNCF 0/HAVE_TRUNCF 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_CBRT 0/HAVE_CBRT 1/g&apos; config.h</span><br><span class="line">sed -i &apos;&apos; &apos;s/HAVE_RINT 0/HAVE_RINT 1/g&apos; config.h</span><br><span class="line"></span><br><span class="line">make clean</span><br><span class="line">make -j4</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># 增加的内容</span><br><span class="line">$TOOLCHAIN/bin/arm-linux-androideabi-ld \</span><br><span class="line">-rpath-link=$PLATFORM/usr/lib \</span><br><span class="line">-L$PLATFORM/usr/lib \</span><br><span class="line">-L$PREFIX/lib \</span><br><span class="line">-soname libffmpeg.so -shared -nostdlib -Bsymbolic --whole-archive --no-undefined -o \</span><br><span class="line">$PREFIX/libffmpeg.so \</span><br><span class="line">    libavcodec/libavcodec.a \</span><br><span class="line">    libavfilter/libavfilter.a \</span><br><span class="line">    libswresample/libswresample.a \</span><br><span class="line">    libavformat/libavformat.a \</span><br><span class="line">    libavutil/libavutil.a \</span><br><span class="line">    libswscale/libswscale.a \</span><br><span class="line">    -lc -lm -lz -ldl -llog --dynamic-linker=/system/bin/linker \</span><br><span class="line">    $TOOLCHAIN/lib/gcc/arm-linux-androideabi/4.9.x/libgcc.a \</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># arm v7vfp</span><br><span class="line">CPU=armv7-a</span><br><span class="line">OPTIMIZE_CFLAGS=&quot;-mfloat-abi=softfp -mfpu=vfp -marm -march=$CPU &quot;</span><br><span class="line">PREFIX=./android/$CPU-vfp</span><br><span class="line">ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line">build_one</span><br><span class="line"></span><br><span class="line"># CPU=armv</span><br><span class="line"># PREFIX=$(pwd)/android/$CPU</span><br><span class="line"># ADDI_CFLAGS=&quot;-marm&quot;</span><br><span class="line"># build_one</span><br><span class="line"></span><br><span class="line">#arm v6</span><br><span class="line">#CPU=armv6</span><br><span class="line">#OPTIMIZE_CFLAGS=&quot;-marm -march=$CPU&quot;</span><br><span class="line">#PREFIX=./android/$CPU </span><br><span class="line">#ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line">#build_one</span><br><span class="line"></span><br><span class="line">#arm v7vfpv3</span><br><span class="line"># CPU=armv7-a</span><br><span class="line"># OPTIMIZE_CFLAGS=&quot;-mfloat-abi=softfp -mfpu=vfpv3-d16 -marm -march=$CPU &quot;</span><br><span class="line"># PREFIX=./android/$CPU</span><br><span class="line"># ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line"># build_one</span><br><span class="line"></span><br><span class="line">#arm v7n</span><br><span class="line">#CPU=armv7-a</span><br><span class="line">#OPTIMIZE_CFLAGS=&quot;-mfloat-abi=softfp -mfpu=neon -marm -march=$CPU -mtune=cortex-a8&quot;</span><br><span class="line">#PREFIX=./android/$CPU </span><br><span class="line">#ADDITIONAL_CONFIGURE_FLAG=--enable-neon</span><br><span class="line">#build_one</span><br><span class="line"></span><br><span class="line">#arm v6+vfp</span><br><span class="line">#CPU=armv6</span><br><span class="line">#OPTIMIZE_CFLAGS=&quot;-DCMP_HAVE_VFP -mfloat-abi=softfp -mfpu=vfp -marm -march=$CPU&quot;</span><br><span class="line">#PREFIX=./android/$&#123;CPU&#125;_vfp </span><br><span class="line">#ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line">#build_one</span><br></pre></td></tr></table></figure></p>
+<p>8.具体要编译哪个库，自己设置。 通过<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --help</span><br></pre></td></tr></table></figure></p>
+<p>命令查看怎么设置，通过打开configure文件查看所对应的库之间的依赖等。</p>
+<p>依赖关系<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># libraries, in linking order</span><br><span class="line">avcodec_deps=&quot;avutil&quot;</span><br><span class="line">avcodec_select=&quot;null_bsf&quot;</span><br><span class="line">avdevice_deps=&quot;avformat avcodec avutil&quot;</span><br><span class="line">avfilter_deps=&quot;avutil&quot;</span><br><span class="line">avformat_deps=&quot;avcodec avutil&quot;</span><br><span class="line">avformat_suggest=&quot;network&quot;</span><br><span class="line">avresample_deps=&quot;avutil&quot;</span><br><span class="line">postproc_deps=&quot;avutil gpl&quot;</span><br><span class="line">swresample_deps=&quot;avutil&quot;</span><br><span class="line">swscale_deps=&quot;avutil&quot;</span><br></pre></td></tr></table></figure></p>
+<p>通过这个就可以知道在android里面的so库加载顺序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">static &#123;</span><br><span class="line">       System.loadLibrary(&quot;avutil-55&quot;);</span><br><span class="line">       System.loadLibrary(&quot;swresample-2&quot;);</span><br><span class="line">       System.loadLibrary(&quot;avcodec-57&quot;);</span><br><span class="line">       System.loadLibrary(&quot;avformat-57&quot;);</span><br><span class="line">       System.loadLibrary(&quot;swscale-4&quot;);</span><br><span class="line">       System.loadLibrary(&quot;avfilter-6&quot;);</span><br><span class="line">       //自己实现逻辑编译的库</span><br><span class="line">       System.loadLibrary(&quot;native-lib&quot;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>也可以通过查看生成的lib/pkgconfig里面对应的pc文件查看具体的依赖关系</p>
+<p>比如libavfilter.pc<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">prefix=./android/armv7-a-vfp</span><br><span class="line">exec_prefix=$&#123;prefix&#125;</span><br><span class="line">libdir=$&#123;prefix&#125;/lib</span><br><span class="line">includedir=$&#123;prefix&#125;/include</span><br><span class="line"></span><br><span class="line">Name: libavfilter</span><br><span class="line">Description: FFmpeg audio/video filtering library</span><br><span class="line">Version: 6.31.100</span><br><span class="line">Requires: </span><br><span class="line">Requires.private: libswscale &gt;= 4.0.100, libavformat &gt;= 57.25.100, libavcodec &gt;= 57.24.102, libswresample &gt;= 2.0.101, libavutil &gt;= 55.17.103</span><br><span class="line">Conflicts:</span><br><span class="line">Libs: -L$&#123;libdir&#125;  -lavfilter </span><br><span class="line">Libs.private: -lm -lz -pthread</span><br><span class="line">Cflags: -I$&#123;includedir&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/音视频/" rel="tag"><i class="fa fa-tag"></i> 音视频</a>
+          
+            <a href="/tags/ffmpeg/" rel="tag"><i class="fa fa-tag"></i> ffmpeg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/jni 小细节操作.html" rel="next" title="jni小细节操作">
+                <i class="fa fa-chevron-left"></i> jni小细节操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ffmpeg-android视频解码.html" rel="prev" title="ffmpeg android视频解码">
+                ffmpeg android视频解码 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

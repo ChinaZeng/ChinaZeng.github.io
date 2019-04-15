@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="音视频,ffmpeg," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="主要用到的api 1234567avfilter_register_all()：注册所有AVFilter。avfilter_graph_alloc()：为FilterGraph分配内存。avfilter_graph_create_filter()：创建并向FilterGraph中添加一个Filter。avfilter_graph_parse_ptr()：将一串通过字符串描述的Graph添加到Fil">
+<meta name="keywords" content="音视频,ffmpeg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ffmpeg添加水印和滤镜效果">
+<meta property="og:url" content="http://www.zengzhaowen.cn/ffmpeg添加水印和滤镜效果.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="主要用到的api 1234567avfilter_register_all()：注册所有AVFilter。avfilter_graph_alloc()：为FilterGraph分配内存。avfilter_graph_create_filter()：创建并向FilterGraph中添加一个Filter。avfilter_graph_parse_ptr()：将一串通过字符串描述的Graph添加到Fil">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.105Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ffmpeg添加水印和滤镜效果">
+<meta name="twitter:description" content="主要用到的api 1234567avfilter_register_all()：注册所有AVFilter。avfilter_graph_alloc()：为FilterGraph分配内存。avfilter_graph_create_filter()：创建并向FilterGraph中添加一个Filter。avfilter_graph_parse_ptr()：将一串通过字符串描述的Graph添加到Fil">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/ffmpeg添加水印和滤镜效果.html"/>
+
+
+
+
+
+  <title>ffmpeg添加水印和滤镜效果 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/ffmpeg添加水印和滤镜效果.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ffmpeg添加水印和滤镜效果</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-27T11:12:37+08:00">
+                2018-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ffmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">ffmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ffmpeg添加水印和滤镜效果.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ffmpeg添加水印和滤镜效果.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,271字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>主要用到的api</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">avfilter_register_all()：注册所有AVFilter。</span><br><span class="line">avfilter_graph_alloc()：为FilterGraph分配内存。</span><br><span class="line">avfilter_graph_create_filter()：创建并向FilterGraph中添加一个Filter。</span><br><span class="line">avfilter_graph_parse_ptr()：将一串通过字符串描述的Graph添加到FilterGraph中。</span><br><span class="line">avfilter_graph_config()：检查FilterGraph的配置。</span><br><span class="line">av_buffersrc_add_frame()：向FilterGraph中加入一个AVFrame。</span><br><span class="line">av_buffersink_get_frame()：从FilterGraph中取出一个AVFrame。</span><br></pre></td></tr></table></figure>
+<p>源代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;android/log.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;android/native_window.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;android/native_window_jni.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libavcodec/avcodec.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libavformat/avformat.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libswscale/swscale.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libavutil/imgutils.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//-----AVfilter-----</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;libavfilter/avfiltergraph.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;libavfilter/buffersrc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;libavfilter/buffersink.h&gt;</span></span></span><br><span class="line"><span class="comment">//-----AVfilter-----</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  LOG_TAG    <span class="meta-string">"JNI_TAG"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  LOGD(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *filters_descr = <span class="string">"lutyuv='u=128:v=128'"</span>;</span><br><span class="line"><span class="comment">//const char *filters_descr = "hflip";</span></span><br><span class="line"><span class="comment">//const char *filters_descr = "hue='h=60:s=-3'";</span></span><br><span class="line"><span class="comment">//const char *filters_descr = "crop=2/3*in_w:2/3*in_h";</span></span><br><span class="line"><span class="comment">//const char *filters_descr = "drawbox=x=200:y=200:w=300:h=300:color=pink@0.5";</span></span><br><span class="line"><span class="comment">//const char *filters_descr = "movie=/storage/emulated/0/shuiyin.png[wm];[in][wm]overlay=5:5[out]";</span></span><br><span class="line"><span class="comment">//const char *filters_descr="drawgrid=width=100:height=100:thickness=4:color=pink@0.9";</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getCodecContext</span><span class="params">(AVCodecParameters *codecpar, AVCodecContext **avCodecContext)</span> </span>&#123;</span><br><span class="line">    AVCodec *dec = avcodec_find_decoder(codecpar-&gt;codec_id);</span><br><span class="line">    <span class="keyword">if</span> (!dec) &#123;</span><br><span class="line">        LOGD(<span class="string">"can not find decoder"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    *avCodecContext = avcodec_alloc_context3(dec);</span><br><span class="line">    <span class="keyword">if</span> (!*avCodecContext) &#123;</span><br><span class="line">        LOGD(<span class="string">"can not alloc new decodecctx"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (avcodec_parameters_to_context(*avCodecContext, codecpar) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        avcodec_free_context(avCodecContext);</span><br><span class="line">        *avCodecContext = <span class="literal">NULL</span>;</span><br><span class="line">        LOGD(<span class="string">"can not fill decodecctx"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (avcodec_open2(*avCodecContext, dec, <span class="number">0</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">        LOGD(<span class="string">"cant not open audio strames"</span>);</span><br><span class="line">        avcodec_free_context(avCodecContext);</span><br><span class="line">        *avCodecContext = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_ffmpegdemo_FFmpegHelper_play(JNIEnv *env, jobject instance, jstring url_,</span><br><span class="line">                                          jobject surface) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *url = env-&gt;GetStringUTFChars(url_, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    AVFormatContext *pFormatCtx = <span class="literal">NULL</span>;</span><br><span class="line">    AVCodecContext *pCodecCtx = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    AVFilterContext *buffersink_ctx = <span class="literal">NULL</span>;</span><br><span class="line">    AVFilterContext *buffersrc_ctx = <span class="literal">NULL</span>;</span><br><span class="line">    AVFilterGraph *filter_graph = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-----------------------------AVCodecContext init start----------------------------</span></span><br><span class="line">    av_register_all();</span><br><span class="line">    avfilter_register_all();<span class="comment">//</span></span><br><span class="line">    pFormatCtx = avformat_alloc_context();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Open video file</span></span><br><span class="line">    <span class="keyword">if</span> (avformat_open_input(&amp;pFormatCtx, url, <span class="literal">NULL</span>, <span class="literal">NULL</span>) != <span class="number">0</span>) &#123;</span><br><span class="line"></span><br><span class="line">        LOGD(<span class="string">"Couldn't open url:%s\n"</span>, url);</span><br><span class="line">        <span class="keyword">return</span>; <span class="comment">// Couldn't open file</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Retrieve stream information</span></span><br><span class="line">    <span class="keyword">if</span> (avformat_find_stream_info(pFormatCtx, <span class="literal">NULL</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        LOGD(<span class="string">"Couldn't find stream information."</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Find the first video stream</span></span><br><span class="line">    <span class="keyword">int</span> videoStream = <span class="number">-1</span>, i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; pFormatCtx-&gt;nb_streams; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (pFormatCtx-&gt;streams[i]-&gt;codecpar-&gt;codec_type == AVMEDIA_TYPE_VIDEO</span><br><span class="line">            &amp;&amp; videoStream &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            videoStream = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (videoStream == <span class="number">-1</span>) &#123;</span><br><span class="line">        LOGD(<span class="string">"Didn't find a video stream."</span>);</span><br><span class="line">        <span class="keyword">return</span>; <span class="comment">// Didn't find a video stream</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (getCodecContext(pFormatCtx-&gt;streams[videoStream]-&gt;codecpar, &amp;pCodecCtx) != <span class="number">0</span>) &#123;</span><br><span class="line">        LOGD(<span class="string">"Didn't get CodecContext."</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//-----------------------------AVCodecContext init end-------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//------------------------------filter init start------------------------------------</span></span><br><span class="line">    <span class="keyword">char</span> args[<span class="number">512</span>];</span><br><span class="line">    AVFilter *buffersrc = avfilter_get_by_name(<span class="string">"buffer"</span>);</span><br><span class="line">    AVFilter *buffersink = avfilter_get_by_name(<span class="string">"buffersink"</span>);<span class="comment">//新版的ffmpeg库必须为buffersink</span></span><br><span class="line">    AVFilterInOut *outputs = avfilter_inout_alloc();</span><br><span class="line">    AVFilterInOut *inputs = avfilter_inout_alloc();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">enum</span> AVPixelFormat pix_fmts[] = &#123;AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE&#125;;</span><br><span class="line"></span><br><span class="line">    filter_graph = avfilter_graph_alloc();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* buffer video source: the decoded frames from the decoder will be inserted here. */</span></span><br><span class="line">    <span class="built_in">snprintf</span>(args, <span class="keyword">sizeof</span>(args),</span><br><span class="line">             <span class="string">"video_size=%dx%d:pix_fmt=%d:time_base=%d/%d:pixel_aspect=%d/%d"</span>,</span><br><span class="line">             pCodecCtx-&gt;width, pCodecCtx-&gt;height, pCodecCtx-&gt;pix_fmt,</span><br><span class="line">             pFormatCtx-&gt;streams[videoStream]-&gt;time_base.num,</span><br><span class="line">             pFormatCtx-&gt;streams[videoStream]-&gt;time_base.den,</span><br><span class="line">             pCodecCtx-&gt;sample_aspect_ratio.num, pCodecCtx-&gt;sample_aspect_ratio.den);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (avfilter_graph_create_filter(&amp;buffersrc_ctx, buffersrc, <span class="string">"in"</span>,</span><br><span class="line">                                     args, <span class="literal">NULL</span>, filter_graph) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        LOGD(<span class="string">"Cannot create buffer source\n"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    AVBufferSinkParams *buffersink_params = av_buffersink_params_alloc();</span><br><span class="line">    buffersink_params-&gt;pixel_fmts = pix_fmts;</span><br><span class="line">    <span class="keyword">if</span> (avfilter_graph_create_filter(&amp;buffersink_ctx, buffersink, <span class="string">"out"</span>,</span><br><span class="line">                                     <span class="literal">NULL</span>, buffersink_params, filter_graph) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        LOGD(<span class="string">"Cannot create buffer sink\n"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    av_free(buffersink_params);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Endpoints for the filter graph. */</span></span><br><span class="line">    outputs-&gt;name = av_strdup(<span class="string">"in"</span>);</span><br><span class="line">    outputs-&gt;filter_ctx = buffersrc_ctx;</span><br><span class="line">    outputs-&gt;pad_idx = <span class="number">0</span>;</span><br><span class="line">    outputs-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    inputs-&gt;name = av_strdup(<span class="string">"out"</span>);</span><br><span class="line">    inputs-&gt;filter_ctx = buffersink_ctx;</span><br><span class="line">    inputs-&gt;pad_idx = <span class="number">0</span>;</span><br><span class="line">    inputs-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((avfilter_graph_parse_ptr(filter_graph, filters_descr,</span><br><span class="line">                                  &amp;inputs, &amp;outputs, <span class="literal">NULL</span>)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        LOGD(<span class="string">"Cannot avfilter_graph_parse_ptr\n"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((avfilter_graph_config(filter_graph, <span class="literal">NULL</span>)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        LOGD(<span class="string">"Cannot avfilter_graph_config\n"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//------------------------------filter init end------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//------------------------------window init start-----------------------------------</span></span><br><span class="line">    <span class="comment">// 获取native window</span></span><br><span class="line">    ANativeWindow *nativeWindow = ANativeWindow_fromSurface(env, surface);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取视频宽高</span></span><br><span class="line">    <span class="keyword">int</span> videoWidth = pCodecCtx-&gt;width;</span><br><span class="line">    <span class="keyword">int</span> videoHeight = pCodecCtx-&gt;height;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置native window的buffer大小,可自动拉伸</span></span><br><span class="line">    ANativeWindow_setBuffersGeometry(nativeWindow, videoWidth, videoHeight,</span><br><span class="line">                                     WINDOW_FORMAT_RGBA_8888);</span><br><span class="line">    ANativeWindow_Buffer windowBuffer;</span><br><span class="line">    <span class="comment">//------------------------------window init end-----------------------------------</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//------------------------------get data-----------------------------------</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用于渲染</span></span><br><span class="line">    AVFrame *pFrameRGBA = av_frame_alloc();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Determine required buffer size and allocate buffer</span></span><br><span class="line">    <span class="comment">// buffer中数据就是用于渲染的,且格式为RGBA</span></span><br><span class="line">    <span class="keyword">int</span> numBytes = av_image_get_buffer_size(AV_PIX_FMT_RGBA, pCodecCtx-&gt;width, pCodecCtx-&gt;height,</span><br><span class="line">                                            <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">uint8_t</span> *buffer = (<span class="keyword">uint8_t</span> *) av_malloc(numBytes * <span class="keyword">sizeof</span>(<span class="keyword">uint8_t</span>));</span><br><span class="line">    av_image_fill_arrays(pFrameRGBA-&gt;data, pFrameRGBA-&gt;linesize, buffer, AV_PIX_FMT_RGBA,</span><br><span class="line">                         pCodecCtx-&gt;width, pCodecCtx-&gt;height, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 由于解码出来的帧格式不是RGBA的,在渲染之前需要进行格式转换</span></span><br><span class="line">    SwsContext *sws_ctx = sws_getContext(pCodecCtx-&gt;width,</span><br><span class="line">                                         pCodecCtx-&gt;height,</span><br><span class="line">                                         pCodecCtx-&gt;pix_fmt,</span><br><span class="line">                                         pCodecCtx-&gt;width,</span><br><span class="line">                                         pCodecCtx-&gt;height,</span><br><span class="line">                                         AV_PIX_FMT_RGBA,</span><br><span class="line">                                         SWS_BILINEAR,</span><br><span class="line">                                         <span class="literal">NULL</span>,</span><br><span class="line">                                         <span class="literal">NULL</span>,</span><br><span class="line">                                         <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    AVPacket *packet = av_packet_alloc();</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (av_read_frame(pFormatCtx, packet) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// Is this a packet from the video stream?</span></span><br><span class="line">        <span class="keyword">if</span> (packet-&gt;stream_index == videoStream) &#123;</span><br><span class="line">            <span class="comment">// Decode video frame</span></span><br><span class="line">            <span class="keyword">if</span> (avcodec_send_packet(pCodecCtx, packet) != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            AVFrame *pFrame = av_frame_alloc();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (avcodec_receive_frame(pCodecCtx, pFrame) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// lock native window buffer</span></span><br><span class="line">                ANativeWindow_lock(nativeWindow, &amp;windowBuffer, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">//for AVfilter start</span></span><br><span class="line">                pFrame-&gt;pts = av_frame_get_best_effort_timestamp(pFrame);</span><br><span class="line">                <span class="comment">//* push the decoded frame into the filtergraph</span></span><br><span class="line">                <span class="keyword">if</span> (av_buffersrc_add_frame(buffersrc_ctx, pFrame) == <span class="number">0</span>) &#123;</span><br><span class="line">                    av_buffersink_get_frame(buffersink_ctx, pFrame);</span><br><span class="line">                &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">                    LOGD(<span class="string">"Could not av_buffersrc_add_frame"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 格式转换</span></span><br><span class="line">                sws_scale(sws_ctx, (<span class="keyword">uint8_t</span> <span class="keyword">const</span> *<span class="keyword">const</span> *) pFrame-&gt;data,</span><br><span class="line">                          pFrame-&gt;linesize, <span class="number">0</span>, pCodecCtx-&gt;height,</span><br><span class="line">                          pFrameRGBA-&gt;data, pFrameRGBA-&gt;linesize);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 获取stride</span></span><br><span class="line">                <span class="keyword">uint8_t</span> *dst = (<span class="keyword">uint8_t</span> *) windowBuffer.bits;</span><br><span class="line">                <span class="keyword">int</span> dstStride = windowBuffer.stride * <span class="number">4</span>;</span><br><span class="line">                <span class="keyword">uint8_t</span> *src = (pFrameRGBA-&gt;data[<span class="number">0</span>]);</span><br><span class="line">                <span class="keyword">int</span> srcStride = pFrameRGBA-&gt;linesize[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 由于window的stride和帧的stride不同,因此需要逐行复制</span></span><br><span class="line">                <span class="keyword">int</span> h;</span><br><span class="line">                <span class="keyword">for</span> (h = <span class="number">0</span>; h &lt; videoHeight; h++) &#123;</span><br><span class="line">                    <span class="built_in">memcpy</span>(dst + h * dstStride, src + h * srcStride, srcStride);</span><br><span class="line">                &#125;</span><br><span class="line">                ANativeWindow_unlockAndPost(nativeWindow);</span><br><span class="line"></span><br><span class="line">                count++;</span><br><span class="line">                LOGD(<span class="string">"解码渲染%d帧"</span>, count);</span><br><span class="line">            &#125;</span><br><span class="line">            av_frame_free(&amp;pFrame);</span><br><span class="line">            av_free(pFrame);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ANativeWindow_release(nativeWindow);</span><br><span class="line">    av_packet_free(&amp;packet);</span><br><span class="line">    sws_freeContext(sws_ctx);</span><br><span class="line"></span><br><span class="line">    avfilter_inout_free(&amp;outputs);</span><br><span class="line">    av_free(outputs);</span><br><span class="line">    avfilter_inout_free(&amp;inputs);</span><br><span class="line">    av_free(inputs);</span><br><span class="line"></span><br><span class="line">    av_free(buffer);</span><br><span class="line">    av_frame_free(&amp;pFrameRGBA);</span><br><span class="line">    av_free(pFrameRGBA);</span><br><span class="line"></span><br><span class="line">    avfilter_graph_free(&amp;filter_graph); <span class="comment">//for avfilter</span></span><br><span class="line">    <span class="comment">// Close the codecs</span></span><br><span class="line">    avcodec_close(pCodecCtx);</span><br><span class="line">    avcodec_free_context(&amp;pCodecCtx);</span><br><span class="line">    pCodecCtx = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Close the video file</span></span><br><span class="line">    avformat_close_input(&amp;pFormatCtx);</span><br><span class="line">    avformat_free_context(pFormatCtx);</span><br><span class="line">    pFormatCtx = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    env-&gt;ReleaseStringUTFChars(url_, url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更多的特效使用： <a href="http://www.ffmpeg.org/ffmpeg-filters.html" target="_blank" rel="noopener">http://www.ffmpeg.org/ffmpeg-filters.html</a></p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/音视频/" rel="tag"><i class="fa fa-tag"></i> 音视频</a>
+          
+            <a href="/tags/ffmpeg/" rel="tag"><i class="fa fa-tag"></i> ffmpeg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Android OpenGLES渲染MediaCodec解码数据.html" rel="next" title="Android OpenGLES渲染MediaCodec解码数据">
+                <i class="fa fa-chevron-left"></i> Android OpenGLES渲染MediaCodec解码数据
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ffmpeg音视频合成.html" rel="prev" title="ffmpeg音视频合成">
+                ffmpeg音视频合成 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

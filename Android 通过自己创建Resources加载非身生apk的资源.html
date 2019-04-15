@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,源码," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在我们开发中我们在xml里面写布局1234&amp;lt;ImageView   android:src=&quot;@mipmap/ic_launcher_round&quot;   android:layout_width=&quot;wrap_content&quot;   android:layout_height=&quot;wrap_content&quot; /&amp;gt; 我们的src中赋值@mipmap/ic_launcher_round,然后就会得">
+<meta name="keywords" content="android,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 通过自己创建Resources加载非身生apk的资源">
+<meta property="og:url" content="http://www.zengzhaowen.cn/Android 通过自己创建Resources加载非身生apk的资源.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="在我们开发中我们在xml里面写布局1234&amp;lt;ImageView   android:src=&quot;@mipmap/ic_launcher_round&quot;   android:layout_width=&quot;wrap_content&quot;   android:layout_height=&quot;wrap_content&quot; /&amp;gt; 我们的src中赋值@mipmap/ic_launcher_round,然后就会得">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.094Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 通过自己创建Resources加载非身生apk的资源">
+<meta name="twitter:description" content="在我们开发中我们在xml里面写布局1234&amp;lt;ImageView   android:src=&quot;@mipmap/ic_launcher_round&quot;   android:layout_width=&quot;wrap_content&quot;   android:layout_height=&quot;wrap_content&quot; /&amp;gt; 我们的src中赋值@mipmap/ic_launcher_round,然后就会得">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/Android 通过自己创建Resources加载非身生apk的资源.html"/>
+
+
+
+
+
+  <title>Android 通过自己创建Resources加载非身生apk的资源 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/Android 通过自己创建Resources加载非身生apk的资源.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 通过自己创建Resources加载非身生apk的资源</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T09:52:57+08:00">
+                2018-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Android 通过自己创建Resources加载非身生apk的资源.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Android 通过自己创建Resources加载非身生apk的资源.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,935字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  15分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在我们开发中我们在<code>xml</code>里面写布局<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;ImageView</span><br><span class="line">   android:src=<span class="string">"@mipmap/ic_launcher_round"</span></span><br><span class="line">   android:layout_width=<span class="string">"wrap_content"</span></span><br><span class="line">   android:layout_height=<span class="string">"wrap_content"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>我们的<code>src</code>中赋值<code>@mipmap/ic_launcher_round</code>,然后就会得到对应的资源，那么有没有好奇我们这些资源是怎么加载进去的呢？我们点进ImageView去查看:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">       <span class="keyword">final</span> Drawable d = a.getDrawable(R.styleable.ImageView_src);</span><br><span class="line">       <span class="keyword">if</span> (d != <span class="keyword">null</span>) &#123;</span><br><span class="line">           setImageDrawable(d);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">     <span class="meta">@Nullable</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> Drawable <span class="title">getDrawable</span><span class="params">(@StyleableRes <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (mRecycled) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Cannot make calls to a recycled instance!"</span>);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">final</span> TypedValue value = mValue;</span><br><span class="line">       <span class="keyword">if</span> (getValueAt(index*AssetManager.STYLE_NUM_ENTRIES, value)) &#123;</span><br><span class="line">           <span class="keyword">if</span> (value.type == TypedValue.TYPE_ATTRIBUTE) &#123;</span><br><span class="line">               <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(</span><br><span class="line">                       <span class="string">"Failed to resolve attribute at index "</span> + index + <span class="string">": "</span> + value);</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">return</span> mResources.loadDrawable(value, value.resourceId, mTheme);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">mResources.loadDrawable(value, value.resourceId, mTheme);</span><br></pre></td></tr></table></figure></p>
+<p>调用的是<code>mResources</code>的<code>loadDrawable</code>方法,这样就获取了相应的值。下面我们通过来分析<code>Resources</code>是怎么创建和寻找对应的资源的。如果我们想要用自己的<code>Resources</code>来加载资源，我们应该怎么做呢?<br>我们从<code>Activity</code>的<code>getResources()</code>里面入手:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Resources <span class="title">getResourcesInternal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mResources == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (mOverrideConfiguration == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mResources = <span class="keyword">super</span>.getResources();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">final</span> Context resContext = createConfigurationContext(mOverrideConfiguration);</span><br><span class="line">            mResources = resContext.getResources();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> mResources;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以发现这个<code>mResources</code>是在<code>Context</code>里面获取到的，在<code>Context</code>里面:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Returns a Resources instance for the application's package.</span></span><br><span class="line"><span class="comment">    * &lt;p&gt;</span></span><br><span class="line"><span class="comment">    * &lt;strong&gt;Note:&lt;/strong&gt; Implementations of this method should return</span></span><br><span class="line"><span class="comment">    * a Resources instance that is consistent with the AssetManager instance</span></span><br><span class="line"><span class="comment">    * returned by &#123;<span class="doctag">@link</span> #getAssets()&#125;. For example, they should share the</span></span><br><span class="line"><span class="comment">    * same &#123;<span class="doctag">@link</span> Configuration&#125; object.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> a Resources instance for the application's package</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@see</span> #getAssets()</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> Resources <span class="title">getResources</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这是一个抽象方法，从注释上我们可以知道这个应该和<code>getAssets()</code>,也就是和<code>AssetManager</code>有关,我们找到<code>Context</code>的实现类<code>ContextImpl</code>查看:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Resources <span class="title">getResources</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mResources;</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="title">ContextImpl</span><span class="params">(ContextImpl container, ActivityThread mainThread,</span></span></span><br><span class="line"><span class="function"><span class="params">            LoadedApk packageInfo, IBinder activityToken, UserHandle user, <span class="keyword">boolean</span> restricted,</span></span></span><br><span class="line"><span class="function"><span class="params">            Display display, Configuration overrideConfiguration, <span class="keyword">int</span> createDisplayWithId)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//....</span></span><br><span class="line">      Resources resources = packageInfo.getResources(mainThread);</span><br><span class="line">        <span class="keyword">if</span> (resources != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (displayId != Display.DEFAULT_DISPLAY</span><br><span class="line">                    || overrideConfiguration != <span class="keyword">null</span></span><br><span class="line">                    || (compatInfo != <span class="keyword">null</span> &amp;&amp; compatInfo.applicationScale</span><br><span class="line">                            != resources.getCompatibilityInfo().applicationScale)) &#123;</span><br><span class="line">                resources = mResourcesManager.getTopLevelResources(packageInfo.getResDir(),</span><br><span class="line">                        packageInfo.getSplitResDirs(), packageInfo.getOverlayDirs(),</span><br><span class="line">                        packageInfo.getApplicationInfo().sharedLibraryFiles, displayId,</span><br><span class="line">                        overrideConfiguration, compatInfo);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        mResources = resources;</span><br><span class="line">    <span class="comment">//....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>发现是<code>ResourcesManager</code>里面调用了<code>getTopLevelResources</code>函数，点进去：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Creates the top level Resources for applications with the given compatibility info.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> resDir the resource directory.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> splitResDirs split resource directories.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> overlayDirs the resource overlay directories.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> libDirs the shared library resource dirs this app references.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> displayId display Id.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> overrideConfiguration override configurations.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> compatInfo the compatibility info. Must not be null.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">Resources <span class="title">getTopLevelResources</span><span class="params">(String resDir, String[] splitResDirs,</span></span></span><br><span class="line"><span class="function"><span class="params">            String[] overlayDirs, String[] libDirs, <span class="keyword">int</span> displayId,</span></span></span><br><span class="line"><span class="function"><span class="params">            Configuration overrideConfiguration, CompatibilityInfo compatInfo)</span> </span>&#123;</span><br><span class="line">      <span class="comment">//.....</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">        Configuration overrideConfigCopy = (overrideConfiguration != <span class="keyword">null</span>)</span><br><span class="line">                ? <span class="keyword">new</span> Configuration(overrideConfiguration) : <span class="keyword">null</span>;</span><br><span class="line">        ResourcesKey key = <span class="keyword">new</span> ResourcesKey(resDir, displayId, overrideConfigCopy, scale);</span><br><span class="line">        Resources r;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">            <span class="comment">// Resources is app scale dependent.</span></span><br><span class="line">            <span class="keyword">if</span> (DEBUG) Slog.w(TAG, <span class="string">"getTopLevelResources: "</span> + resDir + <span class="string">" / "</span> + scale);</span><br><span class="line"></span><br><span class="line">            WeakReference&lt;Resources&gt; wr = mActiveResources.get(key);</span><br><span class="line">            r = wr != <span class="keyword">null</span> ? wr.get() : <span class="keyword">null</span>;</span><br><span class="line">            <span class="comment">//if (r != null) Log.i(TAG, "isUpToDate " + resDir + ": " + r.getAssets().isUpToDate());</span></span><br><span class="line">            <span class="keyword">if</span> (r != <span class="keyword">null</span> &amp;&amp; r.getAssets().isUpToDate()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (DEBUG) Slog.w(TAG, <span class="string">"Returning cached resources "</span> + r + <span class="string">" "</span> + resDir</span><br><span class="line">                        + <span class="string">": appScale="</span> + r.getCompatibilityInfo().applicationScale</span><br><span class="line">                        + <span class="string">" key="</span> + key + <span class="string">" overrideConfig="</span> + overrideConfiguration);</span><br><span class="line">                <span class="keyword">return</span> r;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        AssetManager assets = <span class="keyword">new</span> AssetManager();</span><br><span class="line">        <span class="comment">// resDir can be null if the 'android' package is creating a new Resources object.</span></span><br><span class="line">        <span class="comment">// This is fine, since each AssetManager automatically loads the 'android' package</span></span><br><span class="line">        <span class="comment">// already.</span></span><br><span class="line">        <span class="keyword">if</span> (resDir != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (assets.addAssetPath(resDir) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (splitResDirs != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (String splitResDir : splitResDirs) &#123;</span><br><span class="line">                <span class="keyword">if</span> (assets.addAssetPath(splitResDir) == <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (overlayDirs != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (String idmapPath : overlayDirs) &#123;</span><br><span class="line">                assets.addOverlayPath(idmapPath);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (libDirs != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (String libDir : libDirs) &#123;</span><br><span class="line">                <span class="keyword">if</span> (libDir.endsWith(<span class="string">".apk"</span>)) &#123;</span><br><span class="line">                    <span class="comment">// Avoid opening files we know do not have resources,</span></span><br><span class="line">                    <span class="comment">// like code-only .jar files.</span></span><br><span class="line">                    <span class="keyword">if</span> (assets.addAssetPath(libDir) == <span class="number">0</span>) &#123;</span><br><span class="line">                        Log.w(TAG, <span class="string">"Asset path '"</span> + libDir +</span><br><span class="line">                                <span class="string">"' does not exist or contains no resources."</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Log.i(TAG, "Resource: key=" + key + ", display metrics=" + metrics);</span></span><br><span class="line">        DisplayMetrics dm = getDisplayMetricsLocked(displayId);</span><br><span class="line">        Configuration config;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">boolean</span> isDefaultDisplay = (displayId == Display.DEFAULT_DISPLAY);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">boolean</span> hasOverrideConfig = key.hasOverrideConfiguration();</span><br><span class="line">        <span class="keyword">if</span> (!isDefaultDisplay || hasOverrideConfig) &#123;</span><br><span class="line">            config = <span class="keyword">new</span> Configuration(getConfiguration());</span><br><span class="line">            <span class="keyword">if</span> (!isDefaultDisplay) &#123;</span><br><span class="line">                applyNonDefaultDisplayMetricsToConfigurationLocked(dm, config);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (hasOverrideConfig) &#123;</span><br><span class="line">                config.updateFrom(key.mOverrideConfiguration);</span><br><span class="line">                <span class="keyword">if</span> (DEBUG) Slog.v(TAG, <span class="string">"Applied overrideConfig="</span> + key.mOverrideConfiguration);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            config = getConfiguration();</span><br><span class="line">        &#125;</span><br><span class="line">        r = <span class="keyword">new</span> Resources(assets, dm, config, compatInfo);</span><br><span class="line">       <span class="comment">//....</span></span><br><span class="line">            <span class="keyword">return</span> r;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>从这段代码我们就可以知道，如果缓存里面有对应的<code>Resources</code>就直接返回，如果没有就直接<code>new</code>出来,对应的资源路径就是通过<code>AssetManager.addAssetPath(String path)</code>函数设置,也验证了上面说的那句话，<code>Resources</code>和<code>AssetManager</code>有关。</p>
+<h5 id="AssetManager的创建"><a href="#AssetManager的创建" class="headerlink" title="AssetManager的创建"></a>AssetManager的创建</h5><p>我们进入<code>AssetManager</code>类中查看<code>addAssetPath</code>函数:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Add an additional set of assets to the asset manager.  This can be</span></span><br><span class="line"><span class="comment">     * either a directory or ZIP file.  Not for use by applications.  Returns</span></span><br><span class="line"><span class="comment">     * the cookie of the added asset, or 0 on failure.</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@hide</span>&#125;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">addAssetPath</span><span class="params">(String path)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> res = addAssetPathNative(path);</span><br><span class="line">            makeStringBlocks(mStringBlocks);</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">addAssetPathNative</span><span class="params">(String path)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到调用了一个<code>native</code>方法，从注释我们可以知道,这个路径对应的可以是一个目录或者一个<code>zip</code>文件。我们看看<code>AssetManager</code>的构造方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Create a new AssetManager containing only the basic system assets.</span></span><br><span class="line"><span class="comment">     * Applications will not generally use this method, instead retrieving the</span></span><br><span class="line"><span class="comment">     * appropriate asset manager with &#123;<span class="doctag">@link</span> Resources#getAssets&#125;.    Not for</span></span><br><span class="line"><span class="comment">     * use by applications.</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@hide</span>&#125;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AssetManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (DEBUG_REFS) &#123;</span><br><span class="line">                mNumRefs = <span class="number">0</span>;</span><br><span class="line">                incRefsLocked(<span class="keyword">this</span>.hashCode());</span><br><span class="line">            &#125;</span><br><span class="line">            init(<span class="keyword">false</span>);</span><br><span class="line">            <span class="keyword">if</span> (localLOGV) Log.v(TAG, <span class="string">"New asset manager: "</span> + <span class="keyword">this</span>);</span><br><span class="line">            ensureSystemAssets();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以查看到<code>addAssetPath</code>这个方法和<code>AssetManager</code>的构造方法注释上面都有<code>{@hide}</code>,这个表示我们不能在应用层直接调用,如果我们还是要调用的话就需要用到反射:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个AssetManager</span></span><br><span class="line"><span class="comment">//AssetManager assetManager = new AssetManager(); hide的调用不了  只有用反射调用</span></span><br><span class="line">AssetManager assetManager = AssetManager.class.newInstance();</span><br><span class="line"><span class="comment">//添加本地下载好的资源</span></span><br><span class="line"><span class="comment">//  assetManager.addAssetPath(String path);// 也是hide的调用不了  继续用反射执行该方法</span></span><br><span class="line">Method addAssetPathMethod = assetManager.getClass().getDeclaredMethod(<span class="string">"addAssetPath"</span>, String.class);</span><br><span class="line">addAssetPathMethod.invoke(assetManager, resPath);</span><br></pre></td></tr></table></figure>
+<p>　　通过前面的分析可知,Android系统中实际对资源的管理是AssetManager类.每个Resources对象都会关联一个AssetManager对象，Resources将对资源的操作大多数委托给了AssetManager。当然有些源码还有一层 ResourcesImpl 刚刚我们也看到了。<br>　　另外还会存在一个native层的AssetManager对象与java层的这个AssetManager对象相对应，而这个native层AssetManager对象在内存的地址存储在java层的AssetManager.mObject中。所以在java层AssetManager的jni方法中可以快速找到它对应的native层的AssetManager对象。<br><code>AssetManager的init()</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Create a new AssetManager containing only the basic system assets.</span></span><br><span class="line"><span class="comment">   * Applications will not generally use this method, instead retrieving the</span></span><br><span class="line"><span class="comment">   * appropriate asset manager with &#123;<span class="doctag">@link</span> Resources#getAssets&#125;.    Not for</span></span><br><span class="line"><span class="comment">   * use by applications.</span></span><br><span class="line"><span class="comment">   * &#123;<span class="doctag">@hide</span>&#125;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">AssetManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">          <span class="keyword">if</span> (DEBUG_REFS) &#123;</span><br><span class="line">              mNumRefs = <span class="number">0</span>;</span><br><span class="line">              incRefsLocked(<span class="keyword">this</span>.hashCode());</span><br><span class="line">          &#125;</span><br><span class="line">          init(<span class="keyword">false</span>);</span><br><span class="line">          <span class="keyword">if</span> (localLOGV) Log.v(TAG, <span class="string">"New asset manager: "</span> + <span class="keyword">this</span>);</span><br><span class="line">          ensureSystemAssets();</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// ndk的源码路径</span></span><br><span class="line"> <span class="comment">// frameworks/base/core/jni/android_util_AssetManager.cpp</span></span><br><span class="line"> <span class="comment">// frameworks/base/libs/androidfw/AssetManager.cpp</span></span><br><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(<span class="keyword">boolean</span> isSystem)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">android_content_AssetManager_init</span><span class="params">(JNIEnv* env, jobject clazz, jboolean isSystem)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (isSystem) &#123;</span><br><span class="line">        verifySystemIdmaps();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//  AssetManager.cpp</span></span><br><span class="line">    AssetManager* am = <span class="keyword">new</span> AssetManager();</span><br><span class="line">    <span class="keyword">if</span> (am == NULL) &#123;</span><br><span class="line">        jniThrowException(env, <span class="string">"java/lang/OutOfMemoryError"</span>, <span class="string">""</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    am-&gt;addDefaultAssets();</span><br><span class="line"></span><br><span class="line">    ALOGV(<span class="string">"Created AssetManager %p for Java object %p\n"</span>, am, clazz);</span><br><span class="line">    env-&gt;SetLongField(clazz, gAssetManagerOffsets.mObject, reinterpret_cast&lt;jlong&gt;(am));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bool AssetManager::addDefaultAssets()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* root = getenv(<span class="string">"ANDROID_ROOT"</span>);</span><br><span class="line">    LOG_ALWAYS_FATAL_IF(root == NULL, <span class="string">"ANDROID_ROOT not set"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function">String8 <span class="title">path</span><span class="params">(root)</span></span>;</span><br><span class="line">    <span class="comment">// framework/framework-res.apk  </span></span><br><span class="line">    <span class="comment">// 初始化的时候会去加载系统的framework-res.apk资源</span></span><br><span class="line">    <span class="comment">// 也就是说我们为什么能加载系统的资源如颜色、图片、文字等等</span></span><br><span class="line">    path.appendPath(kSystemAssets);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> addAssetPath(path, NULL);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>AssetManager</code>的<code>addAssetPath(String path)</code>方法<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> AssetManager::addAssetPath(<span class="keyword">const</span> String8&amp; path, <span class="keyword">int32_t</span>* cookie)</span><br><span class="line">&#123;</span><br><span class="line">    asset_path ap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 省略一些校验代码</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断是否已经加载过了</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i=<span class="number">0</span>; i&lt;mAssetPaths.size(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (mAssetPaths[i].path == ap.path) &#123;</span><br><span class="line">            <span class="keyword">if</span> (cookie) &#123;</span><br><span class="line">                *cookie = <span class="keyword">static_cast</span>&lt;<span class="keyword">int32_t</span>&gt;(i+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查路径是否有一个androidmanifest . xml</span></span><br><span class="line">    Asset* manifestAsset = <span class="keyword">const_cast</span>&lt;AssetManager*&gt;(<span class="keyword">this</span>)-&gt;openNonAssetInPathLocked(</span><br><span class="line">            kAndroidManifest, Asset::ACCESS_BUFFER, ap);</span><br><span class="line">    <span class="keyword">if</span> (manifestAsset == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="comment">// 如果不包含任何资源</span></span><br><span class="line">        <span class="keyword">delete</span> manifestAsset;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">delete</span> manifestAsset;</span><br><span class="line">    <span class="comment">// 添加 </span></span><br><span class="line">    mAssetPaths.add(ap);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 新路径总是补充到最后</span></span><br><span class="line">    <span class="keyword">if</span> (cookie) &#123;</span><br><span class="line">        *cookie = <span class="keyword">static_cast</span>&lt;<span class="keyword">int32_t</span>&gt;(mAssetPaths.size());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mResources != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        appendPathToResTable(ap);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">bool</span> AssetManager::appendPathToResTable(<span class="keyword">const</span> asset_path&amp; ap) <span class="keyword">const</span> &#123;</span><br><span class="line">    <span class="comment">// skip those ap's that correspond to system overlays</span></span><br><span class="line">    <span class="keyword">if</span> (ap.isSystemOverlay) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Asset* ass = <span class="literal">NULL</span>;</span><br><span class="line">    ResTable* sharedRes = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">bool</span> shared = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">bool</span> onlyEmptyResources = <span class="literal">true</span>;</span><br><span class="line">    MY_TRACE_BEGIN(ap.path.<span class="built_in">string</span>());</span><br><span class="line">    <span class="comment">// 资源覆盖机制，暂不考虑</span></span><br><span class="line">    Asset* idmap = openIdmapLocked(ap);</span><br><span class="line">    <span class="keyword">size_t</span> nextEntryIdx = mResources-&gt;getTableCount();</span><br><span class="line">    ALOGV(<span class="string">"Looking for resource asset in '%s'\n"</span>, ap.path.<span class="built_in">string</span>());</span><br><span class="line">    <span class="comment">// 资源包路径不是一个文件夹，那就是一个apk文件了</span></span><br><span class="line">    <span class="keyword">if</span> (ap.type != kFileTypeDirectory) &#123;</span><br><span class="line">        <span class="comment">// 对于app来说，第一次执行时，肯定为0，因为mResources刚创建，还没对其操作</span></span><br><span class="line">        <span class="comment">// 下面的分支 指挥在参数是系统资源包路径时，才执行，</span></span><br><span class="line">        <span class="comment">// 而且系统资源包路径是首次被解析的</span></span><br><span class="line">        <span class="comment">// 第二次执行appendPathToResTable，nextEntryIdx就不会为0了</span></span><br><span class="line">        <span class="keyword">if</span> (nextEntryIdx == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// mAssetPaths中存储的第一个资源包路径是系统资源的路径，</span></span><br><span class="line">            <span class="comment">// 即framework-res.apk的路径，它在zygote启动时已经加载了</span></span><br><span class="line">            <span class="comment">// 可以通过mZipSet.getZipResourceTable获得其ResTable对象</span></span><br><span class="line">            sharedRes = <span class="keyword">const_cast</span>&lt;AssetManager*&gt;(<span class="keyword">this</span>)-&gt;</span><br><span class="line">                mZipSet.getZipResourceTable(ap.path);</span><br><span class="line">            <span class="comment">// 对于APP来说，肯定不为NULL</span></span><br><span class="line">            <span class="keyword">if</span> (sharedRes != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                <span class="comment">// 得到系统资源包路径中resources.arsc个数</span></span><br><span class="line">                nextEntryIdx = sharedRes-&gt;getTableCount();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 当参数是mAssetPaths中除第一个以外的其他资源资源包路径，</span></span><br><span class="line">        <span class="comment">// 比如app自己的资源包路径时，走下面的逻辑</span></span><br><span class="line">        <span class="keyword">if</span> (sharedRes == <span class="literal">NULL</span>) &#123;</span><br><span class="line">            <span class="comment">// 检查该资源包是否被其他进程加载了，这与ZipSet数据结构有关，后面在详细介绍</span></span><br><span class="line">            ass = <span class="keyword">const_cast</span>&lt;AssetManager*&gt;(<span class="keyword">this</span>)-&gt;</span><br><span class="line">                mZipSet.getZipResourceTableAsset(ap.path);</span><br><span class="line">            <span class="comment">// 对于app自己的资源包来说，一般都会都下面的逻辑</span></span><br><span class="line">            <span class="keyword">if</span> (ass == <span class="literal">NULL</span>) &#123;</span><br><span class="line">                ALOGV(<span class="string">"loading resource table %s\n"</span>, ap.path.<span class="built_in">string</span>());</span><br><span class="line">                <span class="comment">// 创建Asset对象，就是打开resources.arsc</span></span><br><span class="line">                ass = <span class="keyword">const_cast</span>&lt;AssetManager*&gt;(<span class="keyword">this</span>)-&gt;</span><br><span class="line">                    openNonAssetInPathLocked(<span class="string">"resources.arsc"</span>,</span><br><span class="line">                                             Asset::ACCESS_BUFFER,</span><br><span class="line">                                             ap);</span><br><span class="line">                <span class="keyword">if</span> (ass != <span class="literal">NULL</span> &amp;&amp; ass != kExcludedAsset) &#123;</span><br><span class="line">                    ass = <span class="keyword">const_cast</span>&lt;AssetManager*&gt;(<span class="keyword">this</span>)-&gt;</span><br><span class="line">                        mZipSet.setZipResourceTableAsset(ap.path, ass);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 只有在zygote启动时，才会执行下面的逻辑</span></span><br><span class="line">            <span class="comment">// 为系统资源创建 ResTable，并加入到mZipSet里。</span></span><br><span class="line">            <span class="keyword">if</span> (nextEntryIdx == <span class="number">0</span> &amp;&amp; ass != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                <span class="comment">// If this is the first resource table in the asset</span></span><br><span class="line">                <span class="comment">// manager, then we are going to cache it so that we</span></span><br><span class="line">                <span class="comment">// can quickly copy it out for others.</span></span><br><span class="line">                ALOGV(<span class="string">"Creating shared resources for %s"</span>, ap.path.<span class="built_in">string</span>());</span><br><span class="line">                <span class="comment">// 创建ResTable对象，并把前面与resources.arsc关联的Asset对象，加入到这个ResTabl中</span></span><br><span class="line">                sharedRes = <span class="keyword">new</span> ResTable();</span><br><span class="line">                sharedRes-&gt;add(ass, idmap, nextEntryIdx + <span class="number">1</span>, <span class="literal">false</span>);</span><br><span class="line">                sharedRes = <span class="keyword">const_cast</span>&lt;AssetManager*&gt;(<span class="keyword">this</span>)-&gt;</span><br><span class="line">                    mZipSet.setZipResourceTable(ap.path, sharedRes);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ALOGV(<span class="string">"loading resource table %s\n"</span>, ap.path.<span class="built_in">string</span>());</span><br><span class="line">        ass = <span class="keyword">const_cast</span>&lt;AssetManager*&gt;(<span class="keyword">this</span>)-&gt;</span><br><span class="line">            openNonAssetInPathLocked(<span class="string">"resources.arsc"</span>,</span><br><span class="line">                                     Asset::ACCESS_BUFFER,</span><br><span class="line">                                     ap);</span><br><span class="line">        shared = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((ass != <span class="literal">NULL</span> || sharedRes != <span class="literal">NULL</span>) &amp;&amp; ass != kExcludedAsset) &#123;</span><br><span class="line">        ALOGV(<span class="string">"Installing resource asset %p in to table %p\n"</span>, ass, mResources);</span><br><span class="line">        <span class="comment">// 系统资源包时</span></span><br><span class="line">        <span class="keyword">if</span> (sharedRes != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            ALOGV(<span class="string">"Copying existing resources for %s"</span>, ap.path.<span class="built_in">string</span>());</span><br><span class="line">            mResources-&gt;add(sharedRes);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 非系统资源包时，将与resources.arsc关联的Asset对象加入到Restable中</span></span><br><span class="line">            <span class="comment">// 此过程会解析resources.arsc文件。</span></span><br><span class="line">            ALOGV(<span class="string">"Parsing resources for %s"</span>, ap.path.<span class="built_in">string</span>());</span><br><span class="line">            mResources-&gt;add(ass, idmap, nextEntryIdx + <span class="number">1</span>, !shared);</span><br><span class="line">        &#125;</span><br><span class="line">        onlyEmptyResources = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!shared) &#123;</span><br><span class="line">            <span class="keyword">delete</span> ass;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        mResources-&gt;addEmpty(nextEntryIdx + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (idmap != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">delete</span> idmap;</span><br><span class="line">    &#125;</span><br><span class="line">    MY_TRACE_END();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> onlyEmptyResources;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>大家应该之前了解过这个文件<code>resources.arsc</code>， 如果没了解过可以在网上找篇文章看一下。<code>apk</code>在打包的时候会生成它，我们解压<code>apk</code>就应该能够看到他。这里面基本都是存放的资源的索引，之所以不同的分辨率可以加载不同的图片它可是个大功臣。</p>
+<p>我们获取到了<code>assetManager</code>其他的都好办了，因为资源地址是由这个决定的，所以我们其他的都可以用当前<code>app</code>本身的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个AssetManager</span></span><br><span class="line"> <span class="comment">//AssetManager assetManager = new AssetManager(); hide的调用不了  只有用反射调用</span></span><br><span class="line"> AssetManager assetManager = AssetManager.class.newInstance();</span><br><span class="line"> <span class="comment">//添加本地下载好的资源皮肤</span></span><br><span class="line"> <span class="comment">//  assetManager.addAssetPath(String path);// 也是hide的调用不了  继续用反射执行该方法</span></span><br><span class="line"> Method addAssetPathMethod = assetManager.getClass().getDeclaredMethod(<span class="string">"addAssetPath"</span>,         String.class);</span><br><span class="line">  addAssetPathMethod.invoke(assetManager, resPath);</span><br><span class="line"> Resources superResources = context.getResources();</span><br><span class="line"> Resources  mResources = <span class="keyword">new</span> Resources(assetManager, superResources.getDisplayMetrics(),                 superResources.getConfiguration());</span><br></pre></td></tr></table></figure></p>
+<p>这样的话我们就可以通过自己创建<code>Resources</code>来加载非本身apk的资源了<br>`</p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          
+            <a href="/tags/源码/" rel="tag"><i class="fa fa-tag"></i> 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Android setContentView()源码流程分析.html" rel="next" title="Android setContentView()源码流程分析">
+                <i class="fa fa-chevron-left"></i> Android setContentView()源码流程分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Android invalidate流程分析.html" rel="prev" title="Android View绘制流程分析">
+                Android View绘制流程分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#AssetManager的创建"><span class="nav-number">1.</span> <span class="nav-text">AssetManager的创建</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

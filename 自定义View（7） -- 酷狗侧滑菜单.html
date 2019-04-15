@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,自定义view," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="上一篇我们自定义了一个流式布局的ViewGroup,我们为了熟悉自定义ViewGroup,就继续自定义ViewGroup。这篇的内容是是仿照酷狗的侧滑菜单。我们写代码之前，先想清楚是怎么实现，解析实现的步骤。实现侧滑的方式很多种，在这里我选择继承HorizontalScrollView，为什么继承这个呢？因为继承这个的话，我们就不用写childView的move   meause  layout，">
+<meta name="keywords" content="android,自定义view">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义View（7） -- 酷狗侧滑菜单">
+<meta property="og:url" content="http://www.zengzhaowen.cn/自定义View（7） -- 酷狗侧滑菜单.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="上一篇我们自定义了一个流式布局的ViewGroup,我们为了熟悉自定义ViewGroup,就继续自定义ViewGroup。这篇的内容是是仿照酷狗的侧滑菜单。我们写代码之前，先想清楚是怎么实现，解析实现的步骤。实现侧滑的方式很多种，在这里我选择继承HorizontalScrollView，为什么继承这个呢？因为继承这个的话，我们就不用写childView的move   meause  layout，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4658633-558bd5c0a1eaf3ac.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.112Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自定义View（7） -- 酷狗侧滑菜单">
+<meta name="twitter:description" content="上一篇我们自定义了一个流式布局的ViewGroup,我们为了熟悉自定义ViewGroup,就继续自定义ViewGroup。这篇的内容是是仿照酷狗的侧滑菜单。我们写代码之前，先想清楚是怎么实现，解析实现的步骤。实现侧滑的方式很多种，在这里我选择继承HorizontalScrollView，为什么继承这个呢？因为继承这个的话，我们就不用写childView的move   meause  layout，">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4658633-558bd5c0a1eaf3ac.gif?imageMogr2/auto-orient/strip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/自定义View（7） -- 酷狗侧滑菜单.html"/>
+
+
+
+
+
+  <title>自定义View（7） -- 酷狗侧滑菜单 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/自定义View（7） -- 酷狗侧滑菜单.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">自定义View（7） -- 酷狗侧滑菜单</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-12T09:52:57+08:00">
+                2018-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/自定义view/" itemprop="url" rel="index">
+                    <span itemprop="name">自定义view</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/自定义View（7） -- 酷狗侧滑菜单.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/自定义View（7） -- 酷狗侧滑菜单.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,865字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  14分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://upload-images.jianshu.io/upload_images/4658633-558bd5c0a1eaf3ac.gif?imageMogr2/auto-orient/strip" alt="效果图"><br>上一篇我们自定义了一个流式布局的<code>ViewGroup</code>,我们为了熟悉自定义<code>ViewGroup</code>,就继续自定义<code>ViewGroup</code>。这篇的内容是是仿照酷狗的侧滑菜单。<br>我们写代码之前，先想清楚是怎么实现，解析实现的步骤。实现侧滑的方式很多种，在这里我选择继承<code>HorizontalScrollView</code>，为什么继承这个呢？因为继承这个的话，我们就不用写<code>childView</code>的<code>move   meause  layout</code>，这样就节约了很大的代码量和事件，因为内部<code>HorizontalScrollView</code>已经封装好了。我们在这个控件里面放置两个<code>childView</code>，一个是<code>menu</code>,一个是<code>content</code>。然后我们处理拦截和快速滑动事件就可以了。思路想清楚了我们就开始撸码。<br>首先我们自定义一个属性，用于打开的时候<code>content</code>还有多少可以看到，也就是打开的时候<code>menu</code>距离右边的距离。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">declare-styleable</span> <span class="attr">name</span>=<span class="string">"SkiddingMenuLayout"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"menuRightMargin"</span> <span class="attr">format</span>=<span class="string">"dimension"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">declare-styleable</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>在初始化的时候我们通过<code>menuRightMargin</code>属性获取<code>menu</code>真正的宽度<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SkiddingMenuLayout</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SkiddingMenuLayout</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, attrs, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SkiddingMenuLayout</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 初始化自定义属性</span></span><br><span class="line">        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SkiddingMenuLayout);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> rightMargin = array.getDimension(</span><br><span class="line">                R.styleable.SkiddingMenuLayout_menuRightMargin, DisplayUtil.dip2px(context, <span class="number">50</span>));</span><br><span class="line">        <span class="comment">// 菜单页的宽度是 = 屏幕的宽度 - 右边的一小部分距离（自定义属性）</span></span><br><span class="line">        mMenuWidth = (<span class="keyword">int</span>) (DisplayUtil.getScreenWidth(context) - rightMargin);</span><br><span class="line">        array.recycle();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>接着我们在布局加载完毕的时候我们指定<code>menu</code>和<code>content</code>的宽度<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//xml 布局解析完毕回调的方法</span><br><span class="line">    @Override</span><br><span class="line">    protected void onFinishInflate() &#123;</span><br><span class="line">        super.onFinishInflate();</span><br><span class="line">        //指定宽高</span><br><span class="line">        //先拿到整体容器</span><br><span class="line">        ViewGroup container = (ViewGroup) getChildAt(0);</span><br><span class="line"></span><br><span class="line">        int childCount = container.getChildCount();</span><br><span class="line">        if (childCount != 2)</span><br><span class="line">            throw new RuntimeException("只能放置两个子View");</span><br><span class="line">        //菜单</span><br><span class="line">        mMenuView = container.getChildAt(0);</span><br><span class="line">        ViewGroup.LayoutParams meauParams = mMenuView.getLayoutParams();</span><br><span class="line">        meauParams.width = mMenuWidth;</span><br><span class="line">        //7.0一下的不加这句代码是正常的   7.0以上的必须加</span><br><span class="line">        mMenuView.setLayoutParams(meauParams);</span><br><span class="line"></span><br><span class="line">        //内容页</span><br><span class="line">        mContentView = container.getChildAt(1);</span><br><span class="line">        ViewGroup.LayoutParams contentParams = mContentView.getLayoutParams();</span><br><span class="line">        contentParams.width = DisplayUtil.getScreenWidth(getContext());</span><br><span class="line">        //7.0一下的不加这句代码是正常的   7.0以上的必须加</span><br><span class="line">        mContentView.setLayoutParams(contentParams);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里有一个细节，我们在刚进入的时候，菜单默认是关闭的，所以我们需要调用<code>scrollTo()</code>函数移动一下位置，但是发现在<code>onFinishInflate()</code>函数里面调用没有作用,这个是为什么呢？因为我们在<code>xml</code>加载完毕之后，才会真正的执行<code>View</code>的绘制流程，这时候调用<code>scrollTo()</code>这个函数其实是执行了代码的，但是在<code>onLaout()</code>摆放<code>childView</code>的时候，又默认回到了<code>(0,0)</code>位置，所以我们应该在<code>onLayout()</code>之后调用这个函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onLayout(changed, l, t, r, b);</span><br><span class="line">        <span class="comment">//进入是关闭状态</span></span><br><span class="line">        scrollTo(mMenuWidth, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>初始化完毕了，接下来我们进行事件的拦截，<code>MOVE</code>的时候相应滑动事件，<code>UP</code>的时候判断是关闭还是打开，然后调用函数即可<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//手指抬起是二选一，要么关闭要么打开</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent ev)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//    当菜单打开的时候，手指触摸右边内容部分需要关闭菜单，还需要拦截事件（打开情况下点击内容页不会响应点击事件）</span></span><br><span class="line">        <span class="keyword">if</span> (ev.getAction() == MotionEvent.ACTION_UP) &#123;</span><br><span class="line">            <span class="comment">// 只需要管手指抬起 ，根据我们当前滚动的距离来判断</span></span><br><span class="line">            <span class="keyword">int</span> currentScrollX = getScrollX();</span><br><span class="line">            <span class="keyword">if</span> (currentScrollX &gt; mMenuWidth / <span class="number">2</span>) &#123;</span><br><span class="line">                <span class="comment">// 关闭</span></span><br><span class="line">                closeMenu();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 打开</span></span><br><span class="line">                openMenu();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.onTouchEvent(ev);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 打开菜单 滚动到 0 的位置</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">openMenu</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// smoothScrollTo 有动画</span></span><br><span class="line">        smoothScrollTo(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 关闭菜单 滚动到 mMenuWidth 的位置</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">closeMenu</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        smoothScrollTo(mMenuWidth, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>到这的话，滑动事件和打开关闭事件都完成了，接下来我们就处理一个效果的问题，这里当从左往右滑动的时候，是慢慢打开菜单，这时候<code>content</code>是有一个慢慢的缩放,<code>menu</code>有一个放大和透明度变小，而反过来关闭菜单的话就是相反的效果，<code>content</code>慢慢放大，<code>menu</code>缩小和透明度变大。这里还有一个细节，就是<code>menu</code>慢慢的退出和进入，滑动的距离不是和移动的距离相同的，所以这里还有一个平移。接下来重写<code>onScrollChanged()</code>函数，然后计算出一个梯度值来做处理<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//滑动改变触发</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onScrollChanged</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> oldl, <span class="keyword">int</span> oldt)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onScrollChanged(l, t, oldl, oldt);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        //抽屉效果  两种一样</span></span><br><span class="line"><span class="comment">//        ViewCompat.setTranslationX(mMenuView, l);</span></span><br><span class="line"><span class="comment">//        ViewCompat.setX(mMenuView, l);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//        Log.e("zzz", "l-&gt;" + l + " t-&gt;" + t + " oldl-&gt;" + oldl + " oldt-&gt;" + oldt);</span></span><br><span class="line">        <span class="comment">//主要看l  手指从左往右滑动 由大变小</span></span><br><span class="line">        <span class="comment">//计算一个梯度值 1-&gt;0</span></span><br><span class="line">        <span class="keyword">float</span> scale = <span class="number">1.0f</span> * l / mMenuWidth;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//酷狗侧滑效果...</span></span><br><span class="line"><span class="comment">//        //右边的缩放 最小是0.7f ，最大是1.0f</span></span><br><span class="line">        <span class="keyword">float</span> rightScale = <span class="number">0.7f</span> + <span class="number">0.3f</span> * scale;</span><br><span class="line">        <span class="comment">//设置mContentView缩放的中心点位置</span></span><br><span class="line">        ViewCompat.setPivotX(mContentView, <span class="number">0</span>);</span><br><span class="line">        ViewCompat.setPivotY(mContentView, mContentView.getHeight() / <span class="number">2</span>);</span><br><span class="line">        <span class="comment">//设置右边缩放</span></span><br><span class="line">        ViewCompat.setScaleX(mContentView, rightScale);</span><br><span class="line">        ViewCompat.setScaleY(mContentView, rightScale);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//菜单</span></span><br><span class="line">        <span class="comment">//透明度是半透明到全透明  0.5f-1.0f</span></span><br><span class="line">        <span class="keyword">float</span> alpha = <span class="number">0.5f</span> + (<span class="number">1.0f</span> - scale) * <span class="number">0.5f</span>;</span><br><span class="line">        ViewCompat.setAlpha(mMenuView, alpha);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//缩放  0.7-1.0</span></span><br><span class="line">        <span class="keyword">float</span> leftScale = <span class="number">0.7f</span> + <span class="number">0.3f</span> * (<span class="number">1</span> - scale);</span><br><span class="line">        ViewCompat.setScaleX(mMenuView, leftScale);</span><br><span class="line">        ViewCompat.setScaleY(mMenuView, leftScale);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//退出按钮在右边</span></span><br><span class="line">        ViewCompat.setTranslationX(mMenuView, <span class="number">0.2f</span> * l);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样的话我们就完成了效果，但是我们还有几个细节没有处理，首先是快速滑动的问题，还有一个是当打开<code>menu</code>的时候，点击<code>content</code>需要关闭菜单，而不是相应对应的事件。接下来我们对这两个问题进行处理。</p>
+<p>快速滑动问题，这个问题我们采用<code>GestureDetector</code>这个类来做处理，这个类可以处理很多收拾问题:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The listener that is used to notify when gestures occur.</span></span><br><span class="line"><span class="comment">     * If you want to listen for all the different gestures then implement</span></span><br><span class="line"><span class="comment">     * this interface. If you only want to listen for a subset it might</span></span><br><span class="line"><span class="comment">     * be easier to extend &#123;<span class="doctag">@link</span> SimpleOnGestureListener&#125;.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnGestureListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Notified when a tap occurs with the down &#123;<span class="doctag">@link</span> MotionEvent&#125;</span></span><br><span class="line"><span class="comment">         * that triggered it. This will be triggered immediately for</span></span><br><span class="line"><span class="comment">         * every down event. All other events should be preceded by this.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e The down motion event.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">onDown</span><span class="params">(MotionEvent e)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * The user has performed a down &#123;<span class="doctag">@link</span> MotionEvent&#125; and not performed</span></span><br><span class="line"><span class="comment">         * a move or up yet. This event is commonly used to provide visual</span></span><br><span class="line"><span class="comment">         * feedback to the user to let them know that their action has been</span></span><br><span class="line"><span class="comment">         * recognized i.e. highlight an element.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e The down motion event</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onShowPress</span><span class="params">(MotionEvent e)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Notified when a tap occurs with the up &#123;<span class="doctag">@link</span> MotionEvent&#125;</span></span><br><span class="line"><span class="comment">         * that triggered it.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e The up motion event that completed the first tap</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span> true if the event is consumed, else false</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">onSingleTapUp</span><span class="params">(MotionEvent e)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Notified when a scroll occurs with the initial on down &#123;<span class="doctag">@link</span> MotionEvent&#125; and the</span></span><br><span class="line"><span class="comment">         * current move &#123;<span class="doctag">@link</span> MotionEvent&#125;. The distance in x and y is also supplied for</span></span><br><span class="line"><span class="comment">         * convenience.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e1 The first down motion event that started the scrolling.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e2 The move motion event that triggered the current onScroll.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> distanceX The distance along the X axis that has been scrolled since the last</span></span><br><span class="line"><span class="comment">         *              call to onScroll. This is NOT the distance between &#123;<span class="doctag">@code</span> e1&#125;</span></span><br><span class="line"><span class="comment">         *              and &#123;<span class="doctag">@code</span> e2&#125;.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> distanceY The distance along the Y axis that has been scrolled since the last</span></span><br><span class="line"><span class="comment">         *              call to onScroll. This is NOT the distance between &#123;<span class="doctag">@code</span> e1&#125;</span></span><br><span class="line"><span class="comment">         *              and &#123;<span class="doctag">@code</span> e2&#125;.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span> true if the event is consumed, else false</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">onScroll</span><span class="params">(MotionEvent e1, MotionEvent e2, <span class="keyword">float</span> distanceX, <span class="keyword">float</span> distanceY)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Notified when a long press occurs with the initial on down &#123;<span class="doctag">@link</span> MotionEvent&#125;</span></span><br><span class="line"><span class="comment">         * that trigged it.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e The initial on down motion event that started the longpress.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onLongPress</span><span class="params">(MotionEvent e)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Notified of a fling event when it occurs with the initial on down &#123;<span class="doctag">@link</span> MotionEvent&#125;</span></span><br><span class="line"><span class="comment">         * and the matching up &#123;<span class="doctag">@link</span> MotionEvent&#125;. The calculated velocity is supplied along</span></span><br><span class="line"><span class="comment">         * the x and y axis in pixels per second.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e1 The first down motion event that started the fling.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e2 The move motion event that triggered the current onFling.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> velocityX The velocity of this fling measured in pixels per second</span></span><br><span class="line"><span class="comment">         *              along the x axis.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> velocityY The velocity of this fling measured in pixels per second</span></span><br><span class="line"><span class="comment">         *              along the y axis.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span> true if the event is consumed, else false</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">onFling</span><span class="params">(MotionEvent e1, MotionEvent e2, <span class="keyword">float</span> velocityX, <span class="keyword">float</span> velocityY)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The listener that is used to notify when a double-tap or a confirmed</span></span><br><span class="line"><span class="comment">     * single-tap occur.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnDoubleTapListener</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Notified when a single-tap occurs.</span></span><br><span class="line"><span class="comment">         * &lt;p&gt;</span></span><br><span class="line"><span class="comment">         * Unlike &#123;<span class="doctag">@link</span> OnGestureListener#onSingleTapUp(MotionEvent)&#125;, this</span></span><br><span class="line"><span class="comment">         * will only be called after the detector is confident that the user's</span></span><br><span class="line"><span class="comment">         * first tap is not followed by a second tap leading to a double-tap</span></span><br><span class="line"><span class="comment">         * gesture.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e The down motion event of the single-tap.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span> true if the event is consumed, else false</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">onSingleTapConfirmed</span><span class="params">(MotionEvent e)</span></span>;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Notified when a double-tap occurs.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e The down motion event of the first tap of the double-tap.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span> true if the event is consumed, else false</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">onDoubleTap</span><span class="params">(MotionEvent e)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Notified when an event within a double-tap gesture occurs, including</span></span><br><span class="line"><span class="comment">         * the down, move, and up events.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e The motion event that occurred during the double-tap gesture.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span> true if the event is consumed, else false</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">onDoubleTapEvent</span><span class="params">(MotionEvent e)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The listener that is used to notify when a context click occurs. When listening for a</span></span><br><span class="line"><span class="comment">     * context click ensure that you call &#123;<span class="doctag">@link</span> #onGenericMotionEvent(MotionEvent)&#125; in</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@link</span> View#onGenericMotionEvent(MotionEvent)&#125;.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnContextClickListener</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Notified when a context click occurs.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> e The motion event that occurred during the context click.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span> true if the event is consumed, else false</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">onContextClick</span><span class="params">(MotionEvent e)</span></span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里我们主要是响应<code>onFling()</code>这个函数，然后判断当前是打开还是关闭状态，在根据快速滑动的手势来执行打开还是关闭的操作:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent ev)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (mGestureDetector.onTouchEvent(ev))<span class="comment">//快速滑动触发了下面的就不要执行了</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;      </span><br><span class="line">      </span><br><span class="line">            <span class="comment">//....</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//快速滑动</span></span><br><span class="line">    <span class="keyword">private</span> GestureDetector.OnGestureListener mOnGestureListener = <span class="keyword">new</span> GestureDetector.SimpleOnGestureListener() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onFling</span><span class="params">(MotionEvent e1, MotionEvent e2, <span class="keyword">float</span> velocityX, <span class="keyword">float</span> velocityY)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//快速滑动回调</span></span><br><span class="line">            <span class="comment">//打开的时候从右到左滑动关闭   关闭的时候从左往右打开</span></span><br><span class="line"><span class="comment">//            Log.e("zzz", "velocityX-&gt;" + velocityX);</span></span><br><span class="line">            <span class="comment">// &gt;0 从左往右边滑动  &lt;0 从右到左</span></span><br><span class="line">            <span class="keyword">if</span> (mMenuIsOpen) &#123;</span><br><span class="line">                <span class="keyword">if</span> (velocityX &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                    closeMenu();</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (velocityX &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    openMenu();</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.onFling(e1, e2, velocityX, velocityY);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>接下来处理<code>menu</code>打开状态下点击<code>content</code>关闭<code>menu</code>，这里我们需要用到<code>onInterceptTouchEvent</code>。当打开状态的时候，我们就把这个事件拦截，然后关闭菜单即可。但是这里有一个问题，当我们拦截了<code>DOWN</code>事件之后，后面的<code>MOVE  UP</code>事件都会被拦截并且相应自身的<code>onTouchEvent</code>事件，所以这里我们需要添加一个判断值，判断是否拦截，然后让其<code>onTouchEvent</code>是否继续执行操作<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onInterceptTouchEvent</span><span class="params">(MotionEvent ev)</span> </span>&#123;</span><br><span class="line">        isIntercept = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (mMenuIsOpen &amp;&amp; ev.getX() &gt; mMenuWidth) &#123;<span class="comment">//打开状态  触摸右边关闭</span></span><br><span class="line">            isIntercept = <span class="keyword">true</span>;<span class="comment">//拦截的话就不执行自己的onTouchEvent</span></span><br><span class="line">            closeMenu();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.onInterceptTouchEvent(ev);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent ev)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (isIntercept)<span class="comment">//拦截的话就不执行自己的onTouchEvent</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>根据我们提出需求，然后分析需求，再完成需求。这一步步我们慢慢进行渗透，最终完成效果，完成之后你会发现其实也就那么一回事。当我们有新需求的时候，我们应该不要恐惧，应该欣然乐观的接收，再慢慢分析，最终完成。这样的话我们才能提高我们的技术。</p>
+<p>本文源码下载地址:<a href="https://github.com/ChinaZeng/CustomView" target="_blank" rel="noopener">https://github.com/ChinaZeng/CustomView</a></p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          
+            <a href="/tags/自定义view/" rel="tag"><i class="fa fa-tag"></i> 自定义view</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/自定义View（6） -- 流式布局.html" rel="next" title="自定义View（6） -- 流式布局">
+                <i class="fa fa-chevron-left"></i> 自定义View（6） -- 流式布局
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/自定义View（8） -- 汽车之家折叠列表.html" rel="prev" title="自定义View（8） -- 汽车之家折叠列表">
+                自定义View（8） -- 汽车之家折叠列表 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

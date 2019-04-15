@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="音视频,ffmpeg," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="每秒理论PCM大小1每秒理论PCM大小 = 采样率 * 声道数 * 位数/8 比如：12//44100hz 立体声 16bitint s_time = 44100 * 2 * 16/8; 获取总时长1duration = pFormatCtx-&amp;gt;duration / AV_TIME_BASE; 获取当前AVframe时间123AVRational time_base = pFormatCtx">
+<meta name="keywords" content="音视频,ffmpeg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ffmpeg 音频播放器相关">
+<meta property="og:url" content="http://www.zengzhaowen.cn/ffmpeg音频播放器相关.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="每秒理论PCM大小1每秒理论PCM大小 = 采样率 * 声道数 * 位数/8 比如：12//44100hz 立体声 16bitint s_time = 44100 * 2 * 16/8; 获取总时长1duration = pFormatCtx-&amp;gt;duration / AV_TIME_BASE; 获取当前AVframe时间123AVRational time_base = pFormatCtx">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.106Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ffmpeg 音频播放器相关">
+<meta name="twitter:description" content="每秒理论PCM大小1每秒理论PCM大小 = 采样率 * 声道数 * 位数/8 比如：12//44100hz 立体声 16bitint s_time = 44100 * 2 * 16/8; 获取总时长1duration = pFormatCtx-&amp;gt;duration / AV_TIME_BASE; 获取当前AVframe时间123AVRational time_base = pFormatCtx">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/ffmpeg音频播放器相关.html"/>
+
+
+
+
+
+  <title>ffmpeg 音频播放器相关 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/ffmpeg音频播放器相关.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ffmpeg 音频播放器相关</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-26T15:41:42+08:00">
+                2018-06-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ffmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">ffmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ffmpeg音频播放器相关.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ffmpeg音频播放器相关.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,138字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="每秒理论PCM大小"><a href="#每秒理论PCM大小" class="headerlink" title="每秒理论PCM大小"></a>每秒理论PCM大小</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">每秒理论PCM大小 = 采样率 * 声道数 * 位数/<span class="number">8</span></span><br></pre></td></tr></table></figure>
+<p>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//44100hz 立体声 16bit</span><br><span class="line">int s_time = 44100 * 2 * 16/8;</span><br></pre></td></tr></table></figure></p>
+<h5 id="获取总时长"><a href="#获取总时长" class="headerlink" title="获取总时长"></a>获取总时长</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">duration = pFormatCtx-&gt;duration / AV_TIME_BASE;</span><br></pre></td></tr></table></figure>
+<h5 id="获取当前AVframe时间"><a href="#获取当前AVframe时间" class="headerlink" title="获取当前AVframe时间"></a>获取当前<code>AVframe</code>时间</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">AVRational time_base = pFormatCtx-&gt;streams[audio_index]-&gt;time_base</span><br><span class="line"><span class="keyword">double</span> now_time = frame-&gt;pts * av_q2d(time_base);</span><br></pre></td></tr></table></figure>
+<h5 id="获取当前播放时间"><a href="#获取当前播放时间" class="headerlink" title="获取当前播放时间"></a>获取当前播放时间</h5><p>因为每一个<code>AVframe</code>的<code>pts</code>不一定都有，所以就需要自己手维护一个当前时间的变量</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">公式：PCM实际数据大小 / 每秒理论PCM大小；</span><br><span class="line">clock += buffersize / ((<span class="keyword">double</span>)(sample_rate * <span class="number">2</span> * <span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+<p>伪代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">AVFormatContext *pFormatCtx = <span class="literal">NULL</span>;</span><br><span class="line"><span class="comment">//采样率</span></span><br><span class="line"><span class="keyword">int</span> sample_rate =<span class="number">0</span>;</span><br><span class="line"><span class="comment">//当前总时长</span></span><br><span class="line"><span class="keyword">int</span> duration = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">AVRational time_base =<span class="literal">NULL</span>;</span><br><span class="line"><span class="comment">//当前AvFrame时间</span></span><br><span class="line"><span class="keyword">int</span> now_time=<span class="number">0</span>;</span><br><span class="line"><span class="comment">//当前播放时长</span></span><br><span class="line"><span class="keyword">int</span> clock = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//上次播放时长标识</span></span><br><span class="line"><span class="keyword">int</span> last_time=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">uint8_t</span> *buffer = <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">int</span> data_size=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//获取到 pFormatCtx</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pFormatCtx-&gt;nb_streams; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(pFormatCtx-&gt;streams[i]-&gt;codecpar-&gt;codec_type == AVMEDIA_TYPE_AUDIO)<span class="comment">//得到音频流</span></span><br><span class="line">        &#123;</span><br><span class="line">                ...</span><br><span class="line">                sample_rate = pFormatCtx-&gt;streams[i]-&gt;codecpar-&gt;sample_rate;</span><br><span class="line">                duration= pFormatCtx-&gt;duration / AV_TIME_BASE;</span><br><span class="line">                time_base = pFormatCtx-&gt;streams[i]-&gt;time_base;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//解码数据  </span></span><br><span class="line">...</span><br><span class="line">    </span><br><span class="line">  <span class="keyword">int</span> nb = swr_convert(</span><br><span class="line">                swr_ctx,</span><br><span class="line">                &amp;buffer,</span><br><span class="line">                avFrame-&gt;nb_samples,</span><br><span class="line">                (<span class="keyword">const</span> <span class="keyword">uint8_t</span> **) avFrame-&gt;data,</span><br><span class="line">                avFrame-&gt;nb_samples);</span><br><span class="line"></span><br><span class="line">   <span class="keyword">int</span> out_channels = av_get_channel_layout_nb_channels(AV_CH_LAYOUT_STEREO);</span><br><span class="line">   data_size = nb * out_channels * av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);</span><br><span class="line"></span><br><span class="line">    now_time = avFrame-&gt;pts * av_q2d(time_base);</span><br><span class="line">    <span class="keyword">if</span>(now_time &lt; clock)&#123;</span><br><span class="line">       now_time = clock;</span><br><span class="line">    &#125;</span><br><span class="line">    clock = now_time;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//解码数据之后数据封装在 buffer，播放的时候</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(data_size&gt;<span class="number">0</span>)&#123;</span><br><span class="line">    <span class="comment">//size/(采样率(44100hz) * 立体声*16bit/8) </span></span><br><span class="line">    clock += data_size / ((<span class="keyword">double</span>)(sample_rate * <span class="number">2</span> * <span class="number">2</span>));</span><br><span class="line">    <span class="comment">//设置一个回掉最小相差值</span></span><br><span class="line">    <span class="keyword">if</span>(clock - last_tiem &gt;= <span class="number">0.1</span>) &#123;</span><br><span class="line">        last_tiem = clock;</span><br><span class="line">        <span class="comment">//回调应用层</span></span><br><span class="line">       callJava-&gt;onCallTimeInfo(CHILD_THREAD,clock, duration);</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="解码播放流程思路"><a href="#解码播放流程思路" class="headerlink" title="解码播放流程思路"></a>解码播放流程思路</h5><p>采用多线程，生产者消费者模型，AVPacket入队，然后AVPacket出队解码播放，播放采用<code>OpenSLES</code></p>
+<h5 id="release内存回收"><a href="#release内存回收" class="headerlink" title="release内存回收"></a>release内存回收</h5><p>当我们<code>release</code>的时候，我们需要注意</p>
+<ol>
+<li>为了确保线程完全退出，我们最好是<code>sleep</code>个几十毫秒，然后在释放相关内存,但是最好的是使用<code>pthred_join</code>来同步线程退出。</li>
+<li>有可能初始化未准备完毕我们就调用<code>release</code>，这时候最好是在初始化准备和<br><code>release</code>加个线程锁。</li>
+<li>初始化的时候有可能<code>avformat_open_input</code>打开网络链接，网络很卡，所以我们需要为<code>pFormatCtx</code>加入一个<code>interrupt_callback</code>来及时响应<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">avformat_callback</span><span class="params">(<span class="keyword">void</span> *ctx)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    WlFFmpeg *fFmpeg = (WlFFmpeg *) ctx;</span><br><span class="line">    <span class="keyword">if</span>(fFmpeg-&gt;playstatus-&gt;<span class="built_in">exit</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> AVERROR_EOF;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pFormatCtx-&gt;interrupt_callback.callback = avformat_callback;</span><br><span class="line">pFormatCtx-&gt;interrupt_callback.opaque = <span class="keyword">this</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h5 id="暂停，继续-停止播放-播放完成"><a href="#暂停，继续-停止播放-播放完成" class="headerlink" title="暂停，继续,停止播放,播放完成"></a>暂停，继续,停止播放,播放完成</h5><p>暂停播放，继续播放采用OpenSLES的相关api,播放完成则在播放完毕的时候回掉即可</p>
+<h5 id="seek功能"><a href="#seek功能" class="headerlink" title="seek功能"></a>seek功能</h5><p>在<code>seek</code>的时候设置标志位并加锁，清空队列，标志位判断是否继续<code>av_read_frame</code>，<code>seek</code>完毕释放锁，还原标识位。即可重新读取最新数据</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">seek = <span class="literal">true</span>;</span><br><span class="line"><span class="built_in">queue</span>-&gt;clearAvpacket();</span><br><span class="line"></span><br><span class="line">pthread_mutex_lock(&amp;seek_mutex);</span><br><span class="line"><span class="keyword">int64_t</span> rel = secs * AV_TIME_BASE;</span><br><span class="line"><span class="comment">//重置内部解码器状态/刷新内部缓冲区</span></span><br><span class="line"> avcodec_flush_buffers(avCodecContext);</span><br><span class="line"><span class="comment">//主要是这个函数</span></span><br><span class="line">avformat_seek_file(pFormatCtx, <span class="number">-1</span>, INT64_MIN, rel, INT64_MAX, <span class="number">0</span>);</span><br><span class="line">pthread_mutex_unlock(&amp;seek_mutex);</span><br><span class="line">seek = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">pthread_mutex_lock(&amp;seek_mutex);</span><br><span class="line">ret = av_read_frame(pFormatCtx, packet);</span><br><span class="line">pthread_mutex_unlock(&amp;seek_mutex);</span><br></pre></td></tr></table></figure>
+<h5 id="音量-声道切换"><a href="#音量-声道切换" class="headerlink" title="音量,声道切换"></a>音量,声道切换</h5><p>采用<code>OpenSLES</code>的相关<code>api</code></p>
+<h5 id="播放变速变调"><a href="#播放变速变调" class="headerlink" title="播放变速变调"></a>播放变速变调</h5><p><code>OpenSL ES</code>可以实现变速播放，但是再改变速度的同时也改变了音调，这<br>种体验是不好的。所以采用<code>SoundTouch</code>来实现，在播放的时候，对原始数据重新进行计算即可</p>
+<h5 id="计算pcm分贝大小"><a href="#计算pcm分贝大小" class="headerlink" title="计算pcm分贝大小"></a>计算pcm分贝大小</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//char*是为了都转换成字节来处理 </span></span><br><span class="line"><span class="keyword">int</span> WlAudio::getPCMDB(<span class="keyword">char</span> *pcmcata, <span class="keyword">size_t</span> pcmsize) &#123;</span><br><span class="line">    <span class="keyword">int</span> db = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">short</span> <span class="keyword">int</span> pervalue = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">double</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pcmsize; i += <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="built_in">memcpy</span>(&amp;pervalue, pcmcata + i, <span class="number">2</span>);</span><br><span class="line">        sum += <span class="built_in">abs</span>(pervalue);</span><br><span class="line">    &#125;</span><br><span class="line">    sum = sum / (pcmsize / <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">if</span> (sum &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        db = (<span class="keyword">int</span>) <span class="number">20.0</span> * <span class="built_in">log10</span>(sum);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> db;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h5><ol>
+<li>由于解码用到了<code>while</code>循环，而不加睡眠的<code>while</code>循环会使<code>CPU</code>使用率提高<code>30%</code>左右，<br>因此我们需要为解码线程加上一定的睡眠时间来降低<code>CPU</code>使用率。</li>
+<li>停止时回收创建的内存空间。</li>
+</ol>
+<h5 id="一个AVPacket对应多个AVFrame-比如-ape格式的"><a href="#一个AVPacket对应多个AVFrame-比如-ape格式的" class="headerlink" title="一个AVPacket对应多个AVFrame  比如.ape格式的"></a>一个AVPacket对应多个AVFrame  比如<code>.ape</code>格式的</h5><p>这种情况就需要在解码的时候，设置一个标识来判断不停的解析AVPacket,<code>avcodec_send_packet(avCodecContext, avPacket)</code>之后不停的<code>avcodec_receive_frame</code>，知道读取完毕在设置标识。</p>
+<h5 id="一个AVPacket对应多个AVFrame引发的seek问题"><a href="#一个AVPacket对应多个AVFrame引发的seek问题" class="headerlink" title="一个AVPacket对应多个AVFrame引发的seek问题"></a>一个AVPacket对应多个AVFrame引发的seek问题</h5><p>由于一个<code>AVPacket</code>里面有多个<code>AVFrame</code>，当<code>seek</code>时，<code>FFmpeg</code>解码器中还残留<code>AVFrame</code>，所以会导致<code>seek</code>后，不能立即播放当前音乐。<br>解决方案就是seek的时候调用</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">avcodec_flush_buffers(avCodecContext)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/音视频/" rel="tag"><i class="fa fa-tag"></i> 音视频</a>
+          
+            <a href="/tags/ffmpeg/" rel="tag"><i class="fa fa-tag"></i> ffmpeg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/OpenSLES基础功能.html" rel="next" title="OpenSLES基础功能">
+                <i class="fa fa-chevron-left"></i> OpenSLES基础功能
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/SoudTouch Android cmake编译.html" rel="prev" title="SoudTouch Android cmake编译">
+                SoudTouch Android cmake编译 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#每秒理论PCM大小"><span class="nav-number">1.</span> <span class="nav-text">每秒理论PCM大小</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#获取总时长"><span class="nav-number">2.</span> <span class="nav-text">获取总时长</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#获取当前AVframe时间"><span class="nav-number">3.</span> <span class="nav-text">获取当前AVframe时间</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#获取当前播放时间"><span class="nav-number">4.</span> <span class="nav-text">获取当前播放时间</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解码播放流程思路"><span class="nav-number">5.</span> <span class="nav-text">解码播放流程思路</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#release内存回收"><span class="nav-number">6.</span> <span class="nav-text">release内存回收</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#暂停，继续-停止播放-播放完成"><span class="nav-number">7.</span> <span class="nav-text">暂停，继续,停止播放,播放完成</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#seek功能"><span class="nav-number">8.</span> <span class="nav-text">seek功能</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#音量-声道切换"><span class="nav-number">9.</span> <span class="nav-text">音量,声道切换</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#播放变速变调"><span class="nav-number">10.</span> <span class="nav-text">播放变速变调</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#计算pcm分贝大小"><span class="nav-number">11.</span> <span class="nav-text">计算pcm分贝大小</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#性能优化"><span class="nav-number">12.</span> <span class="nav-text">性能优化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一个AVPacket对应多个AVFrame-比如-ape格式的"><span class="nav-number">13.</span> <span class="nav-text">一个AVPacket对应多个AVFrame  比如.ape格式的</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一个AVPacket对应多个AVFrame引发的seek问题"><span class="nav-number">14.</span> <span class="nav-text">一个AVPacket对应多个AVFrame引发的seek问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

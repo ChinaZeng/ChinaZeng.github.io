@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,自定义view," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="初始化我就不说了，先思考我们需要什么属性，这里我就随便写了两个，一个是变色的颜色，一个是正常的颜色，当然也可以是默认的字体颜色，我们在attr里面申明1234567891011121314151617181920212223242526&amp;lt;declare-styleable name=&quot;ColorTrackTextView&quot;&amp;gt;       &amp;lt;attr name=&quot;originCo">
+<meta name="keywords" content="android,自定义view">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义View（4） -- 字体变色">
+<meta property="og:url" content="http://www.zengzhaowen.cn/自定义View（4） -- 字体变色.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="初始化我就不说了，先思考我们需要什么属性，这里我就随便写了两个，一个是变色的颜色，一个是正常的颜色，当然也可以是默认的字体颜色，我们在attr里面申明1234567891011121314151617181920212223242526&amp;lt;declare-styleable name=&quot;ColorTrackTextView&quot;&amp;gt;       &amp;lt;attr name=&quot;originCo">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4658633-e84cba1783071f90.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4658633-e2c652dacccad076.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4658633-fc06419bfad2c17f.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.111Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自定义View（4） -- 字体变色">
+<meta name="twitter:description" content="初始化我就不说了，先思考我们需要什么属性，这里我就随便写了两个，一个是变色的颜色，一个是正常的颜色，当然也可以是默认的字体颜色，我们在attr里面申明1234567891011121314151617181920212223242526&amp;lt;declare-styleable name=&quot;ColorTrackTextView&quot;&amp;gt;       &amp;lt;attr name=&quot;originCo">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4658633-e84cba1783071f90.gif?imageMogr2/auto-orient/strip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/自定义View（4） -- 字体变色.html"/>
+
+
+
+
+
+  <title>自定义View（4） -- 字体变色 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/自定义View（4） -- 字体变色.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">自定义View（4） -- 字体变色</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T09:52:57+08:00">
+                2018-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/自定义view/" itemprop="url" rel="index">
+                    <span itemprop="name">自定义view</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/自定义View（4） -- 字体变色.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/自定义View（4） -- 字体变色.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,856字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://upload-images.jianshu.io/upload_images/4658633-e84cba1783071f90.gif?imageMogr2/auto-orient/strip" alt="字体变色.gif"></p>
+<p>初始化我就不说了，先思考我们需要什么属性，这里我就随便写了两个，一个是变色的颜色，一个是正常的颜色，当然也可以是默认的字体颜色，我们在<code>attr</code>里面申明<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;declare-styleable name=<span class="string">"ColorTrackTextView"</span>&gt;</span><br><span class="line">       &lt;attr name=<span class="string">"originColor"</span> format=<span class="string">"color"</span> /&gt;</span><br><span class="line">       &lt;attr name=<span class="string">"changeColor"</span> format=<span class="string">"color"</span> /&gt;</span><br><span class="line">   &lt;/declare-styleable&gt;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> mOriginColor;<span class="comment">//不变化的颜色</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">int</span> mChangeColor;<span class="comment">//变化的颜色</span></span><br><span class="line">   <span class="keyword">private</span> Paint mOriginPaint, mChangePaint;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">       TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ColorTrackTextView);</span><br><span class="line">       mOriginColor = ta.getColor(R.styleable.ColorTrackTextView_originColor, Color.BLACK);</span><br><span class="line">       mChangeColor = ta.getColor(R.styleable.ColorTrackTextView_changeColor, Color.RED);</span><br><span class="line">       ta.recycle();</span><br><span class="line"></span><br><span class="line">       mOriginPaint = <span class="keyword">new</span> Paint();</span><br><span class="line">       mOriginPaint.setColor(mOriginColor);</span><br><span class="line">       mOriginPaint.setAntiAlias(<span class="keyword">true</span>);</span><br><span class="line">       mOriginPaint.setTextSize(getTextSize());</span><br><span class="line"></span><br><span class="line">       mChangePaint = <span class="keyword">new</span> Paint();</span><br><span class="line">       mChangePaint.setColor(mChangeColor);</span><br><span class="line">       mChangePaint.setAntiAlias(<span class="keyword">true</span>);</span><br><span class="line">       mChangePaint.setTextSize(getTextSize());</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>因为我们选择了继承的是<code>TextView</code>，所以我们就不进行 <code>onMeasure()</code>，我们重写<code>onDraw()</code>,覆盖原有的绘制逻辑，我们自己来绘制，这里我们主要使用<code>canvas.clipRect(rect)</code>这个函数来实现裁剪，我们先来测试:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//思路：利用clipRect  来裁剪   使用两个画笔</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line"><span class="comment">//        super.onDraw(canvas);   //不使用TextView的绘制 自己画</span></span><br><span class="line"></span><br><span class="line">        canvas.save();</span><br><span class="line">        <span class="keyword">int</span> mid = <span class="number">500</span>;</span><br><span class="line">        Rect rect = <span class="keyword">new</span> Rect(<span class="number">0</span>, <span class="number">0</span>, mid, getHeight());</span><br><span class="line">        canvas.clipRect(rect);</span><br><span class="line"></span><br><span class="line">        String text = getText().toString();</span><br><span class="line">        <span class="keyword">int</span> x = (<span class="keyword">int</span>) (getPaddingLeft() + getWidth() / <span class="number">2</span> - mOriginPaint.measureText(text) / <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">int</span> y = getPaddingTop() + DisplayUtil.getTextBaseLine(getHeight(), mOriginPaint);</span><br><span class="line">        canvas.drawText(text, x, y, mChangePaint);</span><br><span class="line">        canvas.restore();</span><br><span class="line"></span><br><span class="line">        canvas.save();</span><br><span class="line">        rect.set(mid, <span class="number">0</span>, getWidth(), getHeight());</span><br><span class="line">        canvas.clipRect(rect);</span><br><span class="line">        canvas.drawText(text, x, y, mOriginPaint);</span><br><span class="line">        canvas.restore();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> &lt;com.zzw.customview.view.ColorTrackTextView xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">        android:id=<span class="string">"@+id/colortv"</span></span><br><span class="line">        android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_height=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_gravity=<span class="string">"center_horizontal"</span></span><br><span class="line">        android:gravity=<span class="string">"center"</span></span><br><span class="line">        android:text=<span class="string">"1111111"</span></span><br><span class="line">        android:textSize=<span class="string">"50sp"</span></span><br><span class="line">        app:changeColor=<span class="string">"@color/colorAccent"</span></span><br><span class="line">        app:originColor=<span class="string">"@color/colorPrimary"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4658633-e2c652dacccad076.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>可以看到，我们是有效果的，因为我们考略到要和  <code>ViewPager</code> 一起配合使用，所以我们定义一个<code>float</code>类型的<code>mCurrentProgress</code>属性，用于表示当前的滑动进度，在设置一个方向，颜色是从左到右变化还是从右到左的变化<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//不同的朝向</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DIRECTION_LEFT_TO_RIGHT = <span class="number">1</span>;<span class="comment">//从左边变色</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DIRECTION_RIGHT_TO_LEFT = <span class="number">2</span>;<span class="comment">//从右边变色</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> mDirection = DIRECTION_LEFT_TO_RIGHT;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//当前进度</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">float</span> mCurrentProgress;</span><br></pre></td></tr></table></figure></p>
+<p>接下来我们修改<code>onDraw()</code>以及优化一下赘余代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//思路：利用clipRect  来裁剪   使用两个画笔</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line"><span class="comment">//        super.onDraw(canvas);   //不使用TextView的绘制 自己画</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> mid = comMiddle();</span><br><span class="line">        <span class="keyword">if</span> (mDirection == DIRECTION_LEFT_TO_RIGHT) &#123;</span><br><span class="line">            drawText(canvas, mChangePaint, <span class="number">0</span>, mid); <span class="comment">//画左边  颜色</span></span><br><span class="line">            drawText(canvas, mOriginPaint, mid, getWidth());<span class="comment">//画右边</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            mid = getWidth() - mid;</span><br><span class="line">            drawText(canvas, mChangePaint, mid, getWidth());<span class="comment">//画右边  颜色</span></span><br><span class="line">            drawText(canvas, mOriginPaint, <span class="number">0</span>, mid); <span class="comment">//画左边</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据当前进度算出中间值</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">comMiddle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span>) (mCurrentProgress * getWidth());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据start  end  确定rect绘制文字</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> canvas</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> paint</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> start</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> end</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawText</span><span class="params">(Canvas canvas, Paint paint, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">        canvas.save();</span><br><span class="line">        Rect rect = <span class="keyword">new</span> Rect(start, <span class="number">0</span>, end, getHeight());<span class="comment">//确定区域</span></span><br><span class="line">        canvas.clipRect(rect);</span><br><span class="line"></span><br><span class="line">        String text = getText().toString();</span><br><span class="line">        <span class="keyword">int</span> x = (<span class="keyword">int</span>) (getPaddingLeft() + getWidth() / <span class="number">2</span> - paint.measureText(text) / <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">int</span> y = getPaddingTop() + DisplayUtil.getTextBaseLine(getHeight(), paint);</span><br><span class="line">        canvas.drawText(text, x, y, paint);</span><br><span class="line">        canvas.restore();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来我们进行测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public void leftToRight(View view) &#123;</span><br><span class="line">       mColorTrackTextView.setDirection(ColorTrackTextView.DIRECTION_LEFT_TO_RIGHT);</span><br><span class="line">       startAnim(0, 1);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public void RightToLeft(View view) &#123;</span><br><span class="line">       mColorTrackTextView.setDirection(ColorTrackTextView.DIRECTION_RIGHT_TO_LEFT);</span><br><span class="line">       startAnim(0, 1);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   private void startAnim(float startPro, float endPro) &#123;</span><br><span class="line">       ValueAnimator animator = ObjectAnimator.ofFloat(startPro, endPro);</span><br><span class="line">       animator.setDuration(2000);</span><br><span class="line">       animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void onAnimationUpdate(ValueAnimator animation) &#123;</span><br><span class="line">               float currentProgress = (float) animation.getAnimatedValue();</span><br><span class="line">               mColorTrackTextView.setCurrentProgress(currentProgress);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">       animator.start();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>就会得到如下图的效果:<br><img src="http://upload-images.jianshu.io/upload_images/4658633-fc06419bfad2c17f.gif?imageMogr2/auto-orient/strip" alt="字体变色测试.gif"></p>
+<p>感觉离成功近了一步，这里我们顺便优化了一个性能的问题，因为是不端的调用<code>setCurrentProgress()</code>方法进行重新绘制，所以这里我们加个判断:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCurrentProgress</span><span class="params">(<span class="keyword">float</span> currentProgress)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mCurrentProgress == currentProgress)<span class="comment">//当前进度相同就不执行下一步</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.mCurrentProgress = currentProgress;</span><br><span class="line">        invalidate();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>让它重复的时候不进行重绘，这只是一个小细节,接下来我们和<code>ViewPager</code>配合使用。我们在开发中一般遇到的是根据一个数据源，然后动态的添加<code>Fragment</code>和<code>ViewPager</code>进行关联，这里我们模拟这个场景。我们使用一个<code>LinearLayout</code>来管理这些字体变色的<code>view</code>，  <code>ViewPager</code>的<code>OnPageChangeListener</code>来管理字体变色,布局为下:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"fill_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"fill_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:orientation</span>=<span class="string">"vertical"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">LinearLayout</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:orientation</span>=<span class="string">"horizontal"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:paddingTop</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:paddingBottom</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/indicator_view"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">android.support.v4.view.ViewPager</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"0dp"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/view_pager"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_weight</span>=<span class="string">"1"</span></span></span><br><span class="line"><span class="tag">        /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后我们在代码中动态的添加:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zzw.customview;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.graphics.Color;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.support.v4.app.Fragment;</span><br><span class="line"><span class="keyword">import</span> android.support.v4.app.FragmentPagerAdapter;</span><br><span class="line"><span class="keyword">import</span> android.support.v4.view.ViewPager;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.view.ViewGroup;</span><br><span class="line"><span class="keyword">import</span> android.widget.LinearLayout;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.zzw.customview.view.ColorTrackTextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by zzw on 2017/6/15.</span></span><br><span class="line"><span class="comment"> * Version:</span></span><br><span class="line"><span class="comment"> * Des: 字体变色和viewpager配合使用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewPagerActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String[] items = &#123;<span class="string">"热点"</span>, <span class="string">"推荐"</span>, <span class="string">"社会"</span>, <span class="string">"图片"</span>, <span class="string">"科技"</span>, <span class="string">"运动"</span>&#125;;</span><br><span class="line">    <span class="keyword">private</span> LinearLayout mIndicatorContainer;<span class="comment">// 变成通用的</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;ColorTrackTextView&gt; mIndicators;</span><br><span class="line">    <span class="keyword">private</span> ViewPager mViewPager;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_view_pager);</span><br><span class="line"></span><br><span class="line">        mIndicators = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        mIndicatorContainer = (LinearLayout) findViewById(R.id.indicator_view);</span><br><span class="line">        mViewPager = (ViewPager) findViewById(R.id.view_pager);</span><br><span class="line">        initIndicator();</span><br><span class="line">        initViewPager();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化ViewPager</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initViewPager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mViewPager.setAdapter(<span class="keyword">new</span> FragmentPagerAdapter(getSupportFragmentManager()) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Fragment <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> ItemFragment.newInstance(items[position]);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> items.length;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(ViewGroup container, <span class="keyword">int</span> position, Object object)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        mViewPager.addOnPageChangeListener(<span class="keyword">new</span> ViewPager.OnPageChangeListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageScrolled</span><span class="params">(<span class="keyword">int</span> position, <span class="keyword">float</span> positionOffset, <span class="keyword">int</span> positionOffsetPixels)</span> </span>&#123;</span><br><span class="line">                Log.e(<span class="string">"TAG"</span>, <span class="string">"position -&gt; "</span> + position + <span class="string">"  positionOffset -&gt; "</span> + positionOffset + <span class="string">"  positionOffsetPixels-&gt;"</span> + positionOffsetPixels);</span><br><span class="line">                <span class="comment">// position 代表当前的位置</span></span><br><span class="line">                <span class="comment">// positionOffset 代表滚动的 0 - 1 百分比  左滑 1-&gt;0  右滑-&gt; 0-1</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">// 1.左边  位置 position</span></span><br><span class="line">                ColorTrackTextView left = mIndicators.get(position);</span><br><span class="line">                left.setDirection(ColorTrackTextView.DIRECTION_RIGHT_TO_LEFT);</span><br><span class="line">                left.setCurrentProgress(<span class="number">1</span> - positionOffset);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    ColorTrackTextView right = mIndicators.get(position + <span class="number">1</span>);</span><br><span class="line">                    right.setDirection(ColorTrackTextView.DIRECTION_LEFT_TO_RIGHT);</span><br><span class="line">                    right.setCurrentProgress(positionOffset);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageSelected</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageScrollStateChanged</span><span class="params">(<span class="keyword">int</span> state)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化可变色的指示器</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initIndicator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; items.length; i++) &#123;</span><br><span class="line">            <span class="comment">// 动态添加颜色跟踪的TextView</span></span><br><span class="line">            LinearLayout.LayoutParams params = <span class="keyword">new</span> LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,</span><br><span class="line">           ViewGroup.LayoutParams.WRAP_CONTENT);</span><br><span class="line">            params.weight = <span class="number">1</span>;</span><br><span class="line">            ColorTrackTextView colorTrackTextView = <span class="keyword">new</span> ColorTrackTextView(<span class="keyword">this</span>);</span><br><span class="line">            <span class="comment">// 设置颜色</span></span><br><span class="line">            colorTrackTextView.setTextSize(<span class="number">20</span>);</span><br><span class="line">            colorTrackTextView.setChangeColor(Color.RED);</span><br><span class="line">            colorTrackTextView.setText(items[i]);</span><br><span class="line">            colorTrackTextView.setLayoutParams(params);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 把新的加入LinearLayout容器</span></span><br><span class="line">            mIndicatorContainer.addView(colorTrackTextView);</span><br><span class="line">            <span class="comment">// 加入集合</span></span><br><span class="line">            mIndicators.add(colorTrackTextView);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里我们发现左右滑动的时候可以实现了，但是点击<code>tab</code>的时候还会出现上一个没有变色的情况,这里我就不上图了，我们直接写一个函数，在选中之后把重新设置颜色即可。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">selectPos</span><span class="params">(<span class="keyword">int</span> pos)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mIndicators.size(); i++) &#123;</span><br><span class="line">          ColorTrackTextView colorTrackTextView = mIndicators.get(i);</span><br><span class="line">          <span class="keyword">if</span> (i == pos) &#123;</span><br><span class="line">              colorTrackTextView.setCurrentProgress(<span class="number">1.0f</span>);</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              colorTrackTextView.setCurrentProgress(<span class="number">0.0f</span>);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>最后要说的是，优化问题，在这篇文章中我们在绘制的过程中就已经进行优化了，我们要养成这种好习惯，不管是代码上还是性能上。<br>下载地址:<a href="https://github.com/ChinaZeng/CustomView" target="_blank" rel="noopener">https://github.com/ChinaZeng/CustomView</a></p>
+<p>参考链接:<a href="http://www.jianshu.com/p/6e4b3eebbba0" target="_blank" rel="noopener">http://www.jianshu.com/p/6e4b3eebbba0</a></p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          
+            <a href="/tags/自定义view/" rel="tag"><i class="fa fa-tag"></i> 自定义view</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/自定义View（3） -- 字母索引.html" rel="next" title="自定义View（3） -- 字母索引">
+                <i class="fa fa-chevron-left"></i> 自定义View（3） -- 字母索引
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/自定义View（5） -- 评分控件RatingBar.html" rel="prev" title="自定义View（5） -- 评分控件RatingBar">
+                自定义View（5） -- 评分控件RatingBar <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

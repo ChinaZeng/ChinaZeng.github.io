@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,源码,glide," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="代码如下:1234567891011121314151617181920212223242526private &amp;lt;T&amp;gt; DrawableTypeRequest&amp;lt;T&amp;gt; loadGeneric(Class&amp;lt;T&amp;gt; modelClass) &amp;#123;        //1. 获取streamModelLoader        ModelLoader&amp;lt;T, In">
+<meta name="keywords" content="android,源码,glide">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Glide v3.7源码分析(2)-----RequestManager.load">
+<meta property="og:url" content="http://www.zengzhaowen.cn/Glide  v3.7源码分析(2)-----RequestManager.load.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="代码如下:1234567891011121314151617181920212223242526private &amp;lt;T&amp;gt; DrawableTypeRequest&amp;lt;T&amp;gt; loadGeneric(Class&amp;lt;T&amp;gt; modelClass) &amp;#123;        //1. 获取streamModelLoader        ModelLoader&amp;lt;T, In">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/BD4795A17A4F43A493EC2EA97FDBE289?method=download&shareKey=0a3768f55780780e614df5c943aa534e">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.096Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Glide v3.7源码分析(2)-----RequestManager.load">
+<meta name="twitter:description" content="代码如下:1234567891011121314151617181920212223242526private &amp;lt;T&amp;gt; DrawableTypeRequest&amp;lt;T&amp;gt; loadGeneric(Class&amp;lt;T&amp;gt; modelClass) &amp;#123;        //1. 获取streamModelLoader        ModelLoader&amp;lt;T, In">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/BD4795A17A4F43A493EC2EA97FDBE289?method=download&shareKey=0a3768f55780780e614df5c943aa534e">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/Glide  v3.7源码分析(2)-----RequestManager.load.html"/>
+
+
+
+
+
+  <title>Glide v3.7源码分析(2)-----RequestManager.load | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/Glide  v3.7源码分析(2)-----RequestManager.load.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Glide v3.7源码分析(2)-----RequestManager.load</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-31T10:15:57+08:00">
+                2018-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Glide  v3.7源码分析(2)-----RequestManager.load.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Glide  v3.7源码分析(2)-----RequestManager.load.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,145字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  18分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>代码如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function">DrawableTypeRequest&lt;T&gt; <span class="title">loadGeneric</span><span class="params">(Class&lt;T&gt; modelClass)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//1. 获取streamModelLoader</span></span><br><span class="line">        ModelLoader&lt;T, InputStream&gt; streamModelLoader = Glide.buildStreamModelLoader(modelClass, context);</span><br><span class="line">        <span class="comment">//2. 获取fileDescriptorModelLoader</span></span><br><span class="line">        ModelLoader&lt;T, ParcelFileDescriptor&gt; fileDescriptorModelLoader =</span><br><span class="line">                Glide.buildFileDescriptorModelLoader(modelClass, context);</span><br><span class="line">        <span class="keyword">if</span> (modelClass != <span class="keyword">null</span> &amp;&amp; streamModelLoader == <span class="keyword">null</span> &amp;&amp; fileDescriptorModelLoader == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Unknown type "</span> + modelClass + <span class="string">". You must provide a Model of a type for"</span></span><br><span class="line">                    + <span class="string">" which there is a registered ModelLoader, if you are using a custom model, you must first call"</span></span><br><span class="line">                    + <span class="string">" Glide#register with a ModelLoaderFactory for your custom model class"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//3. 获取DrawableTypeRequest</span></span><br><span class="line">        <span class="keyword">return</span> optionsApplier.apply(</span><br><span class="line">                <span class="keyword">new</span> DrawableTypeRequest&lt;T&gt;(modelClass, streamModelLoader, fileDescriptorModelLoader, context,</span><br><span class="line">                        glide, requestTracker, lifecycle, optionsApplier));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> DrawableTypeRequest&lt;String&gt; <span class="title">load</span><span class="params">(String string)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//4. load</span></span><br><span class="line">        <span class="keyword">return</span> (DrawableTypeRequest&lt;String&gt;) fromString().load(string);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> DrawableTypeRequest&lt;String&gt; <span class="title">fromString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> loadGeneric(String.class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>流程图如下:<br><img src="https://note.youdao.com/yws/api/personal/file/BD4795A17A4F43A493EC2EA97FDBE289?method=download&amp;shareKey=0a3768f55780780e614df5c943aa534e" alt="RequestManager.load"></p>
+<ol>
+<li><strong>buildModelLoader</strong>: 根据请求的<code>model</code>和需要解析的<code>model</code>获取到对应的<code>ModelLoader</code></li>
+</ol>
+<ul>
+<li><p>Glide.buildModelLoader()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T, Y&gt; <span class="function">ModelLoader&lt;T, Y&gt; <span class="title">buildModelLoader</span><span class="params">(Class&lt;T&gt; modelClass, Class&lt;Y&gt; resourceClass,</span></span></span><br><span class="line"><span class="function"><span class="params">           Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (modelClass == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</span><br><span class="line">               Log.d(TAG, <span class="string">"Unable to load null model, setting placeholder only"</span>);</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">       &#125;</span><br><span class="line">      <span class="comment">//详见【1.1】 Glide.get  详见【1.2】 buildModelLoader</span></span><br><span class="line">       <span class="keyword">return</span> Glide.get(context).getLoaderFactory().buildModelLoader(modelClass, resourceClass);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>1.1</p>
+<ul>
+<li>Glide.get()：<code>module</code>配置解析，初始化<code>Glide</code>对象</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Glide <span class="title">get</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (glide == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Glide.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (glide == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    Context applicationContext = context.getApplicationContext();</span><br><span class="line">                    <span class="comment">//解析Manifest配置的GlideModule  详见【1.1.1】</span></span><br><span class="line">                    List&lt;GlideModule&gt; modules = <span class="keyword">new</span> ManifestParser(applicationContext).parse();</span><br><span class="line"></span><br><span class="line">                    GlideBuilder builder = <span class="keyword">new</span> GlideBuilder(applicationContext);</span><br><span class="line">                    <span class="comment">//遍历module，完成赋值 </span></span><br><span class="line">                    <span class="keyword">for</span> (GlideModule <span class="keyword">module</span> : modules) &#123;</span><br><span class="line">                        <span class="keyword">module</span>.applyOptions(applicationContext, builder);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">//初始化Glide 详见【1.1.2】</span></span><br><span class="line">                    glide = builder.createGlide();</span><br><span class="line">                     <span class="comment">//遍历module，完成注册</span></span><br><span class="line">                    <span class="keyword">for</span> (GlideModule <span class="keyword">module</span> : modules) &#123;</span><br><span class="line">                        <span class="keyword">module</span>.registerComponents(applicationContext, glide);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> glide;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>1.1.1</p>
+<ul>
+<li>ManifestParser.parser()：解析<code>AndroidManifest.xml</code>配置的<code>module</code><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;GlideModule&gt; <span class="title">parse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        List&lt;GlideModule&gt; modules = <span class="keyword">new</span> ArrayList&lt;GlideModule&gt;();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(</span><br><span class="line">                    context.getPackageName(), PackageManager.GET_META_DATA);</span><br><span class="line">            <span class="keyword">if</span> (appInfo.metaData != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (String key : appInfo.metaData.keySet()) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (GLIDE_MODULE_VALUE.equals(appInfo.metaData.get(key))) &#123;</span><br><span class="line">                        modules.add(parseModule(key));</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unable to find metadata to parse GlideModules"</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> modules;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> GlideModule <span class="title">parseModule</span><span class="params">(String className)</span> </span>&#123;</span><br><span class="line">        Class&lt;?&gt; clazz;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            clazz = Class.forName(className);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Unable to find GlideModule implementation"</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Object <span class="keyword">module</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//初始化module</span></span><br><span class="line">            <span class="keyword">module</span> = clazz.newInstance();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InstantiationException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unable to instantiate GlideModule implementation for "</span> + clazz, e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unable to instantiate GlideModule implementation for "</span> + clazz, e);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!(<span class="keyword">module</span> <span class="keyword">instanceof</span> GlideModule)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Expected instanceof GlideModule, but found: "</span> + <span class="keyword">module</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (GlideModule) <span class="keyword">module</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>1.1.2</p>
+<ul>
+<li>GlideBuilder.createGlide():<code>Glide</code>初始化<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Glide <span class="title">createGlide</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sourceService == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//根据cpu获取核心加载数量</span></span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> cores = Math.max(<span class="number">1</span>, Runtime.getRuntime().availableProcessors());</span><br><span class="line">            <span class="comment">//具有优先级顺序的线程池</span></span><br><span class="line">            sourceService = <span class="keyword">new</span> FifoPriorityThreadPoolExecutor(cores);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (diskCacheService == <span class="keyword">null</span>) &#123;</span><br><span class="line">            diskCacheService = <span class="keyword">new</span> FifoPriorityThreadPoolExecutor(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//缓存计算类</span></span><br><span class="line">        MemorySizeCalculator calculator = <span class="keyword">new</span> MemorySizeCalculator(context);</span><br><span class="line">        <span class="keyword">if</span> (bitmapPool == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.HONEYCOMB) &#123;</span><br><span class="line">                <span class="keyword">int</span> size = calculator.getBitmapPoolSize();</span><br><span class="line">                <span class="comment">//位图池</span></span><br><span class="line">                bitmapPool = <span class="keyword">new</span> LruBitmapPool(size);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                bitmapPool = <span class="keyword">new</span> BitmapPoolAdapter();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//内存缓存</span></span><br><span class="line">        <span class="keyword">if</span> (memoryCache == <span class="keyword">null</span>) &#123;</span><br><span class="line">            memoryCache = <span class="keyword">new</span> LruResourceCache(calculator.getMemoryCacheSize());</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//磁盘缓存</span></span><br><span class="line">        <span class="keyword">if</span> (diskCacheFactory == <span class="keyword">null</span>) &#123;</span><br><span class="line">            diskCacheFactory = <span class="keyword">new</span> InternalCacheDiskCacheFactory(context);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//负责启动request load和管理内存的引擎类</span></span><br><span class="line">        <span class="keyword">if</span> (engine == <span class="keyword">null</span>) &#123;</span><br><span class="line">            engine = <span class="keyword">new</span> Engine(memoryCache, diskCacheFactory, diskCacheService, sourceService);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (decodeFormat == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//编码格式  默认PREFER_RGB_565</span></span><br><span class="line">            decodeFormat = DecodeFormat.DEFAULT;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Glide(engine, memoryCache, bitmapPool, context, decodeFormat);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Glide(Engine engine, MemoryCache memoryCache, BitmapPool bitmapPool, Context context, DecodeFormat decodeFormat) &#123;</span><br><span class="line">        <span class="keyword">this</span>.engine = engine;</span><br><span class="line">        <span class="keyword">this</span>.bitmapPool = bitmapPool;</span><br><span class="line">        <span class="keyword">this</span>.memoryCache = memoryCache;</span><br><span class="line">        <span class="keyword">this</span>.decodeFormat = decodeFormat;</span><br><span class="line">        <span class="comment">//ModelLoader生成工厂类</span></span><br><span class="line">        loaderFactory = <span class="keyword">new</span> GenericLoaderFactory(context);</span><br><span class="line">        mainHandler = <span class="keyword">new</span> Handler(Looper.getMainLooper());</span><br><span class="line">       </span><br><span class="line">        bitmapPreFiller = <span class="keyword">new</span> BitmapPreFiller(memoryCache, bitmapPool, decodeFormat);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//DataLoadProviderRegistry 注册</span></span><br><span class="line">        dataLoadProviderRegistry = <span class="keyword">new</span> DataLoadProviderRegistry();</span><br><span class="line"></span><br><span class="line">        StreamBitmapDataLoadProvider streamBitmapLoadProvider =</span><br><span class="line">                <span class="keyword">new</span> StreamBitmapDataLoadProvider(bitmapPool, decodeFormat);</span><br><span class="line">        dataLoadProviderRegistry.register(InputStream.class, Bitmap.class, streamBitmapLoadProvider);</span><br><span class="line"></span><br><span class="line">        FileDescriptorBitmapDataLoadProvider fileDescriptorLoadProvider =</span><br><span class="line">                <span class="keyword">new</span> FileDescriptorBitmapDataLoadProvider(bitmapPool, decodeFormat);</span><br><span class="line">        dataLoadProviderRegistry.register(ParcelFileDescriptor.class, Bitmap.class, fileDescriptorLoadProvider);</span><br><span class="line"></span><br><span class="line">        ImageVideoDataLoadProvider imageVideoDataLoadProvider =</span><br><span class="line">                <span class="keyword">new</span> ImageVideoDataLoadProvider(streamBitmapLoadProvider, fileDescriptorLoadProvider);</span><br><span class="line">        dataLoadProviderRegistry.register(ImageVideoWrapper.class, Bitmap.class, imageVideoDataLoadProvider);</span><br><span class="line"></span><br><span class="line">        GifDrawableLoadProvider gifDrawableLoadProvider =</span><br><span class="line">                <span class="keyword">new</span> GifDrawableLoadProvider(context, bitmapPool);</span><br><span class="line">        dataLoadProviderRegistry.register(InputStream.class, GifDrawable.class, gifDrawableLoadProvider);</span><br><span class="line"></span><br><span class="line">        dataLoadProviderRegistry.register(ImageVideoWrapper.class, GifBitmapWrapper.class,</span><br><span class="line">                <span class="keyword">new</span> ImageVideoGifDrawableLoadProvider(imageVideoDataLoadProvider, gifDrawableLoadProvider, bitmapPool));</span><br><span class="line"></span><br><span class="line">        dataLoadProviderRegistry.register(InputStream.class, File.class, <span class="keyword">new</span> StreamFileDataLoadProvider());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//GenericLoaderFactory注册 </span></span><br><span class="line">        register(File.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorFileLoader.Factory());</span><br><span class="line">        register(File.class, InputStream.class, <span class="keyword">new</span> StreamFileLoader.Factory());</span><br><span class="line">        register(<span class="keyword">int</span>.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorResourceLoader.Factory());</span><br><span class="line">        register(<span class="keyword">int</span>.class, InputStream.class, <span class="keyword">new</span> StreamResourceLoader.Factory());</span><br><span class="line">        register(Integer.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorResourceLoader.Factory());</span><br><span class="line">        register(Integer.class, InputStream.class, <span class="keyword">new</span> StreamResourceLoader.Factory());</span><br><span class="line">        register(String.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorStringLoader.Factory());</span><br><span class="line">        register(String.class, InputStream.class, <span class="keyword">new</span> StreamStringLoader.Factory());</span><br><span class="line">        register(Uri.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorUriLoader.Factory());</span><br><span class="line">        register(Uri.class, InputStream.class, <span class="keyword">new</span> StreamUriLoader.Factory());</span><br><span class="line">        register(URL.class, InputStream.class, <span class="keyword">new</span> StreamUrlLoader.Factory());</span><br><span class="line">        register(GlideUrl.class, InputStream.class, <span class="keyword">new</span> HttpUrlGlideUrlLoader.Factory());</span><br><span class="line">        register(<span class="keyword">byte</span>[].class, InputStream.class, <span class="keyword">new</span> StreamByteArrayLoader.Factory());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//TranscoderRegistry 注册</span></span><br><span class="line">        transcoderRegistry.register(Bitmap.class, GlideBitmapDrawable.class,</span><br><span class="line">                <span class="keyword">new</span> GlideBitmapDrawableTranscoder(context.getResources(), bitmapPool));</span><br><span class="line">        transcoderRegistry.register(GifBitmapWrapper.class, GlideDrawable.class,</span><br><span class="line">                <span class="keyword">new</span> GifBitmapWrapperDrawableTranscoder(</span><br><span class="line">                        <span class="keyword">new</span> GlideBitmapDrawableTranscoder(context.getResources(), bitmapPool)));</span><br><span class="line"></span><br><span class="line">        bitmapCenterCrop = <span class="keyword">new</span> CenterCrop(bitmapPool);</span><br><span class="line">        drawableCenterCrop = <span class="keyword">new</span> GifBitmapWrapperTransformation(bitmapPool, bitmapCenterCrop);</span><br><span class="line"></span><br><span class="line">        bitmapFitCenter = <span class="keyword">new</span> FitCenter(bitmapPool);</span><br><span class="line">        drawableFitCenter = <span class="keyword">new</span> GifBitmapWrapperTransformation(bitmapPool, bitmapFitCenter);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据modelClass，resourceClass，ModelLoaderFactory注册到GenericLoaderFactory</span></span><br><span class="line"><span class="keyword">public</span> &lt;T, Y&gt; <span class="function"><span class="keyword">void</span> <span class="title">register</span><span class="params">(Class&lt;T&gt; modelClass, Class&lt;Y&gt; resourceClass, ModelLoaderFactory&lt;T, Y&gt; factory)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//详见【1.1.3】</span></span><br><span class="line">        ModelLoaderFactory&lt;T, Y&gt; removed = loaderFactory.register(modelClass, resourceClass, factory);</span><br><span class="line">        <span class="keyword">if</span> (removed != <span class="keyword">null</span>) &#123;</span><br><span class="line">            removed.teardown();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>可以看到，<code>Glide</code>初始化的时候做了很多的事，初始化了缓存相关的类，任务执行以及缓存管理的引擎，注册了<code>DataLoadProviderRegistry GenericLoaderFactory</code>等等这些。这个时候我们知道了<code>Glide.buildModelLoader()函数里面Glide.get(context).getLoaderFactory()</code>对象为<code>GenericLoaderFactory</code></p>
+<ul>
+<li><p>1.1.3</p>
+<ul>
+<li>GenericLoaderFactory.register()<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> &lt;T, Y&gt; <span class="function">ModelLoaderFactory&lt;T, Y&gt; <span class="title">register</span><span class="params">(Class&lt;T&gt; modelClass, Class&lt;Y&gt; resourceClass,</span></span></span><br><span class="line"><span class="function"><span class="params">            ModelLoaderFactory&lt;T, Y&gt; factory)</span> </span>&#123;</span><br><span class="line">        cachedModelLoaders.clear();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//modelClassToResourceFactories key为modelClass,值为已resourceClass为key，factory为值得HashMap</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//根据modelClass获取resourceToFactories</span></span><br><span class="line">        Map&lt;Class<span class="comment">/*Y*/</span>, ModelLoaderFactory<span class="comment">/*T, Y*/</span>&gt; resourceToFactories = modelClassToResourceFactories.get(modelClass);</span><br><span class="line">        <span class="keyword">if</span> (resourceToFactories == <span class="keyword">null</span>) &#123;</span><br><span class="line">            resourceToFactories = <span class="keyword">new</span> HashMap&lt;Class<span class="comment">/*Y*/</span>, ModelLoaderFactory<span class="comment">/*T, Y*/</span>&gt;();</span><br><span class="line">            modelClassToResourceFactories.put(modelClass, resourceToFactories);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        ModelLoaderFactory<span class="comment">/*T, Y*/</span> previous = resourceToFactories.put(resourceClass, factory);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (previous != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// This factory may be being used by another model. We don't want to say it has been removed unless we</span></span><br><span class="line">            <span class="comment">// know it has been removed for all models.</span></span><br><span class="line">            <span class="keyword">for</span> (Map&lt;Class<span class="comment">/*Y*/</span>, ModelLoaderFactory<span class="comment">/*T, Y*/</span>&gt; factories : modelClassToResourceFactories.values()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (factories.containsValue(previous)) &#123;</span><br><span class="line">                    previous = <span class="keyword">null</span>;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> previous;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>1.2</p>
+<ul>
+<li>GenericLoaderFactory.buildModelLoader()<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> &lt;T, Y&gt; <span class="function">ModelLoader&lt;T, Y&gt; <span class="title">buildModelLoader</span><span class="params">(Class&lt;T&gt; modelClass, Class&lt;Y&gt; resourceClass)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//获取缓存的ModelLoader</span></span><br><span class="line">        ModelLoader&lt;T, Y&gt; result = getCachedLoader(modelClass, resourceClass);</span><br><span class="line">        <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// We've already tried to create a model loader and can't with the currently registered set of factories,</span></span><br><span class="line">            <span class="comment">// but we can't use null to demonstrate that failure because model loaders that haven't been requested</span></span><br><span class="line">            <span class="comment">// yet will be null in the cache. To avoid this, we use a special signal model loader.</span></span><br><span class="line">            <span class="keyword">if</span> (NULL_MODEL_LOADER.equals(result)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//根据 modelClass 和 resourceClass获取对应的ModelLoaderFactory</span></span><br><span class="line">        <span class="keyword">final</span> ModelLoaderFactory&lt;T, Y&gt; factory = getFactory(modelClass, resourceClass);</span><br><span class="line">        <span class="keyword">if</span> (factory != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//根据ModelLoaderFactory获取到ModelLoader，并将存到缓存，详见【1.2.1】</span></span><br><span class="line">            result = factory.build(context, <span class="keyword">this</span>);</span><br><span class="line">            cacheModelLoader(modelClass, resourceClass, result);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// We can't generate a model loader for the given arguments with the currently registered set of factories.</span></span><br><span class="line">            cacheNullLoader(modelClass, resourceClass);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> &lt;T, Y&gt; <span class="function">ModelLoaderFactory&lt;T, Y&gt; <span class="title">getFactory</span><span class="params">(Class&lt;T&gt; modelClass, Class&lt;Y&gt; resourceClass)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 在【1.1.2】Glide初始化的时候modelClassToResourceFactories注册对应关系</span></span><br><span class="line">        Map&lt;Class<span class="comment">/*Y*/</span>, ModelLoaderFactory<span class="comment">/*T, Y*/</span>&gt; resourceToFactories = modelClassToResourceFactories.get(modelClass);</span><br><span class="line">        ModelLoaderFactory<span class="comment">/*T, Y*/</span> result = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (resourceToFactories != <span class="keyword">null</span>) &#123;</span><br><span class="line">            result = resourceToFactories.get(resourceClass);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (result == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (Class&lt;? <span class="keyword">super</span> T&gt; registeredModelClass : modelClassToResourceFactories.keySet()) &#123;</span><br><span class="line">                <span class="comment">// This accounts for model subclasses, our map only works for exact matches. We should however still</span></span><br><span class="line">                <span class="comment">// match a subclass of a model with a factory for a super class of that model if if there isn't a</span></span><br><span class="line">                <span class="comment">// factory for that particular subclass. Uris are a great example of when this happens, most uris</span></span><br><span class="line">                <span class="comment">// are actually subclasses for Uri, but we'd generally rather load them all with the same factory rather</span></span><br><span class="line">                <span class="comment">// than trying to register for each subclass individually.</span></span><br><span class="line">                <span class="keyword">if</span> (registeredModelClass.isAssignableFrom(modelClass)) &#123;</span><br><span class="line">                    Map&lt;Class<span class="comment">/*Y*/</span>, ModelLoaderFactory<span class="comment">/*T, Y*/</span>&gt; currentResourceToFactories =</span><br><span class="line">                            modelClassToResourceFactories.get(registeredModelClass);</span><br><span class="line">                    <span class="keyword">if</span> (currentResourceToFactories != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        result = currentResourceToFactories.get(resourceClass);</span><br><span class="line">                        <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>1.2.1</p>
+<ul>
+<li>factory.build():根据<code>ModelLoaderFactory</code>获取到<code>ModelLoader</code>,这里用<code>module.class=String.class</code>来举例， 【1.1.2】Glide初始化的时候可知道<code>register(String.class, InputStream.class, new StreamStringLoader.Factory());</code></li>
+<li>StreamStringLoader.Factory.build()<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamStringLoader</span> <span class="keyword">extends</span> <span class="title">StringLoader</span>&lt;<span class="title">InputStream</span>&gt; <span class="keyword">implements</span> <span class="title">StreamModelLoader</span>&lt;<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The default factory for &#123;<span class="doctag">@link</span> com.bumptech.glide.load.model.stream.StreamStringLoader&#125;s.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span> <span class="keyword">implements</span> <span class="title">ModelLoaderFactory</span>&lt;<span class="title">String</span>, <span class="title">InputStream</span>&gt; </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> ModelLoader&lt;String, InputStream&gt; <span class="title">build</span><span class="params">(Context context, GenericLoaderFactory factories)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//这里通过`factories.buildModelLoader`来构建一个`module.class=Uri.class`类型的`ModuleLoader`，从【1.1.2】里面可以看到`register(Uri.class, InputStream.class, new StreamUriLoader.Factory());`。`factories.buildModelLoader`详见【1.2】 </span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> StreamStringLoader(factories.buildModelLoader(Uri.class, InputStream.class));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">teardown</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="comment">// Do nothing.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StreamStringLoader</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(Glide.buildStreamModelLoader(Uri.class, context));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StreamStringLoader</span><span class="params">(ModelLoader&lt;Uri, InputStream&gt; uriLoader)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(uriLoader);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamUriLoader</span> <span class="keyword">extends</span> <span class="title">UriLoader</span>&lt;<span class="title">InputStream</span>&gt; <span class="keyword">implements</span> <span class="title">StreamModelLoader</span>&lt;<span class="title">Uri</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * THe default factory for &#123;<span class="doctag">@link</span> com.bumptech.glide.load.model.stream.StreamUriLoader&#125;s.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span> <span class="keyword">implements</span> <span class="title">ModelLoaderFactory</span>&lt;<span class="title">Uri</span>, <span class="title">InputStream</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> ModelLoader&lt;Uri, InputStream&gt; <span class="title">build</span><span class="params">(Context context, GenericLoaderFactory factories)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//【1.1.2】  register(GlideUrl.class, InputStream.class, new HttpUrlGlideUrlLoader.Factory());</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> StreamUriLoader(context, factories.buildModelLoader(GlideUrl.class, InputStream.class));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">teardown</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="comment">// Do nothing.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StreamUriLoader</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, Glide.buildStreamModelLoader(GlideUrl.class, context));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StreamUriLoader</span><span class="params">(Context context, ModelLoader&lt;GlideUrl, InputStream&gt; urlLoader)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, urlLoader);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpUrlGlideUrlLoader</span> <span class="keyword">implements</span> <span class="title">ModelLoader</span>&lt;<span class="title">GlideUrl</span>, <span class="title">InputStream</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ModelCache&lt;GlideUrl, GlideUrl&gt; modelCache;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The default factory for &#123;<span class="doctag">@link</span> com.bumptech.glide.load.model.stream.HttpUrlGlideUrlLoader&#125;s.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span> <span class="keyword">implements</span> <span class="title">ModelLoaderFactory</span>&lt;<span class="title">GlideUrl</span>, <span class="title">InputStream</span>&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> ModelCache&lt;GlideUrl, GlideUrl&gt; modelCache = <span class="keyword">new</span> ModelCache&lt;GlideUrl, GlideUrl&gt;(<span class="number">500</span>);</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> ModelLoader&lt;GlideUrl, InputStream&gt; <span class="title">build</span><span class="params">(Context context, GenericLoaderFactory factories)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> HttpUrlGlideUrlLoader(modelCache);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">teardown</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="comment">// Do nothing.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HttpUrlGlideUrlLoader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HttpUrlGlideUrlLoader</span><span class="params">(ModelCache&lt;GlideUrl, GlideUrl&gt; modelCache)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.modelCache = modelCache;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataFetcher&lt;InputStream&gt; <span class="title">getResourceFetcher</span><span class="params">(GlideUrl model, <span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// GlideUrls memoize parsed URLs so caching them saves a few object instantiations and time spent parsing urls.</span></span><br><span class="line">        GlideUrl url = model;</span><br><span class="line">        <span class="keyword">if</span> (modelCache != <span class="keyword">null</span>) &#123;</span><br><span class="line">            url = modelCache.get(model, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">            <span class="keyword">if</span> (url == <span class="keyword">null</span>) &#123;</span><br><span class="line">                modelCache.put(model, <span class="number">0</span>, <span class="number">0</span>, model);</span><br><span class="line">                url = model;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HttpUrlFetcher(url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>StreamStringLoader</code>继承<code>StringLoader</code>,<code>StringLoader</code>里面有一个<code>ModelLoader uriLoader</code>成员变量,当<code>build</code>的时候，这里通过<code>factories.buildModelLoader</code>来构建一个<code>module.class=Uri.class</code>类型的<code>ModuleLoader</code>，从【1.1.2】里面可以看到<code>register(Uri.class, InputStream.class, new StreamUriLoader.Factory());`</code>StreamUriLoader<code>继承</code>UriLoader<code>，它有一个</code>ModelLoader  urlLoader<code>成员变量，这个时候也通过</code>factories.buildModelLoader<code>以</code>module.class = GlideUrl.class<code>的方式获取,【1.1.2】</code>register(GlideUrl.class, InputStream.class, new HttpUrlGlideUrlLoader.Factory());`，这里一层一层的获取很是巧妙。</p>
+<ol start="2">
+<li><strong>Glide.buildFileDescriptorModelLoader</strong>：获取<code>fileDescriptorModelLoader</code><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">ModelLoader&lt;T, ParcelFileDescriptor&gt; <span class="title">buildFileDescriptorModelLoader</span><span class="params">(Class&lt;T&gt; modelClass,</span></span></span><br><span class="line"><span class="function"><span class="params">         Context context)</span> </span>&#123;</span><br><span class="line">         <span class="comment">//详见【1】</span></span><br><span class="line">     <span class="keyword">return</span> buildModelLoader(modelClass, ParcelFileDescriptor.class, context);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这一步和【1】差不多的流程，已<code>module.class = String.class</code>为例子，<code>register(String.class, ParcelFileDescriptor.class, new FileDescriptorStringLoader.Factory());</code>于【1.2.1】类似，也是一层一层的获取，这就不废话了。</p>
+<ol start="3">
+<li><strong>获取DrawableTypeRequest</strong>: <code>DrawableTypeReques</code>t继承<code>DrawableRequestBuilder</code>,<code>DrawableRequestBuilder</code>继承<code>GenericRequestBuilder</code><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> OptionsApplier optionsApplier;</span><br><span class="line"><span class="keyword">this</span>.optionsApplier = <span class="keyword">new</span> OptionsApplier();</span><br><span class="line"></span><br><span class="line"><span class="comment">//【3.1】  new DrawableTypeRequest</span></span><br><span class="line">optionsApplier.apply(</span><br><span class="line">                <span class="keyword">new</span> DrawableTypeRequest&lt;T&gt;(modelClass, streamModelLoader, fileDescriptorModelLoader, context,</span><br><span class="line">                        glide, requestTracker, lifecycle, optionsApplier))</span><br><span class="line">                        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OptionsApplier</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> &lt;A, X extends GenericRequestBuilder&lt;A, ?, ?, ?&gt;&gt; <span class="function">X <span class="title">apply</span><span class="params">(X builder)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//HOOK </span></span><br><span class="line">            <span class="keyword">if</span> (options != <span class="keyword">null</span>) &#123;</span><br><span class="line">                options.apply(builder);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> builder;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这里获取<code>Request</code>对象的时候，留了一个<code>hook</code>。</p>
+<ul>
+<li><p>3.1</p>
+<ul>
+<li>new DrawableTypeRequest<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">DrawableTypeRequest(Class&lt;ModelType&gt; modelClass, ModelLoader&lt;ModelType, InputStream&gt; streamModelLoader,</span><br><span class="line">            ModelLoader&lt;ModelType, ParcelFileDescriptor&gt; fileDescriptorModelLoader, Context context, Glide glide,</span><br><span class="line">            RequestTracker requestTracker, Lifecycle lifecycle, RequestManager.OptionsApplier optionsApplier) &#123;</span><br><span class="line">            <span class="comment">//【3.2】 buildProvider</span></span><br><span class="line">        <span class="keyword">super</span>(context, modelClass,</span><br><span class="line">                buildProvider(glide, streamModelLoader, fileDescriptorModelLoader, GifBitmapWrapper.class,</span><br><span class="line">                        GlideDrawable.class, <span class="keyword">null</span>),</span><br><span class="line">                glide, requestTracker, lifecycle);</span><br><span class="line">        <span class="keyword">this</span>.streamModelLoader = streamModelLoader;</span><br><span class="line">        <span class="keyword">this</span>.fileDescriptorModelLoader = fileDescriptorModelLoader;</span><br><span class="line">        <span class="keyword">this</span>.optionsApplier = optionsApplier;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    DrawableRequestBuilder(Context context, Class&lt;ModelType&gt; modelClass,</span><br><span class="line">            LoadProvider&lt;ModelType, ImageVideoWrapper, GifBitmapWrapper, GlideDrawable&gt; loadProvider, Glide glide,</span><br><span class="line">            RequestTracker requestTracker, Lifecycle lifecycle) &#123;</span><br><span class="line">        <span class="keyword">super</span>(context, modelClass, loadProvider, GlideDrawable.class, glide, requestTracker, lifecycle);</span><br><span class="line">        <span class="comment">// Default to animating.</span></span><br><span class="line">        crossFade();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    GenericRequestBuilder(Context context, Class&lt;ModelType&gt; modelClass,</span><br><span class="line">            LoadProvider&lt;ModelType, DataType, ResourceType, TranscodeType&gt; loadProvider,</span><br><span class="line">            Class&lt;TranscodeType&gt; transcodeClass, Glide glide, RequestTracker requestTracker, Lifecycle lifecycle) &#123;</span><br><span class="line">        <span class="keyword">this</span>.context = context;</span><br><span class="line">        <span class="keyword">this</span>.modelClass = modelClass;</span><br><span class="line">        <span class="keyword">this</span>.transcodeClass = transcodeClass;</span><br><span class="line">        <span class="keyword">this</span>.glide = glide;</span><br><span class="line">        <span class="keyword">this</span>.requestTracker = requestTracker;</span><br><span class="line">        <span class="keyword">this</span>.lifecycle = lifecycle;</span><br><span class="line">        <span class="keyword">this</span>.loadProvider = loadProvider != <span class="keyword">null</span></span><br><span class="line">                ? <span class="keyword">new</span> ChildLoadProvider&lt;ModelType, DataType, ResourceType, TranscodeType&gt;(loadProvider) : <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (context == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Context can't be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (modelClass != <span class="keyword">null</span> &amp;&amp; loadProvider == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"LoadProvider must not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>3.2</p>
+<ul>
+<li>buildProvider<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;A, Z, R&gt; <span class="function">FixedLoadProvider&lt;A, ImageVideoWrapper, Z, R&gt; <span class="title">buildProvider</span><span class="params">(Glide glide,</span></span></span><br><span class="line"><span class="function"><span class="params">           ModelLoader&lt;A, InputStream&gt; streamModelLoader,</span></span></span><br><span class="line"><span class="function"><span class="params">           ModelLoader&lt;A, ParcelFileDescriptor&gt; fileDescriptorModelLoader, Class&lt;Z&gt; resourceClass,</span></span></span><br><span class="line"><span class="function"><span class="params">           Class&lt;R&gt; transcodedClass,</span></span></span><br><span class="line"><span class="function"><span class="params">           ResourceTranscoder&lt;Z, R&gt; transcoder)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (streamModelLoader == <span class="keyword">null</span> &amp;&amp; fileDescriptorModelLoader == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (transcoder == <span class="keyword">null</span>) &#123;</span><br><span class="line">       <span class="comment">//获取ResourceTranscoder详见【3.2.1】  --&gt; GifBitmapWrapperDrawableTranscoder</span></span><br><span class="line">           transcoder = glide.buildTranscoder(resourceClass, transcodedClass);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="comment">//详见【3.2.2】</span></span><br><span class="line">       DataLoadProvider&lt;ImageVideoWrapper, Z&gt; dataLoadProvider = glide.buildDataProvider(ImageVideoWrapper.class,</span><br><span class="line">               resourceClass);</span><br><span class="line">       ImageVideoModelLoader&lt;A&gt; modelLoader = <span class="keyword">new</span> ImageVideoModelLoader&lt;A&gt;(streamModelLoader,</span><br><span class="line">               fileDescriptorModelLoader);</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> FixedLoadProvider&lt;A, ImageVideoWrapper, Z, R&gt;(modelLoader, transcoder, dataLoadProvider);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>这里<code>resourceClass = GifBitmapWrapper.class</code>,<code>transcodedClass = GlideDrawable.class</code></p>
+<ul>
+<li>3.2.1<ul>
+<li>glide.buildTranscoder<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;Z, R&gt; <span class="function">ResourceTranscoder&lt;Z, R&gt; <span class="title">buildTranscoder</span><span class="params">(Class&lt;Z&gt; decodedClass, Class&lt;R&gt; transcodedClass)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> transcoderRegistry.get(decodedClass, transcodedClass);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>从【1.1.2】<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">transcoderRegistry.register(GifBitmapWrapper.class, GlideDrawable.class,</span><br><span class="line">               <span class="keyword">new</span> GifBitmapWrapperDrawableTranscoder(</span><br><span class="line">                       <span class="keyword">new</span> GlideBitmapDrawableTranscoder(context.getResources(), bitmapPool)));</span><br></pre></td></tr></table></figure></p>
+<p>获取的<code>transcoder</code>为<code>GifBitmapWrapperDrawableTranscoder</code></p>
+<ul>
+<li>3.2.2<ul>
+<li>glide.buildDataProvider<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;T, Z&gt; <span class="function">DataLoadProvider&lt;T, Z&gt; <span class="title">buildDataProvider</span><span class="params">(Class&lt;T&gt; dataClass, Class&lt;Z&gt; decodedClass)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> dataLoadProviderRegistry.get(dataClass, decodedClass);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>这里<code>dataClass = ImageVideoWrapper.class</code>,<code>decodedClass = resourceClass = GifBitmapWrapper.class</code><br>从【1.1.2】<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dataLoadProviderRegistry.register(ImageVideoWrapper.class, GifBitmapWrapper.class,</span><br><span class="line">               <span class="keyword">new</span> ImageVideoGifDrawableLoadProvider(imageVideoDataLoadProvider, gifDrawableLoadProvider, bitmapPool));</span><br></pre></td></tr></table></figure></p>
+<p>获取的<code>DataLoadProvider</code>为<code>ImageVideoGifDrawableLoadProvider</code></p>
+<ol start="4">
+<li><strong>DrawableTypeRequest.load</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DrawableRequestBuilder&lt;ModelType&gt; <span class="title">load</span><span class="params">(ModelType model)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.load(model);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> GenericRequestBuilder&lt;ModelType, DataType, ResourceType, TranscodeType&gt; <span class="title">load</span><span class="params">(ModelType model)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.model = model;</span><br><span class="line">        isModelSet = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>最后的<code>load</code>就是设置一些<code>moduleType</code>。</p>
+<p>总结：  </p>
+<ol>
+<li><code>Glide.with</code>获取到<code>RequestManager</code>对象，然后我们通过<code>RequestManager.load</code>根据<code>modelType</code>获取到<code>GenericRequestBuilder</code>对象。</li>
+<li><code>Glide</code>根据<code>modelType</code>生成<code>Request</code>采用了工厂，并且初始化<code>ModuleLoader</code>的时候，里面又包含着另外一个<code>ModuleLoader</code>引用，很是巧妙。具体查看【1.2】</li>
+<li>一个<code>modelType(modelClass)</code>对应多个<code>resourceType(resourceClass)</code>,一个<code>resourceType</code>对应一个<code>transcodedType(transcodedClass)</code></li>
+<li><code>modelType</code>可以理解为请求的类型,<code>String Uri File</code>等;<code>resourceType</code>可以理解为请求的结果形式，比如<code>Stream File</code>等；<code>transcodedType</code>可以理解为图片的转换类型<code>Drawable  Bitmap</code>等。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          
+            <a href="/tags/源码/" rel="tag"><i class="fa fa-tag"></i> 源码</a>
+          
+            <a href="/tags/glide/" rel="tag"><i class="fa fa-tag"></i> glide</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Glide v3.7源码分析(1)-----Glide.with().html" rel="next" title="Glide v3.7源码分析(1)-----Glide.with()">
+                <i class="fa fa-chevron-left"></i> Glide v3.7源码分析(1)-----Glide.with()
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Glide v3.7源码分析(3)------GenericRequestBuilder.into（时序图）.html" rel="prev" title="Glide v3.7源码分析(3)------GenericRequestBuilder.into（时序图）">
+                Glide v3.7源码分析(3)------GenericRequestBuilder.into（时序图） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="c/c++," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数组参数传递 我们先看个例子，main入口 ，同样的代码打印的信息不一样。12345678910111213141516171819202122232425262728293031323334353637#include &quot;stdafx.h&quot;#include &quot;stdio.h&quot;void print2(int* arr) &amp;#123;	int len = sizeof(arr) / sizeof(i">
+<meta name="keywords" content="c&#x2F;c++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c语法进阶">
+<meta property="og:url" content="http://www.zengzhaowen.cn/c语法进阶.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="数组参数传递 我们先看个例子，main入口 ，同样的代码打印的信息不一样。12345678910111213141516171819202122232425262728293031323334353637#include &quot;stdafx.h&quot;#include &quot;stdio.h&quot;void print2(int* arr) &amp;#123;	int len = sizeof(arr) / sizeof(i">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/4DCAB706BA7549929C3C63332AD58DFE?method=download&shareKey=36a1bf78bb08907bb4078e5742c52f0d">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/15F3E62B283E46258714B17DC79B1A13?method=download&shareKey=2253d285282f540dc9fd8f05755e97e7">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/1BB5E7518BD74517B33E1DC96EA9A6D1?method=download&shareKey=54e2c859b5a3294d9febd0e1c70a910c">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.103Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="c语法进阶">
+<meta name="twitter:description" content="数组参数传递 我们先看个例子，main入口 ，同样的代码打印的信息不一样。12345678910111213141516171819202122232425262728293031323334353637#include &quot;stdafx.h&quot;#include &quot;stdio.h&quot;void print2(int* arr) &amp;#123;	int len = sizeof(arr) / sizeof(i">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/4DCAB706BA7549929C3C63332AD58DFE?method=download&shareKey=36a1bf78bb08907bb4078e5742c52f0d">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/c语法进阶.html"/>
+
+
+
+
+
+  <title>c语法进阶 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/c语法进阶.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">c语法进阶</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-10T09:25:57+08:00">
+                2018-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c-c/" itemprop="url" rel="index">
+                    <span itemprop="name">c/c++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/c语法进阶.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/c语法进阶.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,487字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>数组参数传递</strong></p>
+<p>我们先看个例子，main入口 ，同样的代码打印的信息不一样。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdafx.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdio.h"</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print2</span><span class="params">(<span class="keyword">int</span>* arr)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> len = <span class="keyword">sizeof</span>(arr) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"len =%d\n"</span>, len);<span class="comment">//len = 1  </span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (; i &lt; len; i++) &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, arr[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">int</span> arr[])</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> len = <span class="keyword">sizeof</span>(arr) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"len =%d\n"</span>, len);<span class="comment">//len = 1  </span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (; i &lt; len; i++) &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, arr[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> arr[] = &#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span> &#125;;</span><br><span class="line">	<span class="keyword">int</span> len = <span class="keyword">sizeof</span>(arr) / <span class="keyword">sizeof</span>(<span class="keyword">int</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"len =%d\n"</span>, len);<span class="comment">//len = 5</span></span><br><span class="line">	print(arr);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"===================\n"</span>);</span><br><span class="line">	print2(arr);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"===================\n"</span>);</span><br><span class="line">	getchar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从这demo我们可以看到，数组作为参数传递的时候为什么获取不到长度？ </p>
+<blockquote>
+<p>数组作为参数传递，会退化成为一个指针，传递的是首地址 （高效）</p>
+</blockquote>
+<p><strong>数据类型剖析</strong></p>
+<ol>
+<li>数据类型本质: <strong>一块连续大小的内存空间</strong><br>demo1<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a; <span class="comment">//告诉c和c++编译器开辟一块连续大小的4字节的内存空间</span></span><br><span class="line">a =<span class="number">32</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>demo2<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> arr[] = &#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span> &#125;;<span class="comment">//内存大小空间 4x5=20</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d , %d,%d ,%d"</span>, arr,arr+<span class="number">1</span>,&amp;arr,&amp;arr+<span class="number">1</span>);<span class="comment">// 17758788 ,17758792,17758788 ,17758808</span></span><br><span class="line">	getchar();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"><span class="number">2.</span> 数据类型别名</span><br><span class="line">```c</span><br><span class="line"><span class="comment">/* Primitive types that match up with Java equivalents. */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">uint8_t</span>  jboolean; <span class="comment">/* unsigned 8 bits */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int8_t</span>   jbyte;    <span class="comment">/* signed 8 bits */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">uint16_t</span> jchar;    <span class="comment">/* unsigned 16 bits */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int16_t</span>  jshort;   <span class="comment">/* signed 16 bits */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int32_t</span>  jint;     <span class="comment">/* signed 32 bits */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int64_t</span>  jlong;    <span class="comment">/* signed 64 bits */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">float</span>    jfloat;   <span class="comment">/* 32-bit IEEE 754 */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">double</span>   jdouble;  <span class="comment">/* 64-bit IEEE 754 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* "cardinal indices and sizes" */</span></span><br><span class="line"><span class="keyword">typedef</span> jint     jsize;</span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li>void* 代表任意的数据类型的指针</li>
+</ol>
+<p><strong>变量的本质</strong></p>
+<ol>
+<li>变量的本质：固定内存块大小(一块连续大小的内存空间)的别名,通过变量去操作一块内存上的数据  </li>
+<li>变量的三要素：内存大小，名称，作用域</li>
+</ol>
+<p><strong>内存四驱模型</strong></p>
+<ol>
+<li><p>程序运行流程</p>
+<blockquote>
+<ol>
+<li>操作系统会将物理磁盘上的代码load到内存  </li>
+<li>加载到内存后会将c代码分为4个区</li>
+<li>后系统找到main程序入口运行</li>
+</ol>
+</blockquote>
+</li>
+<li><p>四驱模型</p>
+<blockquote>
+<ol>
+<li>栈区: 由编译器自动分配的，存放一些局部变量和函数，内存会自动进行回收。</li>
+<li>堆区: 一般由开发者自己开辟的，内存需要手动释放 malloc–&gt;free new–&gt;delete等。</li>
+<li>全局区（数据区）: 静态的一些常量，字符串等。</li>
+<li>程序代码区: 存放函数的二进制代码。</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Student</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> Student _Student;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change</span><span class="params">(<span class="keyword">int</span> number)</span> </span>&#123;</span><br><span class="line">	number = <span class="number">300</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%p\n"</span>, &amp;number);<span class="comment">//00B3F928</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">change</span><span class="params">(<span class="keyword">int</span>* p_number)</span> </span>&#123;</span><br><span class="line">	*p_number = <span class="number">300</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%p\n"</span>, p_number);<span class="comment">//00B3F9FC</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">chanegStudentAge</span><span class="params">(_Student student)</span> </span>&#123;</span><br><span class="line">	student.age = <span class="number">20</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%p\n"</span>, &amp;student);<span class="comment">//0135F74C</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">	a = <span class="number">20</span>;</span><br><span class="line">	change(a);<span class="comment">//把a的值复制给了number </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"a =%d\n"</span>,a);  <span class="comment">//a = 20</span></span><br><span class="line"></span><br><span class="line">	change(&amp;a);<span class="comment">//直接操作a的地址</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"a =%d\n"</span>, a);  <span class="comment">//a = 300</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	_Student student =  _Student();</span><br><span class="line">	student.age = <span class="number">5</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"student =%d\n"</span>, &amp;student);  <span class="comment">//student =20314144</span></span><br><span class="line">	chanegStudentAge(student);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"age = %d"</span>, student.age);</span><br><span class="line">	getchar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>不管是基本数据类型还是结构体，c都是值传递，和java不同的是，java基本数据类型是值传递，对象是引用传递。所以在c当中一般都是指针传递</strong></p>
+<p>change(int number)<br><img src="https://note.youdao.com/yws/api/personal/file/4DCAB706BA7549929C3C63332AD58DFE?method=download&amp;shareKey=36a1bf78bb08907bb4078e5742c52f0d" alt=""><br>changep(int* p_number)<br><img src="https://note.youdao.com/yws/api/personal/file/15F3E62B283E46258714B17DC79B1A13?method=download&amp;shareKey=2253d285282f540dc9fd8f05755e97e7" alt=""></p>
+<p><strong>栈的开口方向</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">5</span>;<span class="comment">//先入栈</span></span><br><span class="line"><span class="keyword">int</span> buffer[]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> b=<span class="number">7</span>;</span><br><span class="line"></span><br><span class="line">fprint(<span class="string">"%p , %p"</span>,&amp;a,&amp;b);</span><br></pre></td></tr></table></figure></p>
+<p>如果地址a&gt;b(debug)，说明开口向下。<br>a&lt;b(release)开口向上。<br>buffer数据类型的方向和栈的开口方向没关系，都是向上。&amp;buffer[0]&gt;&amp;buffer[1]</p>
+<p><strong>指针强化</strong></p>
+<p>指针也是一种数据类型，虽然占用四个字节，但是有数据类型。</p>
+<p><strong>野指针</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Student</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	 Student* student =(Student*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Student));</span><br><span class="line"></span><br><span class="line">	 <span class="comment">//释放的时候记得判断为NULL</span></span><br><span class="line">	 <span class="keyword">if</span> (student != <span class="literal">NULL</span>) &#123;</span><br><span class="line">		 <span class="built_in">free</span>(student);<span class="comment">//这个时候student变为野指针</span></span><br><span class="line">		 <span class="comment">//我们不需要的话最好置为NULL</span></span><br><span class="line">		 student = <span class="literal">NULL</span>;</span><br><span class="line">	 &#125;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	 <span class="comment">//释放的时候记得判断为NULL,这个时候就不会去free，从而避免错误</span></span><br><span class="line">	 <span class="keyword">if</span> (student != <span class="literal">NULL</span>) &#123;</span><br><span class="line">		 <span class="built_in">free</span>(student);</span><br><span class="line">	 &#125;</span><br><span class="line">	 getchar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>NULL</strong><br> NULL也是一个内存指针，指针指向00000000，只不过我们不能进行操作。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"NULL=%p"</span>, <span class="literal">NULL</span>); <span class="comment">//NULL=00000000</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>字符串和 buffer 强化</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">char</span> buffer[<span class="number">100</span>] = &#123;<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>&#125;;<span class="comment">//后面3-99 都是默认值0</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//长度</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" strlen(buffer) = %d\n"</span>, <span class="built_in">strlen</span>(buffer));<span class="comment">//strlen(buffer) = 3  根据\0结束计算</span></span><br><span class="line">	<span class="comment">//内存</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" sizeof(buffer) = %d\n"</span>, <span class="keyword">sizeof</span>(buffer));<span class="comment">//sizeof(buffer) = 100</span></span><br><span class="line">	<span class="comment">//内容</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d %d %d \n"</span>,buffer[<span class="number">0</span>], buffer[<span class="number">3</span>], buffer[<span class="number">75</span>]);<span class="comment">//49 0 0</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"-------------------------------\n"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">char</span> buffer1[] = &#123; <span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span> &#125;;</span><br><span class="line">	<span class="comment">//长度</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" strlen(buffer1) = %d\n"</span>, <span class="built_in">strlen</span>(buffer1));<span class="comment">//strlen(buffer1) = 15  根据\0结束计算</span></span><br><span class="line">	<span class="comment">//内存</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" sizeof(buffer1) = %d\n"</span>, <span class="keyword">sizeof</span>(buffer1));<span class="comment">//sizeof(buffer1) = 3</span></span><br><span class="line">	<span class="comment">//内容</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d %d %d \n"</span>, buffer1[<span class="number">0</span>], buffer1[<span class="number">3</span>], buffer1[<span class="number">8</span>]);<span class="comment">//49 -52 -52</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//char buffer2[2] = &#123; '1','2','3' &#125;;   这个直接就报错了 编译不通过</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"-------------------------------\n"</span>);</span><br><span class="line">	<span class="keyword">char</span> buffer3[<span class="number">100</span>] = &#123; <span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'\0'</span>, <span class="string">'2'</span> &#125;;<span class="comment">//后面4-99 都是默认值0</span></span><br><span class="line">	 <span class="comment">//长度</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" strlen(buffer3) = %d\n"</span>, <span class="built_in">strlen</span>(buffer3));<span class="comment">//strlen(buffer3) = 2  根据\0结束计算</span></span><br><span class="line">	<span class="comment">//内存</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" sizeof(buffer3) = %d\n"</span>, <span class="keyword">sizeof</span>(buffer3));<span class="comment">//sizeof(buffer3) = 100</span></span><br><span class="line">	<span class="comment">//内容</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d %d %d %d %d \n"</span>, buffer3[<span class="number">0</span>], buffer3[<span class="number">1</span>], buffer3[<span class="number">2</span>], buffer3[<span class="number">3</span>], buffer3[<span class="number">8</span>]);<span class="comment">//49 50 0 50 0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"-------------------------------\n"</span>);</span><br><span class="line">	<span class="keyword">char</span> buffer4[<span class="number">100</span>] = &#123; <span class="string">'0'</span> &#125;;<span class="comment">//把数据初始化为0</span></span><br><span class="line">    <span class="comment">//长度</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" strlen(buffer4) = %d\n"</span>, <span class="built_in">strlen</span>(buffer4));<span class="comment">//strlen(buffer4) = 1  根据\0结束计算</span></span><br><span class="line">	<span class="comment">//内存</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" sizeof(buffer4) = %d\n"</span>, <span class="keyword">sizeof</span>(buffer4));<span class="comment">//sizeof(buffer4) = 100</span></span><br><span class="line">	<span class="comment">//内容</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d %d %d %d %d \n"</span>, buffer4[<span class="number">0</span>], buffer4[<span class="number">1</span>], buffer4[<span class="number">2</span>], buffer4[<span class="number">3</span>], buffer4[<span class="number">8</span>]);<span class="comment">//48 0 0 0 0</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"-------------------------------\n"</span>);</span><br><span class="line">	<span class="keyword">char</span> buffer5[<span class="number">100</span>] ; <span class="comment">//数据全部默认为-52</span></span><br><span class="line">	<span class="comment">//长度</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" strlen(buffer5) = %d\n"</span>, <span class="built_in">strlen</span>(buffer5));<span class="comment">//strlen(buffer5) = 109  根据\0结束计算</span></span><br><span class="line">	 <span class="comment">//内存</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" sizeof(buffer5) = %d\n"</span>, <span class="keyword">sizeof</span>(buffer5));<span class="comment">//sizeof(buffer5) = 100</span></span><br><span class="line">	 <span class="comment">//内容</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d %d %d %d %d \n"</span>, buffer5[<span class="number">0</span>], buffer5[<span class="number">1</span>], buffer5[<span class="number">2</span>], buffer5[<span class="number">3</span>], buffer5[<span class="number">8</span>]);<span class="comment">//-52 -52 -52 -52 -52</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"-------------------------------\n"</span>);</span><br><span class="line">	<span class="comment">//char *buffer6 = "hello"; //和下面一样的</span></span><br><span class="line">	<span class="keyword">char</span> buffer6[] = <span class="string">"hello"</span>; <span class="comment">//  相当于"hello\0"</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//char * ,char[],malloc区别:前两个都是在栈里开辟内存，字符串放在常量区，数组定义的是将常量区的数据copy过来到char[]里面(这样的话栈里也有了数据)，char*是直接指针指向常量，malloc的方式是在堆里面开辟内存，存储数据到堆里</span></span><br><span class="line">	 <span class="comment">//长度</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" strlen(buffer6) = %d\n"</span>, <span class="built_in">strlen</span>(buffer6));<span class="comment">//strlen(buffer6) = 5  根据\0结束计算</span></span><br><span class="line">	 <span class="comment">//内存</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">" sizeof(buffer6) = %d\n"</span>, <span class="keyword">sizeof</span>(buffer6));<span class="comment">//sizeof(buffer6) = 6</span></span><br><span class="line">	<span class="comment">//内容</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d %d %d %d %d \n"</span>, buffer6[<span class="number">0</span>], buffer6[<span class="number">1</span>], buffer6[<span class="number">2</span>], buffer6[<span class="number">3</span>], buffer6[<span class="number">8</span>]);<span class="comment">//104 101 108 108 -52</span></span><br><span class="line"></span><br><span class="line">	getchar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>char * ,char[],malloc</code>区别:前两个都是在栈里开辟内存，字符串放在常量区，数组定义的是将常量区的数据copy过来到<code>char[]</code>里面(这样的话栈里也有了数据)，<code>char*</code>是直接指针指向常量，<code>malloc</code>的方式是在堆里面开辟内存，存储数据到堆里。从而可以知道，字符串可以在任何区域开辟内存。<br>如图，栈中从上往下依次是<code>char[],char*,malloc()</code><br><img src="https://note.youdao.com/yws/api/personal/file/1BB5E7518BD74517B33E1DC96EA9A6D1?method=download&amp;shareKey=54e2c859b5a3294d9febd0e1c70a910c" alt=""></p>
+<p><strong>开发模型强化</strong></p>
+<blockquote>
+<ol>
+<li>确定参数，传递指针</li>
+<li>一定要考略健壮性</li>
+<li>异常错误，抛出说明</li>
+<li>不要直接轻易的去改变调用者传递给你的指针，如需必要可以先考略临时的变量操作。可以加上const修饰参数强制不可修改。</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">AndroidBitmapInfo</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> width;</span><br><span class="line">	<span class="keyword">int</span> height;</span><br><span class="line">	<span class="keyword">int</span> format;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">androidBitmapGetInfo</span><span class="params">(AndroidBitmapInfo * pAndroidBitmapInfo)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//2. 健壮性考略</span></span><br><span class="line">	<span class="keyword">if</span> (pAndroidBitmapInfo == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"pAndroidBitmapInfo is null"</span>);</span><br><span class="line">		<span class="comment">//3. 异常错误，抛出说明</span></span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//4. 不要直接轻易的去改变调用者传递给你的指针</span></span><br><span class="line">	<span class="comment">//pAndroidBitmapInfo = &amp;AndroidBitmapInfo();</span></span><br><span class="line"></span><br><span class="line">	pAndroidBitmapInfo-&gt;height = <span class="number">1920</span>;</span><br><span class="line">	pAndroidBitmapInfo-&gt;width = <span class="number">1080</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//1. 确定参数，传递指针</span></span><br><span class="line">	AndroidBitmapInfo androidBitmapInfo;</span><br><span class="line">	<span class="keyword">int</span> ret =androidBitmapGetInfo(&amp;androidBitmapInfo);</span><br><span class="line">	<span class="keyword">if</span> (ret == <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"w=%d,h=%d"</span>, androidBitmapInfo.width, androidBitmapInfo.height);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	getchar();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>结构体强化</strong></p>
+<ul>
+<li><p>在<code>c</code>中<code>=</code>是赋值操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">char</span> name[<span class="number">50</span>];</span><br><span class="line">	<span class="keyword">int</span> age;</span><br><span class="line">&#125;Student;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	Student stu1 = &#123;<span class="string">"张三"</span>,<span class="number">35</span>&#125;;</span><br><span class="line">	Student stu2;</span><br><span class="line">	stu2 = stu1;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%p , %p \n"</span>, &amp;stu1, &amp;stu2);<span class="comment">//007CFD7C , 007CFD3C</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s , %d \n"</span>, stu2.name, stu2.age);<span class="comment">//张三 , 35</span></span><br><span class="line">	getchar();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在结构体里面套指针</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdafx.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdio.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//结构体套指针，必须要对结构体指针进行初始化（赋值）</span></span><br><span class="line"><span class="comment">//指针可以指向任何地址，但是它的大小永远是4字节</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">char</span>* name;<span class="comment">// 定义了一个name指针</span></span><br><span class="line">	<span class="keyword">int</span> age;</span><br><span class="line">&#125;Student;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	Student stu;</span><br><span class="line">	<span class="comment">// 1. </span></span><br><span class="line">	<span class="comment">//stu.name = "李四"; // 将指针指向常量区的"李四"</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//2. </span></span><br><span class="line">	<span class="comment">//往stu.name里面copy数据 "李四" 不能直接copy</span></span><br><span class="line">	<span class="comment">//strcpy(stu.name, "李四");</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//3.</span></span><br><span class="line">	<span class="comment">//首先把char* name 指向堆区开辟的内存 ，然后把常量区的数据"李四" copy到堆里面</span></span><br><span class="line">	stu.name =(<span class="keyword">char</span>*) <span class="built_in">malloc</span>(<span class="number">100</span>);</span><br><span class="line">	<span class="built_in">strcpy</span>(stu.name, <span class="string">"李四"</span>);</span><br><span class="line"></span><br><span class="line">	stu.age = <span class="number">35</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s , %d \n"</span>, stu.name, stu.age);<span class="comment">//李四 , 35</span></span><br><span class="line">	getchar();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>深<code>copy</code>和浅<code>copy</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">char</span> *name;</span><br><span class="line">	<span class="keyword">int</span> age;</span><br><span class="line">&#125;Student;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">copyToP</span><span class="params">(Student* from, Student *to)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//浅copy</span></span><br><span class="line">	*to = *from;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//深copy</span></span><br><span class="line">	to-&gt;name = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>(<span class="number">100</span>);<span class="comment">//开辟内存</span></span><br><span class="line">	<span class="built_in">strcpy</span>(to-&gt;name, from-&gt;name);<span class="comment">//copy值</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">char</span> * name =(<span class="keyword">char</span>*) <span class="built_in">malloc</span>(<span class="number">100</span>);</span><br><span class="line">	Student stu = &#123;name,<span class="number">25</span>&#125;;</span><br><span class="line">	<span class="built_in">strcpy</span>(stu-&gt;name, <span class="string">"张三"</span>);</span><br><span class="line">	stu.age = <span class="number">35</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s , %d \n"</span>, stu.name, stu.age);<span class="comment">//张三 , 35</span></span><br><span class="line"></span><br><span class="line">	Student stu2 = &#123;<span class="string">"李四"</span>,<span class="number">15</span>&#125;;</span><br><span class="line">	copyToP(&amp;stu2,&amp;stu);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s , %d \n"</span>, stu2.name, stu2.age);<span class="comment">//张三 , 35</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (stu.name) &#123;</span><br><span class="line">		<span class="built_in">free</span>(stu.name);</span><br><span class="line">		stu.name = <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (stu2.name) &#123;<span class="comment">//如果是浅copy会释放出错，因为stu.name和stu2.name指向一个位置  stu.name已经free了</span></span><br><span class="line">		<span class="built_in">free</span>(stu2.name);</span><br><span class="line">		stu2.name = <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	getchar();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结构体的偏移量 ：见c基础的结构体内存开辟以及内存计算</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/c-c/" rel="tag"><i class="fa fa-tag"></i> c/c++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/c基础.html" rel="next" title="c基础">
+                <i class="fa fa-chevron-left"></i> c基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/c++基础语法.html" rel="prev" title="c++基础语法">
+                c++基础语法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

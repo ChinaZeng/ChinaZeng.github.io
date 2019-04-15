@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,自定义view," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="先看效果图： 上几次都是自定义的view，这期我们来自定义一个简单的ViewGroup。和自定义view不同的是，viewGroup一般情况下是管理childView，所以主要是重写onMeause()来测量childView宽高，从而设置自身宽高，然后重写onLayout来摆放childView的位置，我们一般不对viewGroup进行绘制，如果特殊情况需要绘制，重写dispatchDraw()">
+<meta name="keywords" content="android,自定义view">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义View（6） -- 流式布局">
+<meta property="og:url" content="http://www.zengzhaowen.cn/自定义View（6） -- 流式布局.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="先看效果图： 上几次都是自定义的view，这期我们来自定义一个简单的ViewGroup。和自定义view不同的是，viewGroup一般情况下是管理childView，所以主要是重写onMeause()来测量childView宽高，从而设置自身宽高，然后重写onLayout来摆放childView的位置，我们一般不对viewGroup进行绘制，如果特殊情况需要绘制，重写dispatchDraw()">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4658633-f7a783b28bb5db3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.112Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自定义View（6） -- 流式布局">
+<meta name="twitter:description" content="先看效果图： 上几次都是自定义的view，这期我们来自定义一个简单的ViewGroup。和自定义view不同的是，viewGroup一般情况下是管理childView，所以主要是重写onMeause()来测量childView宽高，从而设置自身宽高，然后重写onLayout来摆放childView的位置，我们一般不对viewGroup进行绘制，如果特殊情况需要绘制，重写dispatchDraw()">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4658633-f7a783b28bb5db3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/自定义View（6） -- 流式布局.html"/>
+
+
+
+
+
+  <title>自定义View（6） -- 流式布局 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/自定义View（6） -- 流式布局.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">自定义View（6） -- 流式布局</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-11T09:52:57+08:00">
+                2018-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/自定义view/" itemprop="url" rel="index">
+                    <span itemprop="name">自定义view</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/自定义View（6） -- 流式布局.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/自定义View（6） -- 流式布局.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,715字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>先看效果图：<br><img src="http://upload-images.jianshu.io/upload_images/4658633-f7a783b28bb5db3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tagLayout"></p>
+<p>上几次都是自定义的<code>view</code>，这期我们来自定义一个简单的<code>ViewGroup</code>。和自定义<code>view</code>不同的是，<code>viewGroup</code>一般情况下是管理<code>childView</code>，所以主要是重写<code>onMeause()</code>来测量<code>childView</code>宽高，从而设置自身宽高，然后重写<code>onLayout</code>来摆放<code>childView</code>的位置，我们一般不对<code>viewGroup</code>进行绘制，如果特殊情况需要绘制，重写<code>dispatchDraw()</code>来进行重绘，因为<code>viewGroup</code>在不设置设置背景的情况下是不会调用<code>onDraw()</code>的，具体请看源码。</p>
+<hr>
+<p>接下来进行我们这篇文章的主题，先理清楚思路，我们实现的效果就是一个容器里面的<code>childView</code>挨着挨着的从左往右摆放，如果摆放的时候这个<code>childView</code>的宽度加上这行前面的<code>childView</code>宽度大于当前设置的宽度的时候，那么就需要换行。<br>初始化和属性我就不说了，如需要可以自行添加，这里我们要考略到<code>childView</code>的<code>margin</code>,所以我们仿照<code>LinearLayout</code>来重写<code>generateLayoutParams</code>函数来设置一个带有<code>margin</code>属性的<code>LayoutParams</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置自己需要的LayoutParams</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> LayoutParams <span class="title">generateLayoutParams</span><span class="params">(AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> MarginLayoutParams(getContext(), attrs);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>重写<code>onMeause()</code>来进行<code>childView</code>的遍历测量，并且设置自生的宽高，因为我们考略到下面要重写<code>onLayout</code>来摆放<code>childView</code>的位置，难免会有一番计算，我们为了不重复计算，所以写了一个<code>List</code>来进行对<code>childView</code>以行为单位来组装，具体如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"> private List&lt;List&lt;View&gt;&gt; mChildViews = new ArrayList&lt;&gt;();</span><br><span class="line">    // 指定宽高</span><br><span class="line">    @Override</span><br><span class="line">    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) &#123;</span><br><span class="line">        super.onMeasure(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">        // 清空集合</span><br><span class="line">        mChildViews.clear();</span><br><span class="line"></span><br><span class="line">        int childCount = getChildCount();</span><br><span class="line"></span><br><span class="line">        // 获取到宽度</span><br><span class="line">        int width = MeasureSpec.getSize(widthMeasureSpec);</span><br><span class="line"></span><br><span class="line">        // 高度需要计算</span><br><span class="line">        int height = getPaddingTop() + getPaddingBottom();</span><br><span class="line"></span><br><span class="line">        // 一行的宽度</span><br><span class="line">        int lineWidth = getPaddingLeft();</span><br><span class="line"></span><br><span class="line">        ArrayList&lt;View&gt; childViews = new ArrayList&lt;&gt;();</span><br><span class="line">        mChildViews.add(childViews);</span><br><span class="line"></span><br><span class="line">        // 子View高度不一致的情况下</span><br><span class="line">        int maxHeight = 0;</span><br><span class="line">        for (int i = 0; i &lt; childCount; i++) &#123;</span><br><span class="line">            // for循环测量子View</span><br><span class="line">            View childView = getChildAt(i);</span><br><span class="line">            if (childView.getVisibility() == GONE) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line">            // 这段话执行之后就可以获取子View的宽高，因为会调用子View的onMeasure</span><br><span class="line">            measureChild(childView, widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">            // margin值 ViewGroup.LayoutParams 没有 就用系统的MarginLayoutParams</span><br><span class="line">            // LinearLayout有自己的 LayoutParams  会复写一个非常重要的方法</span><br><span class="line">            MarginLayoutParams params = (MarginLayoutParams) childView.getLayoutParams();</span><br><span class="line">            // 什么时候需要换行，一行不够的情况下 考虑 margin</span><br><span class="line">            if (lineWidth + (childView.getMeasuredWidth() + params.rightMargin + params.leftMargin) &gt; width) &#123;</span><br><span class="line">                // 换行,累加高度  加上一行条目中最大的高度</span><br><span class="line">                height += maxHeight;</span><br><span class="line"></span><br><span class="line">                //下面重新初始化</span><br><span class="line">                maxHeight = childView.getMeasuredHeight() + params.bottomMargin + params.topMargin;</span><br><span class="line">                lineWidth = childView.getMeasuredWidth() + params.rightMargin + params.leftMargin;</span><br><span class="line">                childViews = new ArrayList&lt;&gt;();</span><br><span class="line">                mChildViews.add(childViews);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                lineWidth += childView.getMeasuredWidth() + params.rightMargin + params.leftMargin;</span><br><span class="line">                maxHeight = Math.max(childView.getMeasuredHeight() + params.bottomMargin + params.topMargin, maxHeight);</span><br><span class="line">            &#125;</span><br><span class="line">            childViews.add(childView);</span><br><span class="line">        &#125;</span><br><span class="line">        height += maxHeight;//不要忘记最后一行的高度</span><br><span class="line"></span><br><span class="line">//        Log.e(&quot;TAG&quot;, &quot;width -&gt; &quot; + width + &quot; height-&gt; &quot; + height);</span><br><span class="line">        // 根据子View计算和指定自己的宽高</span><br><span class="line">        setMeasuredDimension(width, height);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们根据上面的组装的<code>List</code>数据来进行对<code>childView</code>进行摆放<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> left, top = getPaddingTop(), right, bottom;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (List&lt;View&gt; childViews : mChildViews) &#123;</span><br><span class="line">            left = getPaddingLeft();</span><br><span class="line">            <span class="keyword">int</span> maxHeight = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (View childView : childViews) &#123;</span><br><span class="line">                <span class="keyword">if</span> (childView.getVisibility() == GONE) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                MarginLayoutParams params = (MarginLayoutParams) childView.getLayoutParams();</span><br><span class="line">                left += params.leftMargin;</span><br><span class="line">                <span class="keyword">int</span> childTop = top + params.topMargin;</span><br><span class="line">                right = left + childView.getMeasuredWidth();</span><br><span class="line">                bottom = childTop + childView.getMeasuredHeight();</span><br><span class="line"><span class="comment">//                Log.e("TAG", "left -&gt; " + left + " top-&gt; " + childTop + " right -&gt; " + right + " bottom-&gt; " + bottom);</span></span><br><span class="line">                <span class="comment">// 摆放</span></span><br><span class="line">                childView.layout(left, childTop, right, bottom);</span><br><span class="line">                <span class="comment">// left 叠加</span></span><br><span class="line">                left += childView.getMeasuredWidth() + params.rightMargin;</span><br><span class="line">                <span class="comment">// 不断的叠加top值</span></span><br><span class="line">                <span class="keyword">int</span> childHeight = childView.getMeasuredHeight() + params.topMargin + params.bottomMargin;</span><br><span class="line">                maxHeight = Math.max(maxHeight, childHeight);</span><br><span class="line">            &#125;</span><br><span class="line">            top += maxHeight;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>主要的逻辑代码已经写的很清楚了，细致一看就能很容易的理解。这样的画效果就实现了，但是我们在实际开发的过程中，一般是后台获取到一个<code>List</code>数据，然后我们在设置值，这里推荐一个设计模式就是<code>Adapter</code>模式。这样的话我们就可以自定义自己的<code>View</code>，轻松的降低了代码的耦合，并且复用效果也好,我们申明一个`Adapter’类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Email 240336124@qq.com</span></span><br><span class="line"><span class="comment"> * Created by Darren on 2017/6/11.</span></span><br><span class="line"><span class="comment"> * Version 1.0</span></span><br><span class="line"><span class="comment"> * Description: 流式布局的Adapter</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseAdapter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1.有多少个条目</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.getView通过position</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> View <span class="title">getView</span><span class="params">(<span class="keyword">int</span> position,ViewGroup parent)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里就简单写了，然后我们在容器中添加<code>setAdapter()</code>函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 设置Adapter</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> adapter</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAdapter</span><span class="params">(BaseAdapter adapter)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (adapter == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"adapter is null"</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="comment">// 清空所有子View</span></span><br><span class="line">       removeAllViews();</span><br><span class="line">       mAdapter = adapter;</span><br><span class="line">       <span class="comment">// 获取数量</span></span><br><span class="line">       <span class="keyword">int</span> childCount = mAdapter.getCount();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; childCount; i++) &#123;</span><br><span class="line">           <span class="comment">// 通过位置获取View</span></span><br><span class="line">           View childView = mAdapter.getView(i, <span class="keyword">this</span>);</span><br><span class="line">           addView(childView);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们使用就和<code>ListView</code>类似了：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> TagLayout mTagLayout;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> List&lt;String&gt; mItems;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">       setContentView(R.layout.activity_taglayout);</span><br><span class="line">       mTagLayout = (TagLayout) findViewById(R.id.taglayout);</span><br><span class="line"></span><br><span class="line">       mItems = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">           mItems.add(<span class="string">"ABC"</span>+i);</span><br><span class="line">       &#125;</span><br><span class="line">       mTagLayout.setAdapter(<span class="keyword">new</span> BaseAdapter() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               <span class="keyword">return</span> mItems.size();</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> View <span class="title">getView</span><span class="params">(<span class="keyword">int</span> position, ViewGroup parent)</span> </span>&#123;</span><br><span class="line">               TextView tagTv = (TextView) LayoutInflater.from(TagLayoutActivity.<span class="keyword">this</span>)</span><br><span class="line">                       .inflate(R.layout.item_tag, parent, <span class="keyword">false</span>);</span><br><span class="line">               tagTv.setText(mItems.get(position));</span><br><span class="line">               <span class="comment">// 操作ListView的方式差不多</span></span><br><span class="line">               <span class="keyword">return</span> tagTv;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样的话我们就简单的实现了流式布局的效果，如果需要单选多选之类的，在这基础上添加就可以了。<br>接下来再具体的总结下自定义<code>view</code>和自定义<code>viewGroup</code>的套路:</p>
+<blockquote>
+<p>######<code>View</code>的自定义套路</p>
+<ol>
+<li>初始化，自定义属性，获取自定义属性<strong>(配置属性)</strong></li>
+<li><code>onMeasure()</code>方法用于测量计算自己的宽高，前提是继承自<code>View</code>，如果是继承自系统已有的 <code>TextView</code> , <code>Button</code>,已经给你计算好了宽高，就可以跳过这个步骤<strong>(设置宽高)</strong></li>
+<li><code>onDraw()</code> 用于绘制自己的显示<strong>(<code>View</code>绘制)</strong></li>
+<li><code>onTouch()</code> 用于与用户交互<strong>(事件分发)</strong></li>
+</ol>
+</blockquote>
+<hr>
+<blockquote>
+<p>######<code>ViewGroup</code>的自定义套路</p>
+<ol>
+<li>自定义属性，获取自定义属性，很少有这种需求<strong>(配置属性)</strong><br>2.<code>onMeasure()</code>方法，<code>for</code>循环测量子<code>View</code>，根据<code>子View</code>的宽高来计算自己的宽高<strong>(设置宽高)</strong></li>
+<li><code>onLayout()</code>用来摆放子View，前提是不是<code>GONE</code>的情况</li>
+<li><code>onDraw()</code>一般不需要，默认情况下是不会调用，如果你要绘制需要实现<code>dispatchDraw()</code>方法<strong>(<code>View</code>绘制)</strong></li>
+<li>在很多情况下不会继承自<code>ViewGroup</code> ，往往是继承 系统已经提供好的<code>ViewGroup</code> 如 <code>ViewPager ScrollView  RelativeLayout</code>,这样的话<code>onMeause()  onLayout()</code>一般都可以跳过，相应的重写一些方法来实现自己的需求。比如侧滑菜单可以继承<code>LinearLayout</code> 或者<code>RelativeLayout</code>等来重写<code>onInterceptTouchEvent</code>来实现。</li>
+</ol>
+</blockquote>
+<p>这篇文章到这就结束了 ，希望对大家有所提升。</p>
+<p>下载地址:<a href="https://github.com/ChinaZeng/CustomView" target="_blank" rel="noopener">https://github.com/ChinaZeng/CustomView</a></p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          
+            <a href="/tags/自定义view/" rel="tag"><i class="fa fa-tag"></i> 自定义view</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/自定义View（5） -- 评分控件RatingBar.html" rel="next" title="自定义View（5） -- 评分控件RatingBar">
+                <i class="fa fa-chevron-left"></i> 自定义View（5） -- 评分控件RatingBar
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/自定义View（7） -- 酷狗侧滑菜单.html" rel="prev" title="自定义View（7） -- 酷狗侧滑菜单">
+                自定义View（7） -- 酷狗侧滑菜单 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

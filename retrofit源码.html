@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,源码," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="retrofit的初始化123456789101112131415161718192021222324252627282930313233343536private static Retrofit RETROFIT;private static Retrofit getRetrofit() &amp;#123;    if (RETROFIT == null) &amp;#123;        RETROFIT">
+<meta name="keywords" content="android,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="retrofit 源码分析">
+<meta property="og:url" content="http://www.zengzhaowen.cn/retrofit源码.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="retrofit的初始化123456789101112131415161718192021222324252627282930313233343536private static Retrofit RETROFIT;private static Retrofit getRetrofit() &amp;#123;    if (RETROFIT == null) &amp;#123;        RETROFIT">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.107Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="retrofit 源码分析">
+<meta name="twitter:description" content="retrofit的初始化123456789101112131415161718192021222324252627282930313233343536private static Retrofit RETROFIT;private static Retrofit getRetrofit() &amp;#123;    if (RETROFIT == null) &amp;#123;        RETROFIT">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/retrofit源码.html"/>
+
+
+
+
+
+  <title>retrofit 源码分析 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/retrofit源码.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">retrofit 源码分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-25T09:52:57+08:00">
+                2018-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/retrofit源码.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/retrofit源码.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,674字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  22分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>retrofit</code>的初始化<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Retrofit RETROFIT;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Retrofit <span class="title">getRetrofit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (RETROFIT == <span class="keyword">null</span>) &#123;</span><br><span class="line">        RETROFIT = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">                .client(getHttpClient())</span><br><span class="line">                .baseUrl(BuildConfig.SERVER_URL)</span><br><span class="line">                .addConverterFactory(NobodyConverterFactory.create())</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create(<span class="keyword">new</span> GsonBuilder()</span><br><span class="line">                        .registerTypeAdapter(<span class="keyword">new</span> TypeToken&lt;HashMap&lt;String, Object&gt;&gt;() &#123;</span><br><span class="line">                        &#125;.getType(), <span class="keyword">new</span> MapTypeAdapter()).create()))</span><br><span class="line">                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> RETROFIT;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> OkHttpClient <span class="title">getHttpClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">            .connectTimeout(<span class="number">15</span>, TimeUnit.SECONDS)</span><br><span class="line">            .readTimeout(<span class="number">15</span>, TimeUnit.SECONDS)</span><br><span class="line">            .writeTimeout(<span class="number">15</span>, TimeUnit.SECONDS)</span><br><span class="line">            .retryOnConnectionFailure(<span class="keyword">true</span>)</span><br><span class="line">            .addInterceptor(AccessTokenInterceptor.getInstance())</span><br><span class="line">            .addInterceptor(<span class="keyword">new</span> RefreshTokenInterceptor(</span><br><span class="line">                    BuildConfig.SERVER_URL))</span><br><span class="line">            .addInterceptor(<span class="keyword">new</span> ErrorPreviewInterceptor())</span><br><span class="line">            .addInterceptor(<span class="keyword">new</span> HttpLoggingInterceptor(<span class="keyword">new</span> HttpLoggingInterceptor.Logger() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">                    LogUtils.i(TAG, message);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;).setLevel(HttpLoggingInterceptor</span><br><span class="line">                    .Level.BODY))</span><br><span class="line">            .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Refofit.Builder: 初始化过程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Build a new &#123;<span class="doctag">@link</span> Retrofit&#125;.</span></span><br><span class="line"><span class="comment">   * &lt;p&gt;</span></span><br><span class="line"><span class="comment">   * Calling &#123;<span class="doctag">@link</span> #baseUrl&#125; is required before calling &#123;<span class="doctag">@link</span> #build()&#125;. All other methods</span></span><br><span class="line"><span class="comment">   * are optional.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line">    <span class="comment">//平台  android？ java8？  ios？</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Platform platform;</span><br><span class="line">    <span class="comment">//ok3网络请求Factory</span></span><br><span class="line">    <span class="keyword">private</span> okhttp3.Call.Factory callFactory;</span><br><span class="line">    <span class="comment">// host</span></span><br><span class="line">    <span class="keyword">private</span> HttpUrl baseUrl;</span><br><span class="line">    <span class="comment">// 数据转换器 request和responseBody解析器  string --&gt;gson--&gt;T</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;Converter.Factory&gt; converterFactories = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">// ok3返回的 response 转换器  response--&gt; rxjava对象</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;CallAdapter.Factory&gt; adapterFactories = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//线程调度</span></span><br><span class="line">    <span class="keyword">private</span> Executor callbackExecutor;</span><br><span class="line">    <span class="comment">//如果设置为true  在service  create的时候就先把方法参数解析出来加入缓存</span></span><br><span class="line">    <span class="comment">//设置为false   在调用这个函数的时候在加入缓存</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> validateEagerly;</span><br><span class="line"></span><br><span class="line">    Builder(Platform platform) &#123;</span><br><span class="line">      <span class="keyword">this</span>.platform = platform;</span><br><span class="line">      <span class="comment">// Add the built-in converter factory first. This prevents overriding its behavior but also</span></span><br><span class="line">      <span class="comment">// ensures correct behavior when using converters that consume all types.</span></span><br><span class="line">      converterFactories.add(<span class="keyword">new</span> BuiltInConverters());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Builder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">      <span class="keyword">this</span>(Platform.get());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Builder(Retrofit retrofit) &#123;</span><br><span class="line">      platform = Platform.get();</span><br><span class="line">      callFactory = retrofit.callFactory;</span><br><span class="line">      baseUrl = retrofit.baseUrl;</span><br><span class="line">      converterFactories.addAll(retrofit.converterFactories);</span><br><span class="line">      adapterFactories.addAll(retrofit.adapterFactories);</span><br><span class="line">      <span class="comment">// Remove the default, platform-aware call adapter added by build().</span></span><br><span class="line">      adapterFactories.remove(adapterFactories.size() - <span class="number">1</span>);</span><br><span class="line">      callbackExecutor = retrofit.callbackExecutor;</span><br><span class="line">      validateEagerly = retrofit.validateEagerly;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Create the &#123;<span class="doctag">@link</span> Retrofit&#125; instance using the configured values.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * Note: If neither &#123;<span class="doctag">@link</span> #client&#125; nor &#123;<span class="doctag">@link</span> #callFactory&#125; is called a default &#123;<span class="doctag">@link</span></span></span><br><span class="line"><span class="comment">     * OkHttpClient&#125; will be created and used.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Retrofit <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (baseUrl == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Base URL required."</span>);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      okhttp3.Call.Factory callFactory = <span class="keyword">this</span>.callFactory;</span><br><span class="line">      <span class="keyword">if</span> (callFactory == <span class="keyword">null</span>) &#123;</span><br><span class="line">        callFactory = <span class="keyword">new</span> OkHttpClient();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      Executor callbackExecutor = <span class="keyword">this</span>.callbackExecutor;</span><br><span class="line">      <span class="keyword">if</span> (callbackExecutor == <span class="keyword">null</span>) &#123;</span><br><span class="line">        callbackExecutor = platform.defaultCallbackExecutor();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Make a defensive copy of the adapters and add the default Call adapter.</span></span><br><span class="line">      List&lt;CallAdapter.Factory&gt; adapterFactories = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="keyword">this</span>.adapterFactories);</span><br><span class="line">      adapterFactories.add(platform.defaultCallAdapterFactory(callbackExecutor));</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Make a defensive copy of the converters.</span></span><br><span class="line">      List&lt;Converter.Factory&gt; converterFactories = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="keyword">this</span>.converterFactories);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Retrofit(callFactory, baseUrl, converterFactories, adapterFactories,</span><br><span class="line">          callbackExecutor, validateEagerly);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>create<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">create</span><span class="params">(<span class="keyword">final</span> Class&lt;T&gt; service)</span> </span>&#123;</span><br><span class="line">   Utils.validateServiceInterface(service);</span><br><span class="line">   <span class="keyword">if</span> (validateEagerly) &#123;</span><br><span class="line">     eagerlyValidateMethods(service);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//动态代理</span></span><br><span class="line">   <span class="keyword">return</span> (T) Proxy.newProxyInstance(service.getClassLoader(), <span class="keyword">new</span> Class&lt;?&gt;[] &#123; service &#125;,</span><br><span class="line">       <span class="keyword">new</span> InvocationHandler() &#123;</span><br><span class="line">         <span class="comment">//Android </span></span><br><span class="line">         <span class="keyword">private</span> <span class="keyword">final</span> Platform platform = Platform.get();</span><br><span class="line"></span><br><span class="line">         <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span></span></span><br><span class="line"><span class="function">             <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">           <span class="comment">// If the method is a method from Object then defer to normal invocation.</span></span><br><span class="line">           <span class="comment">//如果是object的函数  直接执行</span></span><br><span class="line">           <span class="keyword">if</span> (method.getDeclaringClass() == Object.class) &#123;</span><br><span class="line">             <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>, args);</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="comment">//如果是platform的默认函数  预留的一个钩子</span></span><br><span class="line">           <span class="keyword">if</span> (platform.isDefaultMethod(method)) &#123;</span><br><span class="line">             <span class="keyword">return</span> platform.invokeDefaultMethod(method, service, proxy, args);</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="comment">//加载service的方法</span></span><br><span class="line">           ServiceMethod&lt;Object, Object&gt; serviceMethod =</span><br><span class="line">               (ServiceMethod&lt;Object, Object&gt;) loadServiceMethod(method);</span><br><span class="line">           <span class="comment">//根据ServiceMethod得到ok3的网络请求call</span></span><br><span class="line">           OkHttpCall&lt;Object&gt; okHttpCall = <span class="keyword">new</span> OkHttpCall&lt;&gt;(serviceMethod, args);</span><br><span class="line">           <span class="comment">//网络请求  数据转换  返回数据</span></span><br><span class="line">           <span class="keyword">return</span> serviceMethod.callAdapter.adapt(okHttpCall);</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>loadServiceMethod: 拿到对应的解析器，根据注解解析方法的返回类型，方法参数，网络请求的一系列参数 封装成一个对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"> ServiceMethod&lt;?, ?&gt; loadServiceMethod(Method method) &#123;</span><br><span class="line">    <span class="comment">// 读缓存</span></span><br><span class="line">    ServiceMethod&lt;?, ?&gt; result = serviceMethodCache.get(method);</span><br><span class="line">    <span class="keyword">if</span> (result != <span class="keyword">null</span>) <span class="keyword">return</span> result;</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">synchronized</span> (serviceMethodCache) &#123;</span><br><span class="line">      result = serviceMethodCache.get(method);</span><br><span class="line">      <span class="keyword">if</span> (result == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//得到ServiceMethod对象</span></span><br><span class="line">        result = <span class="keyword">new</span> ServiceMethod.Builder&lt;&gt;(<span class="keyword">this</span>, method).build();</span><br><span class="line">        <span class="comment">//加入缓存</span></span><br><span class="line">        serviceMethodCache.put(method, result);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">ServiceMethod:</span><br><span class="line"></span><br><span class="line"> Builder(Retrofit retrofit, Method method) &#123;</span><br><span class="line">      <span class="keyword">this</span>.retrofit = retrofit;</span><br><span class="line">      <span class="keyword">this</span>.method = method;</span><br><span class="line">      <span class="keyword">this</span>.methodAnnotations = method.getAnnotations();</span><br><span class="line">      <span class="keyword">this</span>.parameterTypes = method.getGenericParameterTypes();</span><br><span class="line">      <span class="keyword">this</span>.parameterAnnotationsArray = method.getParameterAnnotations();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> ServiceMethod <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//根据返回类型以及retrofit的adapterFactories拿到callAdapter解析器</span></span><br><span class="line">      callAdapter = createCallAdapter();</span><br><span class="line">       <span class="comment">//解析之后的类型</span></span><br><span class="line">      responseType = callAdapter.responseType();</span><br><span class="line">      <span class="keyword">if</span> (responseType == Response.class || responseType == okhttp3.Response.class) &#123;</span><br><span class="line">        <span class="keyword">throw</span> methodError(<span class="string">"'"</span></span><br><span class="line">            + Utils.getRawType(responseType).getName()</span><br><span class="line">            + <span class="string">"' is not a valid response body type. Did you mean ResponseBody?"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//根据responseType通过retrofit的converterFactories拿到 responseBody解析器</span></span><br><span class="line">      responseConverter = createResponseConverter();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//后面都是解析注解  拼接参数 </span></span><br><span class="line">      <span class="keyword">for</span> (Annotation annotation : methodAnnotations) &#123;</span><br><span class="line">        parseMethodAnnotation(annotation);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (httpMethod == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> methodError(<span class="string">"HTTP method annotation is required (e.g., @GET, @POST, etc.)."</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span> (!hasBody) &#123;</span><br><span class="line">        <span class="keyword">if</span> (isMultipart) &#123;</span><br><span class="line">          <span class="keyword">throw</span> methodError(</span><br><span class="line">              <span class="string">"Multipart can only be specified on HTTP methods with request body (e.g., @POST)."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (isFormEncoded) &#123;</span><br><span class="line">          <span class="keyword">throw</span> methodError(<span class="string">"FormUrlEncoded can only be specified on HTTP methods with "</span></span><br><span class="line">              + <span class="string">"request body (e.g., @POST)."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">int</span> parameterCount = parameterAnnotationsArray.length;</span><br><span class="line">      parameterHandlers = <span class="keyword">new</span> ParameterHandler&lt;?&gt;[parameterCount];</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> p = <span class="number">0</span>; p &lt; parameterCount; p++) &#123;</span><br><span class="line">        Type parameterType = parameterTypes[p];</span><br><span class="line">        <span class="keyword">if</span> (Utils.hasUnresolvableType(parameterType)) &#123;</span><br><span class="line">          <span class="keyword">throw</span> parameterError(p, <span class="string">"Parameter type must not include a type variable or wildcard: %s"</span>,</span><br><span class="line">              parameterType);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Annotation[] parameterAnnotations = parameterAnnotationsArray[p];</span><br><span class="line">        <span class="keyword">if</span> (parameterAnnotations == <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">throw</span> parameterError(p, <span class="string">"No Retrofit annotation found."</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        parameterHandlers[p] = parseParameter(p, parameterType, parameterAnnotations);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (relativeUrl == <span class="keyword">null</span> &amp;&amp; !gotUrl) &#123;</span><br><span class="line">        <span class="keyword">throw</span> methodError(<span class="string">"Missing either @%s URL or @Url parameter."</span>, httpMethod);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (!isFormEncoded &amp;&amp; !isMultipart &amp;&amp; !hasBody &amp;&amp; gotBody) &#123;</span><br><span class="line">        <span class="keyword">throw</span> methodError(<span class="string">"Non-body HTTP method cannot contain @Body."</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (isFormEncoded &amp;&amp; !gotField) &#123;</span><br><span class="line">        <span class="keyword">throw</span> methodError(<span class="string">"Form-encoded method must contain at least one @Field."</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (isMultipart &amp;&amp; !gotPart) &#123;</span><br><span class="line">        <span class="keyword">throw</span> methodError(<span class="string">"Multipart method must contain at least one @Part."</span>);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> ServiceMethod&lt;&gt;(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>OkHttpCall:是一个ok3的call  ，用于网络请求<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Copyright (C) 2015 Square, Inc.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Licensed under the Apache License, Version 2.0 (the "License");</span></span><br><span class="line"><span class="comment"> * you may not use this file except in compliance with the License.</span></span><br><span class="line"><span class="comment"> * You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"> * distributed under the License is distributed on an "AS IS" BASIS,</span></span><br><span class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"> * limitations under the License.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">package</span> retrofit2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> okhttp3.MediaType;</span><br><span class="line"><span class="keyword">import</span> okhttp3.Request;</span><br><span class="line"><span class="keyword">import</span> okhttp3.ResponseBody;</span><br><span class="line"><span class="keyword">import</span> okio.Buffer;</span><br><span class="line"><span class="keyword">import</span> okio.BufferedSource;</span><br><span class="line"><span class="keyword">import</span> okio.ForwardingSource;</span><br><span class="line"><span class="keyword">import</span> okio.Okio;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">OkHttpCall</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Call</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ServiceMethod&lt;T, ?&gt; serviceMethod;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Object[] args;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> canceled;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// All guarded by this.</span></span><br><span class="line">  <span class="keyword">private</span> okhttp3.Call rawCall;</span><br><span class="line">  <span class="keyword">private</span> Throwable creationFailure; <span class="comment">// Either a RuntimeException or IOException.</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">boolean</span> executed;</span><br><span class="line"></span><br><span class="line">  OkHttpCall(ServiceMethod&lt;T, ?&gt; serviceMethod, Object[] args) &#123;</span><br><span class="line">    <span class="keyword">this</span>.serviceMethod = serviceMethod;</span><br><span class="line">    <span class="keyword">this</span>.args = args;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@SuppressWarnings</span>(<span class="string">"CloneDoesntCallSuperClone"</span>) <span class="comment">// We are a final type &amp; this saves clearing state.</span></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> OkHttpCall&lt;T&gt; <span class="title">clone</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> OkHttpCall&lt;&gt;(serviceMethod, args);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//请求</span></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Request <span class="title">request</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    okhttp3.Call call = rawCall;</span><br><span class="line">    <span class="keyword">if</span> (call != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> call.request();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (creationFailure != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (creationFailure <span class="keyword">instanceof</span> IOException) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unable to create request."</span>, creationFailure);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> (RuntimeException) creationFailure;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> (rawCall = createRawCall()).request();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">      creationFailure = e;</span><br><span class="line">      <span class="keyword">throw</span> e;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">      creationFailure = e;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unable to create request."</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//异步请求</span></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(<span class="keyword">final</span> Callback&lt;T&gt; callback)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (callback == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"callback == null"</span>);</span><br><span class="line"></span><br><span class="line">    okhttp3.Call call;</span><br><span class="line">    Throwable failure;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (executed) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Already executed."</span>);</span><br><span class="line">      executed = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">      call = rawCall;</span><br><span class="line">      failure = creationFailure;</span><br><span class="line">      <span class="keyword">if</span> (call == <span class="keyword">null</span> &amp;&amp; failure == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          call = rawCall = createRawCall();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">          failure = creationFailure = t;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (failure != <span class="keyword">null</span>) &#123;</span><br><span class="line">      callback.onFailure(<span class="keyword">this</span>, failure);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (canceled) &#123;</span><br><span class="line">      call.cancel();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    call.enqueue(<span class="keyword">new</span> okhttp3.Callback() &#123;</span><br><span class="line">      <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(okhttp3.Call call, okhttp3.Response rawResponse)</span></span></span><br><span class="line"><span class="function">          <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Response&lt;T&gt; response;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          response = parseResponse(rawResponse);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">          callFailure(e);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        callSuccess(response);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(okhttp3.Call call, IOException e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          callback.onFailure(OkHttpCall.<span class="keyword">this</span>, e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">          t.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">callFailure</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          callback.onFailure(OkHttpCall.<span class="keyword">this</span>, e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">          t.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">callSuccess</span><span class="params">(Response&lt;T&gt; response)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          callback.onResponse(OkHttpCall.<span class="keyword">this</span>, response);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">          t.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">boolean</span> <span class="title">isExecuted</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> executed;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Response&lt;T&gt; <span class="title">execute</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    okhttp3.Call call;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (executed) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Already executed."</span>);</span><br><span class="line">      executed = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (creationFailure != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (creationFailure <span class="keyword">instanceof</span> IOException) &#123;</span><br><span class="line">          <span class="keyword">throw</span> (IOException) creationFailure;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">throw</span> (RuntimeException) creationFailure;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      call = rawCall;</span><br><span class="line">      <span class="keyword">if</span> (call == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          call = rawCall = createRawCall();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException | RuntimeException e) &#123;</span><br><span class="line">          creationFailure = e;</span><br><span class="line">          <span class="keyword">throw</span> e;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (canceled) &#123;</span><br><span class="line">      call.cancel();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> parseResponse(call.execute());</span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//创建realCall ok3的</span></span><br><span class="line">  <span class="keyword">private</span> okhttp3.<span class="function">Call <span class="title">createRawCall</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">//组装参数</span></span><br><span class="line">    Request request = serviceMethod.toRequest(args);</span><br><span class="line">    okhttp3.Call call = serviceMethod.callFactory.newCall(request);</span><br><span class="line">    <span class="keyword">if</span> (call == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Call.Factory returned null."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> call;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//解析response</span></span><br><span class="line">  <span class="function">Response&lt;T&gt; <span class="title">parseResponse</span><span class="params">(okhttp3.Response rawResponse)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    ResponseBody rawBody = rawResponse.body();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Remove the body's source (the only stateful object) so we can pass the response along.</span></span><br><span class="line">    rawResponse = rawResponse.newBuilder()</span><br><span class="line">        .body(<span class="keyword">new</span> NoContentResponseBody(rawBody.contentType(), rawBody.contentLength()))</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> code = rawResponse.code();</span><br><span class="line">    <span class="keyword">if</span> (code &lt; <span class="number">200</span> || code &gt;= <span class="number">300</span>) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// Buffer the entire body to avoid future I/O.</span></span><br><span class="line">        ResponseBody bufferedBody = Utils.buffer(rawBody);</span><br><span class="line">        <span class="keyword">return</span> Response.error(bufferedBody, rawResponse);</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        rawBody.close();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (code == <span class="number">204</span> || code == <span class="number">205</span>) &#123;</span><br><span class="line">      rawBody.close();</span><br><span class="line">      <span class="keyword">return</span> Response.success(<span class="keyword">null</span>, rawResponse);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ExceptionCatchingRequestBody catchingBody = <span class="keyword">new</span> ExceptionCatchingRequestBody(rawBody);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">//通过response解析器进行类型转换</span></span><br><span class="line">      T body = serviceMethod.toResponse(catchingBody);</span><br><span class="line">      <span class="keyword">return</span> Response.success(body, rawResponse);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">      <span class="comment">// If the underlying source threw an exception, propagate that rather than indicating it was</span></span><br><span class="line">      <span class="comment">// a runtime exception.</span></span><br><span class="line">      catchingBody.throwIfCaught();</span><br><span class="line">      <span class="keyword">throw</span> e;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    canceled = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    okhttp3.Call call;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">      call = rawCall;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (call != <span class="keyword">null</span>) &#123;</span><br><span class="line">      call.cancel();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isCanceled</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (canceled) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> rawCall != <span class="keyword">null</span> &amp;&amp; rawCall.isCanceled();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">NoContentResponseBody</span> <span class="keyword">extends</span> <span class="title">ResponseBody</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MediaType contentType;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">long</span> contentLength;</span><br><span class="line"></span><br><span class="line">    NoContentResponseBody(MediaType contentType, <span class="keyword">long</span> contentLength) &#123;</span><br><span class="line">      <span class="keyword">this</span>.contentType = contentType;</span><br><span class="line">      <span class="keyword">this</span>.contentLength = contentLength;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> MediaType <span class="title">contentType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> contentType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">contentLength</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> contentLength;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> BufferedSource <span class="title">source</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Cannot read raw response body of a converted body."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ExceptionCatchingRequestBody</span> <span class="keyword">extends</span> <span class="title">ResponseBody</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ResponseBody delegate;</span><br><span class="line">    IOException thrownException;</span><br><span class="line"></span><br><span class="line">    ExceptionCatchingRequestBody(ResponseBody delegate) &#123;</span><br><span class="line">      <span class="keyword">this</span>.delegate = delegate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> MediaType <span class="title">contentType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> delegate.contentType();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">contentLength</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> delegate.contentLength();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> BufferedSource <span class="title">source</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> Okio.buffer(<span class="keyword">new</span> ForwardingSource(delegate.source()) &#123;</span><br><span class="line">        <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">read</span><span class="params">(Buffer sink, <span class="keyword">long</span> byteCount)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.read(sink, byteCount);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            thrownException = e;</span><br><span class="line">            <span class="keyword">throw</span> e;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      delegate.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">throwIfCaught</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (thrownException != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> thrownException;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>CallAdapter的选择：ServiceMethon.createCallAdapter()–&gt;retrofit.callAdapter() –&gt;retrofit.nextCallAdapter() –&gt;adapterFactories.get();<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Returns the &#123;<span class="doctag">@link</span> CallAdapter&#125; for &#123;<span class="doctag">@code</span> returnType&#125; from the available &#123;<span class="doctag">@linkplain</span></span></span><br><span class="line"><span class="comment"> * #callAdapterFactories() factories&#125; except &#123;<span class="doctag">@code</span> skipPast&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalArgumentException if no call adapter available for &#123;<span class="doctag">@code</span> type&#125;.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> CallAdapter&lt;?, ?&gt; nextCallAdapter(CallAdapter.Factory skipPast, Type returnType,</span><br><span class="line">    Annotation[] annotations) &#123;</span><br><span class="line">  checkNotNull(returnType, <span class="string">"returnType == null"</span>);</span><br><span class="line">  checkNotNull(annotations, <span class="string">"annotations == null"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> start = adapterFactories.indexOf(skipPast) + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = start, count = adapterFactories.size(); i &lt; count; i++) &#123;</span><br><span class="line">    CallAdapter&lt;?, ?&gt; adapter = adapterFactories.get(i).get(returnType, annotations, <span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">if</span> (adapter != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> adapter;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  StringBuilder builder = <span class="keyword">new</span> StringBuilder(<span class="string">"Could not locate call adapter for "</span>)</span><br><span class="line">      .append(returnType)</span><br><span class="line">      .append(<span class="string">".\n"</span>);</span><br><span class="line">  <span class="keyword">if</span> (skipPast != <span class="keyword">null</span>) &#123;</span><br><span class="line">    builder.append(<span class="string">"  Skipped:"</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; start; i++) &#123;</span><br><span class="line">      builder.append(<span class="string">"\n   * "</span>).append(adapterFactories.get(i).getClass().getName());</span><br><span class="line">    &#125;</span><br><span class="line">    builder.append(<span class="string">'\n'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  builder.append(<span class="string">"  Tried:"</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = start, count = adapterFactories.size(); i &lt; count; i++) &#123;</span><br><span class="line">    builder.append(<span class="string">"\n   * "</span>).append(adapterFactories.get(i).getClass().getName());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(builder.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>看看<code>RxJava2CallAdapterFactory</code>的<code>get</code>函数,拿到属于自己的RxJava2CallAdapter</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="keyword">public</span> CallAdapter&lt;?, ?&gt; get(Type returnType, Annotation[] annotations, Retrofit retrofit) &#123;</span><br><span class="line">   Class&lt;?&gt; rawType = getRawType(returnType);</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (rawType == Completable.class) &#123;</span><br><span class="line">     <span class="comment">// Completable is not parameterized (which is what the rest of this method deals with) so it</span></span><br><span class="line">     <span class="comment">// can only be created with a single configuration.</span></span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">new</span> RxJava2CallAdapter(Void.class, scheduler, isAsync, <span class="keyword">false</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, <span class="keyword">false</span>,</span><br><span class="line">         <span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">boolean</span> isFlowable = rawType == Flowable.class;</span><br><span class="line">   <span class="keyword">boolean</span> isSingle = rawType == Single.class;</span><br><span class="line">   <span class="keyword">boolean</span> isMaybe = rawType == Maybe.class;</span><br><span class="line">   <span class="keyword">if</span> (rawType != Observable.class &amp;&amp; !isFlowable &amp;&amp; !isSingle &amp;&amp; !isMaybe) &#123;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">boolean</span> isResult = <span class="keyword">false</span>;</span><br><span class="line">   <span class="keyword">boolean</span> isBody = <span class="keyword">false</span>;</span><br><span class="line">   Type responseType;</span><br><span class="line">   <span class="keyword">if</span> (!(returnType <span class="keyword">instanceof</span> ParameterizedType)) &#123;</span><br><span class="line">     String name = isFlowable ? <span class="string">"Flowable"</span></span><br><span class="line">         : isSingle ? <span class="string">"Single"</span></span><br><span class="line">         : isMaybe ? <span class="string">"Maybe"</span> : <span class="string">"Observable"</span>;</span><br><span class="line">     <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(name + <span class="string">" return type must be parameterized"</span></span><br><span class="line">         + <span class="string">" as "</span> + name + <span class="string">"&lt;Foo&gt; or "</span> + name + <span class="string">"&lt;? extends Foo&gt;"</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   Type observableType = getParameterUpperBound(<span class="number">0</span>, (ParameterizedType) returnType);</span><br><span class="line">   Class&lt;?&gt; rawObservableType = getRawType(observableType);</span><br><span class="line">   <span class="keyword">if</span> (rawObservableType == Response.class) &#123;</span><br><span class="line">     <span class="keyword">if</span> (!(observableType <span class="keyword">instanceof</span> ParameterizedType)) &#123;</span><br><span class="line">       <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Response must be parameterized"</span></span><br><span class="line">           + <span class="string">" as Response&lt;Foo&gt; or Response&lt;? extends Foo&gt;"</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     responseType = getParameterUpperBound(<span class="number">0</span>, (ParameterizedType) observableType);</span><br><span class="line">   &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rawObservableType == Result.class) &#123;</span><br><span class="line">     <span class="keyword">if</span> (!(observableType <span class="keyword">instanceof</span> ParameterizedType)) &#123;</span><br><span class="line">       <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Result must be parameterized"</span></span><br><span class="line">           + <span class="string">" as Result&lt;Foo&gt; or Result&lt;? extends Foo&gt;"</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     responseType = getParameterUpperBound(<span class="number">0</span>, (ParameterizedType) observableType);</span><br><span class="line">     isResult = <span class="keyword">true</span>;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     responseType = observableType;</span><br><span class="line">     isBody = <span class="keyword">true</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> RxJava2CallAdapter(responseType, scheduler, isAsync, isResult, isBody, isFlowable,</span><br><span class="line">       isSingle, isMaybe, <span class="keyword">false</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>我们在拿到ok3的response之后转换为我们需要的类型通过callAdapter的adapter函数，看下RxJava2CallAdapter<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Object <span class="title">adapt</span><span class="params">(Call&lt;R&gt; call)</span> </span>&#123;</span><br><span class="line">   Observable&lt;Response&lt;R&gt;&gt; responseObservable = isAsync</span><br><span class="line">       ? <span class="keyword">new</span> CallEnqueueObservable&lt;&gt;(call)</span><br><span class="line">       : <span class="keyword">new</span> CallExecuteObservable&lt;&gt;(call);</span><br><span class="line"></span><br><span class="line">   Observable&lt;?&gt; observable;</span><br><span class="line">   <span class="keyword">if</span> (isResult) &#123;</span><br><span class="line">     observable = <span class="keyword">new</span> ResultObservable&lt;&gt;(responseObservable);</span><br><span class="line">   &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isBody) &#123;</span><br><span class="line">     observable = <span class="keyword">new</span> BodyObservable&lt;&gt;(responseObservable);</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     observable = responseObservable;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (scheduler != <span class="keyword">null</span>) &#123;</span><br><span class="line">     observable = observable.subscribeOn(scheduler);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (isFlowable) &#123;</span><br><span class="line">     <span class="keyword">return</span> observable.toFlowable(BackpressureStrategy.LATEST);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (isSingle) &#123;</span><br><span class="line">     <span class="keyword">return</span> observable.singleOrError();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (isMaybe) &#123;</span><br><span class="line">     <span class="keyword">return</span> observable.singleElement();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (isCompletable) &#123;</span><br><span class="line">     <span class="keyword">return</span> observable.ignoreElements();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> observable;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>解析看responseConverter，ServiceMthon.createResponseConverter()–&gt;retrofit.responseBodyConverter–&gt;retrofit.nextResponseBodyConverter()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Returns a &#123;<span class="doctag">@link</span> Converter&#125; for &#123;<span class="doctag">@link</span> ResponseBody&#125; to &#123;<span class="doctag">@code</span> type&#125; from the available</span></span><br><span class="line"><span class="comment">   * &#123;<span class="doctag">@linkplain</span> #converterFactories() factories&#125; except &#123;<span class="doctag">@code</span> skipPast&#125;.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@throws</span> IllegalArgumentException if no converter available for &#123;<span class="doctag">@code</span> type&#125;.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> &lt;T&gt; <span class="function">Converter&lt;ResponseBody, T&gt; <span class="title">nextResponseBodyConverter</span><span class="params">(Converter.Factory skipPast,</span></span></span><br><span class="line"><span class="function"><span class="params">      Type type, Annotation[] annotations)</span> </span>&#123;</span><br><span class="line">    checkNotNull(type, <span class="string">"type == null"</span>);</span><br><span class="line">    checkNotNull(annotations, <span class="string">"annotations == null"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> start = converterFactories.indexOf(skipPast) + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = start, count = converterFactories.size(); i &lt; count; i++) &#123;</span><br><span class="line">      Converter&lt;ResponseBody, ?&gt; converter =</span><br><span class="line">          converterFactories.get(i).responseBodyConverter(type, annotations, <span class="keyword">this</span>);</span><br><span class="line">      <span class="keyword">if</span> (converter != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//noinspection unchecked</span></span><br><span class="line">        <span class="keyword">return</span> (Converter&lt;ResponseBody, T&gt;) converter;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    StringBuilder builder = <span class="keyword">new</span> StringBuilder(<span class="string">"Could not locate ResponseBody converter for "</span>)</span><br><span class="line">        .append(type)</span><br><span class="line">        .append(<span class="string">".\n"</span>);</span><br><span class="line">    <span class="keyword">if</span> (skipPast != <span class="keyword">null</span>) &#123;</span><br><span class="line">      builder.append(<span class="string">"  Skipped:"</span>);</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; start; i++) &#123;</span><br><span class="line">        builder.append(<span class="string">"\n   * "</span>).append(converterFactories.get(i).getClass().getName());</span><br><span class="line">      &#125;</span><br><span class="line">      builder.append(<span class="string">'\n'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    builder.append(<span class="string">"  Tried:"</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = start, count = converterFactories.size(); i &lt; count; i++) &#123;</span><br><span class="line">      builder.append(<span class="string">"\n   * "</span>).append(converterFactories.get(i).getClass().getName());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(builder.toString());</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>看看<code>GsonConverterFactory</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * A &#123;<span class="doctag">@linkplain</span> Converter.Factory converter&#125; which uses Gson for JSON.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * Because Gson is so flexible in the types it supports, this converter assumes that it can handle</span></span><br><span class="line"><span class="comment"> * all types. If you are mixing JSON serialization with something else (such as protocol buffers),</span></span><br><span class="line"><span class="comment"> * you must &#123;<span class="doctag">@linkplain</span> Retrofit.Builder#addConverterFactory(Converter.Factory) add this instance&#125;</span></span><br><span class="line"><span class="comment"> * last to allow the other converters a chance to see their types.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">GsonConverterFactory</span> <span class="keyword">extends</span> <span class="title">Converter</span>.<span class="title">Factory</span> </span>&#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Create an instance using a default &#123;<span class="doctag">@link</span> Gson&#125; instance for conversion. Encoding to JSON and</span></span><br><span class="line"><span class="comment">   * decoding from JSON (when no charset is specified by a header) will use UTF-8.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> GsonConverterFactory <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> create(<span class="keyword">new</span> Gson());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Create an instance using &#123;<span class="doctag">@code</span> gson&#125; for conversion. Encoding to JSON and</span></span><br><span class="line"><span class="comment">   * decoding from JSON (when no charset is specified by a header) will use UTF-8.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> GsonConverterFactory <span class="title">create</span><span class="params">(Gson gson)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> GsonConverterFactory(gson);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Gson gson;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">GsonConverterFactory</span><span class="params">(Gson gson)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (gson == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"gson == null"</span>);</span><br><span class="line">    <span class="keyword">this</span>.gson = gson;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> Converter&lt;ResponseBody, ?&gt; responseBodyConverter(Type type, Annotation[] annotations,</span><br><span class="line">      Retrofit retrofit) &#123;</span><br><span class="line">    TypeAdapter&lt;?&gt; adapter = gson.getAdapter(TypeToken.get(type));</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> GsonResponseBodyConverter&lt;&gt;(gson, adapter);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> Converter&lt;?, RequestBody&gt; requestBodyConverter(Type type,</span><br><span class="line">      Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) &#123;</span><br><span class="line">    TypeAdapter&lt;?&gt; adapter = gson.getAdapter(TypeToken.get(type));</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> GsonRequestBodyConverter&lt;&gt;(gson, adapter);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>通过工程得到<code>GsonResponseBodyConverter</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.google.gson.Gson;</span><br><span class="line"><span class="keyword">import</span> com.google.gson.TypeAdapter;</span><br><span class="line"><span class="keyword">import</span> com.google.gson.stream.JsonReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> okhttp3.ResponseBody;</span><br><span class="line"><span class="keyword">import</span> retrofit2.Converter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">GsonResponseBodyConverter</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Converter</span>&lt;<span class="title">ResponseBody</span>, <span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Gson gson;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> TypeAdapter&lt;T&gt; adapter;</span><br><span class="line"></span><br><span class="line">  GsonResponseBodyConverter(Gson gson, TypeAdapter&lt;T&gt; adapter) &#123;</span><br><span class="line">    <span class="keyword">this</span>.gson = gson;</span><br><span class="line">    <span class="keyword">this</span>.adapter = adapter;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> T <span class="title">convert</span><span class="params">(ResponseBody value)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    JsonReader jsonReader = gson.newJsonReader(value.charStream());</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> adapter.read(jsonReader);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      value.close();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当然请求和GsonResponseBodyConverter类似，也是通过工厂来生成。</p>
+<p>总结:</p>
+<ol>
+<li>动态代理实现接口函数调用的拦截</li>
+<li>通过返回类型来和<code>CallAdapter.Factory</code>遍历对比调用get函数拿到对应于的<code>callAdapter</code>，然后通过<code>callAdapter.adapter</code>函数来进行数据转换</li>
+<li>通过返回类型来和<code>Converter.Factory</code>遍历对比调用<code>responseBodyConverter</code>和<code>requestBodyConverter</code>函数拿到对应于的<code>Converter</code>，然后通过<code>Converter.conver</code>t函数来进行请求数据或者<code>responseBody</code>的数据转换</li>
+<li>参数解析的时候判断很多，根据你的参数不同实例不同的<code>ParameterHandler</code>，请求的时候通过<code>ParameterHandler</code>组装数据</li>
+</ol>
+<p>参考链接：<br><a href="https://blog.piasy.com/2016/06/25/Understand-Retrofit/" target="_blank" rel="noopener">retrofit源码</a></p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          
+            <a href="/tags/源码/" rel="tag"><i class="fa fa-tag"></i> 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/LeakCanary 原理浅析.html" rel="next" title="LeakCanary 原理浅析">
+                <i class="fa fa-chevron-left"></i> LeakCanary 原理浅析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Android aidl流程简单分析.html" rel="prev" title="Android aidl流程简单分析">
+                Android aidl流程简单分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

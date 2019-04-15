@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="音视频,OpenSLES," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="OpenSLES（Open Sound Library for Embedded Systems）无授权费、跨平台、针对嵌入式系统精心优化的硬件音频加速API。它为嵌入式移动多媒体设备上的本地应用程序开发者提供标准化, 高性能,低响应时间的音频功能实现方法，并实现软/硬件音频性能的直接跨平台部署，降低执行难度，促进高级音频市场的发展。  在Android里面ndk-&amp;gt;platforms-&amp;">
+<meta name="keywords" content="音视频,OpenSLES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenSLES基础功能">
+<meta property="og:url" content="http://www.zengzhaowen.cn/OpenSLES基础功能.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="OpenSLES（Open Sound Library for Embedded Systems）无授权费、跨平台、针对嵌入式系统精心优化的硬件音频加速API。它为嵌入式移动多媒体设备上的本地应用程序开发者提供标准化, 高性能,低响应时间的音频功能实现方法，并实现软/硬件音频性能的直接跨平台部署，降低执行难度，促进高级音频市场的发展。  在Android里面ndk-&amp;gt;platforms-&amp;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.101Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenSLES基础功能">
+<meta name="twitter:description" content="OpenSLES（Open Sound Library for Embedded Systems）无授权费、跨平台、针对嵌入式系统精心优化的硬件音频加速API。它为嵌入式移动多媒体设备上的本地应用程序开发者提供标准化, 高性能,低响应时间的音频功能实现方法，并实现软/硬件音频性能的直接跨平台部署，降低执行难度，促进高级音频市场的发展。  在Android里面ndk-&amp;gt;platforms-&amp;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/OpenSLES基础功能.html"/>
+
+
+
+
+
+  <title>OpenSLES基础功能 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/OpenSLES基础功能.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OpenSLES基础功能</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-25T15:55:24+08:00">
+                2018-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenSLES/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenSLES</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/OpenSLES基础功能.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/OpenSLES基础功能.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,566字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  14分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li><p><code>OpenSLES（Open Sound Library for Embedded Systems）</code>无授权费、跨平台、针对嵌入式系统精心优化的硬件音频加速API。它为嵌入式移动多媒体设备上的本地应用程序开发者提供标准化, 高性能,低响应时间的音频功能实现方法，并实现软/硬件音频性能的直接跨平台部署，降低执行难度，促进高级音频市场的发展。</p>
+</li>
+<li><p>在<code>Android</code>里面<code>ndk-&gt;platforms-&gt; android-xx -&gt; arch-xx -&gt;usr-&gt;lib</code>目录里面包含了<code>ndk</code>内置的<code>so</code>，可以看到支持了<code>libOpenSLES.so</code>。</p>
+</li>
+<li><p>在<code>github</code>上<a href="https://github.com/googlesamples/android-ndk/" target="_blank" rel="noopener">googlesamples/android-ndk</a>可以看到ndk库的<code>sample</code>,里面<code>native-audio</code>目录就是<code>OpenSLES</code>得<code>sample</code>。</p>
+</li>
+</ol>
+<ol start="4">
+<li><code>OpenSLES</code>播放主要步骤如下:<blockquote>
+<ol>
+<li>创建接口对象  </li>
+<li>设置混音器</li>
+<li>创建播放器（录音器）</li>
+<li>设置缓冲队列和回调函数</li>
+<li>设置播放状态</li>
+<li>启动回调函数</li>
+<li>销毁</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<p>4.1 创建接口对象  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 引擎接口</span></span><br><span class="line">SLObjectItf engineObject = <span class="literal">NULL</span>;</span><br><span class="line">SLEngineItf engineEngine = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建引擎对象</span></span><br><span class="line"> slCreateEngine(&amp;engineObject,  <span class="number">0</span>, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line"> (*engineObject)-&gt;Realize(engineObject, SL_BOOLEAN_FALSE);</span><br><span class="line"> (*engineObject)-&gt;GetInterface(engineObject, SL_IID_ENGINE, &amp;engineEngine);</span><br></pre></td></tr></table></figure>
+<p>4.2 设置混音器</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//混音器</span></span><br><span class="line">SLObjectItf outputMixObject = <span class="literal">NULL</span>;</span><br><span class="line">SLEnvironmentalReverbItf outputMixEnvironmentalReverb = <span class="literal">NULL</span>;</span><br><span class="line">SLEnvironmentalReverbSettings reverbSettings = SL_I3DL2_ENVIRONMENT_PRESET_STONECORRIDOR;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> SLInterfaceID mids[<span class="number">1</span>] = &#123;SL_IID_ENVIRONMENTALREVERB&#125;;</span><br><span class="line"><span class="keyword">const</span> SLboolean mreq[<span class="number">1</span>] = &#123;SL_BOOLEAN_FALSE&#125;;</span><br><span class="line">(*engineEngine)-&gt;CreateOutputMix(engineEngine, &amp;outputMixObject, <span class="number">1</span>, mids, mreq);</span><br><span class="line">(<span class="keyword">void</span>)result;</span><br><span class="line">result = (*outputMixObject)-&gt;Realize(outputMixObject, SL_BOOLEAN_FALSE);</span><br><span class="line">(<span class="keyword">void</span>)result;</span><br><span class="line">result = (*outputMixObject)-&gt;GetInterface(outputMixObject, SL_IID_ENVIRONMENTALREVERB, &amp;outputMixEnvironmentalReverb);</span><br><span class="line"><span class="keyword">if</span> (SL_RESULT_SUCCESS == result) &#123;</span><br><span class="line">    result = (*outputMixEnvironmentalReverb)-&gt;SetEnvironmentalReverbProperties( outputMixEnvironmentalReverb, &amp;reverbSettings);</span><br><span class="line">    (<span class="keyword">void</span>)result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SLDataLocator_OutputMix outputMix = &#123;SL_DATALOCATOR_OUTPUTMIX, outputMixObject&#125;;</span><br></pre></td></tr></table></figure>
+<p>4.3 创建播放器</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> <span class="comment">//pcm</span></span><br><span class="line"> SLObjectItf pcmPlayerObject = <span class="literal">NULL</span>;</span><br><span class="line"> SLPlayItf pcmPlayerPlay = <span class="literal">NULL</span>;</span><br><span class="line"> SLVolumeItf pcmPlayerVolume = <span class="literal">NULL</span>;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> SLDataLocator_AndroidSimpleBufferQueue android_queue=&#123;SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE,<span class="number">2</span>&#125;;</span><br><span class="line"> SLDataFormat_PCM pcm=&#123;</span><br><span class="line">             SL_DATAFORMAT_PCM,<span class="comment">//播放pcm格式的数据</span></span><br><span class="line">             <span class="number">2</span>,<span class="comment">//2个声道（立体声）</span></span><br><span class="line">             SL_SAMPLINGRATE_44_1,<span class="comment">//44100hz的频率</span></span><br><span class="line">             SL_PCMSAMPLEFORMAT_FIXED_16,<span class="comment">//位数 16位</span></span><br><span class="line">             SL_PCMSAMPLEFORMAT_FIXED_16,<span class="comment">//和位数一致就行</span></span><br><span class="line">             SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT,<span class="comment">//立体声（前左前右）</span></span><br><span class="line">             SL_BYTEORDER_LITTLEENDIAN<span class="comment">//结束标志</span></span><br><span class="line">  &#125;;</span><br><span class="line"> </span><br><span class="line"> SLDataSource slDataSource = &#123;&amp;android_queue, &amp;pcm&#125;;</span><br><span class="line"> SLDataSink audioSnk = &#123;&amp;outputMix, <span class="literal">NULL</span>&#125;;</span><br><span class="line"><span class="comment">// SL_IID_BUFFERQUEUE:缓冲  SL_IID_VOLUME:音量  SL_IID_PLAYBACKRATE:微调功能 防止卡顿 微调功能 SL_IID_MUTESOLO:声道切换</span></span><br><span class="line"> <span class="keyword">const</span> SLInterfaceID ids[<span class="number">4</span>] = &#123;SL_IID_BUFFERQUEUE, SL_IID_VOLUME, SL_IID_PLAYBACKRATE, SL_IID_MUTESOLO&#125;;</span><br><span class="line"> <span class="keyword">const</span> SLboolean req[<span class="number">4</span>] = &#123;SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE&#125;;</span><br><span class="line"> </span><br><span class="line">  result = (*engineEngine)-&gt;CreateAudioPlayer(engineEngine, &amp;pcmPlayerObject, &amp;slDataSource, &amp;audioSnk, <span class="number">3</span>, ids, req);</span><br><span class="line">     <span class="comment">// 初始化播放器</span></span><br><span class="line"> (*pcmPlayerObject)-&gt;Realize(pcmPlayerObject, SL_BOOLEAN_FALSE);</span><br><span class="line"> </span><br><span class="line">     <span class="comment">//得到接口后调用  获取Player接口</span></span><br><span class="line"> (*pcmPlayerObject)-&gt;GetInterface(pcmPlayerObject, SL_IID_PLAY, &amp;pcmPlayerPlay);</span><br></pre></td></tr></table></figure>
+<p>4.4  设置缓冲队列和回调函数<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//缓冲器队列接口</span></span><br><span class="line">SLAndroidSimpleBufferQueueItf pcmBufferQueue;</span><br><span class="line"><span class="keyword">void</span> *buffer;</span><br><span class="line"><span class="keyword">uint8_t</span> *out_buffer;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getPcmData</span><span class="params">(<span class="keyword">void</span> **pcm)</span></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(!feof(pcmFile))  &#123;</span><br><span class="line">        <span class="keyword">int</span> size = <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(fread(out_buffer,<span class="number">1</span>,<span class="number">44100</span> * <span class="number">2</span> * <span class="number">2</span>,pcmFile));</span><br><span class="line">        <span class="keyword">if</span>(out_buffer == <span class="literal">NULL</span>)  &#123;</span><br><span class="line">            LOGI(<span class="string">"%s  %d"</span>, <span class="string">"read end"</span>,size);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            LOGI(<span class="string">"%s  %d"</span>, <span class="string">"reading"</span>,size);</span><br><span class="line">        &#125;</span><br><span class="line">        *pcm = out_buffer;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pcmBufferCallBack</span><span class="params">(SLAndroidSimpleBufferQueueItf bf, <span class="keyword">void</span> * context)</span></span>&#123;</span><br><span class="line">    <span class="comment">//assert(NULL == context);</span></span><br><span class="line">    getPcmData(&amp;buffer);</span><br><span class="line">    <span class="comment">// for streaming playback, replace this test by logic to find and fill the next buffer</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> != buffer) &#123;</span><br><span class="line">        SLresult result;</span><br><span class="line">        <span class="comment">// enqueue another buffer</span></span><br><span class="line">        result = (*pcmBufferQueue)-&gt;Enqueue(pcmBufferQueue, buffer, <span class="number">44100</span> * <span class="number">2</span> * <span class="number">2</span>);</span><br><span class="line">        <span class="comment">// the most likely other result is SL_RESULT_BUFFER_INSUFFICIENT,</span></span><br><span class="line">        <span class="comment">// which for this code example would indicate a programming error</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建缓冲区和回调函数</span></span><br><span class="line">(*pcmPlayerObject)-&gt;GetInterface(pcmPlayerObject, SL_IID_BUFFERQUEUE, &amp;pcmBufferQueue);</span><br><span class="line"></span><br><span class="line"><span class="comment">//缓冲接口回调</span></span><br><span class="line">(*pcmBufferQueue)-&gt;RegisterCallback(pcmBufferQueue, pcmBufferCallBack, <span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">//获取音量接口</span></span><br><span class="line">(*pcmPlayerObject)-&gt;GetInterface(pcmPlayerObject, SL_IID_VOLUME, &amp;pcmPlayerVolume);</span><br></pre></td></tr></table></figure></p>
+<p>4.5 设置播放状态</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(*pcmPlayerPlay)-&gt;SetPlayState(pcmPlayerPlay, SL_PLAYSTATE_PLAYING);</span><br></pre></td></tr></table></figure>
+<p>4.6 启动回调函数<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// 主动调用回调函数开始工作</span></span><br><span class="line">pcmBufferCallBack(pcmBufferQueue, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure></p>
+<p>4.7 销毁<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (pcmPlayerObject != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    (*pcmPlayerObject)-&gt;Destroy(pcmPlayerObject);</span><br><span class="line">    pcmPlayerObject = <span class="literal">NULL</span>;</span><br><span class="line">    pcmPlayerPlay = <span class="literal">NULL</span>;</span><br><span class="line">    pcmBufferQueue = <span class="literal">NULL</span>;</span><br><span class="line">    pcmPlayerVolume = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (outputMixObject != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    (*outputMixObject)-&gt;Destroy(outputMixObject);</span><br><span class="line">    outputMixObject = <span class="literal">NULL</span>;</span><br><span class="line">    outputMixEnvironmentalReverb = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"> <span class="keyword">if</span> (engineObject != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    (*engineObject)-&gt;Destroy(engineObject);</span><br><span class="line">    engineObject = <span class="literal">NULL</span>;</span><br><span class="line">    engineEngine = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>示例代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SLES/OpenSLES.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SLES/OpenSLES_Android.h&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;android/log.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOGI(FORMAT,...) __android_log_print(ANDROID_LOG_INFO,<span class="meta-string">"zzw"</span>,FORMAT,##__VA_ARGS__);</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOGE(FORMAT,...) __android_log_print(ANDROID_LOG_ERROR,<span class="meta-string">"zzw"</span>,FORMAT,##__VA_ARGS__);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引擎接口</span></span><br><span class="line">SLObjectItf engineObject = <span class="literal">NULL</span>;</span><br><span class="line">SLEngineItf engineEngine = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//混音器</span></span><br><span class="line">SLObjectItf outputMixObject = <span class="literal">NULL</span>;</span><br><span class="line">SLEnvironmentalReverbItf outputMixEnvironmentalReverb = <span class="literal">NULL</span>;</span><br><span class="line">SLEnvironmentalReverbSettings reverbSettings = SL_I3DL2_ENVIRONMENT_PRESET_STONECORRIDOR;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//pcm</span></span><br><span class="line">SLObjectItf pcmPlayerObject = <span class="literal">NULL</span>;</span><br><span class="line">SLPlayItf pcmPlayerPlay = <span class="literal">NULL</span>;</span><br><span class="line">SLVolumeItf pcmPlayerVolume = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//缓冲器队列接口</span></span><br><span class="line">SLAndroidSimpleBufferQueueItf pcmBufferQueue;</span><br><span class="line"></span><br><span class="line">FILE *pcmFile;</span><br><span class="line"><span class="keyword">void</span> *buffer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">uint8_t</span> *out_buffer;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getPcmData</span><span class="params">(<span class="keyword">void</span> **pcm)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(!feof(pcmFile))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> size = <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(fread(out_buffer,<span class="number">1</span>,<span class="number">44100</span> * <span class="number">2</span> * <span class="number">2</span>,pcmFile));</span><br><span class="line">        <span class="keyword">if</span>(out_buffer == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            LOGI(<span class="string">"%s  %d"</span>, <span class="string">"read end"</span>,size);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            LOGI(<span class="string">"%s  %d"</span>, <span class="string">"reading"</span>,size);</span><br><span class="line">        &#125;</span><br><span class="line">        *pcm = out_buffer;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pcmBufferCallBack</span><span class="params">(SLAndroidSimpleBufferQueueItf bf, <span class="keyword">void</span> * context)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//assert(NULL == context);</span></span><br><span class="line">    getPcmData(&amp;buffer);</span><br><span class="line">    <span class="comment">// for streaming playback, replace this test by logic to find and fill the next buffer</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> != buffer) &#123;</span><br><span class="line">        SLresult result;</span><br><span class="line">        <span class="comment">// enqueue another buffer</span></span><br><span class="line">        result = (*pcmBufferQueue)-&gt;Enqueue(pcmBufferQueue, buffer, <span class="number">44100</span> * <span class="number">2</span> * <span class="number">2</span>);</span><br><span class="line">        <span class="comment">// the most likely other result is SL_RESULT_BUFFER_INSUFFICIENT,</span></span><br><span class="line">        <span class="comment">// which for this code example would indicate a programming error</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_example_zzw_androidopenslaudio_MainActivity_palypcm(JNIEnv *env, jobject instance,</span><br><span class="line">                                                               jstring url_) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *url = env-&gt;GetStringUTFChars(url_, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// TODO</span></span><br><span class="line">    <span class="comment">//读取pcm文件</span></span><br><span class="line">    pcmFile = fopen(url, <span class="string">"r"</span>);</span><br><span class="line">    <span class="keyword">if</span>(pcmFile == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        LOGE(<span class="string">"%s"</span>, <span class="string">"fopen file error"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out_buffer = (<span class="keyword">uint8_t</span> *) <span class="built_in">malloc</span>(<span class="number">44100</span> * <span class="number">2</span> * <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    SLresult result;</span><br><span class="line">    <span class="comment">//第一步------------------------------------------</span></span><br><span class="line">    <span class="comment">// 创建引擎对象</span></span><br><span class="line">    slCreateEngine(&amp;engineObject, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    (*engineObject)-&gt;Realize(engineObject, SL_BOOLEAN_FALSE);</span><br><span class="line">    (*engineObject)-&gt;GetInterface(engineObject, SL_IID_ENGINE, &amp;engineEngine);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//第二步-------------------------------------------</span></span><br><span class="line">    <span class="comment">// 创建混音器</span></span><br><span class="line">    <span class="keyword">const</span> SLInterfaceID mids[<span class="number">1</span>] = &#123;SL_IID_ENVIRONMENTALREVERB&#125;;</span><br><span class="line">    <span class="keyword">const</span> SLboolean mreq[<span class="number">1</span>] = &#123;SL_BOOLEAN_FALSE&#125;;</span><br><span class="line">    result = (*engineEngine)-&gt;CreateOutputMix(engineEngine, &amp;outputMixObject, <span class="number">1</span>, mids, mreq);</span><br><span class="line">    (<span class="keyword">void</span>)result;</span><br><span class="line">    result = (*outputMixObject)-&gt;Realize(outputMixObject, SL_BOOLEAN_FALSE);</span><br><span class="line">    (<span class="keyword">void</span>)result;</span><br><span class="line">    result = (*outputMixObject)-&gt;GetInterface(outputMixObject, SL_IID_ENVIRONMENTALREVERB, &amp;outputMixEnvironmentalReverb);</span><br><span class="line">    <span class="keyword">if</span> (SL_RESULT_SUCCESS == result) &#123;</span><br><span class="line">        result = (*outputMixEnvironmentalReverb)-&gt;SetEnvironmentalReverbProperties(</span><br><span class="line">                outputMixEnvironmentalReverb, &amp;reverbSettings);</span><br><span class="line">        (<span class="keyword">void</span>)result;</span><br><span class="line">    &#125;</span><br><span class="line">    SLDataLocator_OutputMix outputMix = &#123;SL_DATALOCATOR_OUTPUTMIX, outputMixObject&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第三步--------------------------------------------</span></span><br><span class="line">    <span class="comment">// 创建播放器</span></span><br><span class="line">    SLDataLocator_AndroidSimpleBufferQueue android_queue=&#123;SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE,<span class="number">2</span>&#125;;</span><br><span class="line">    SLDataFormat_PCM pcm=&#123;</span><br><span class="line">            SL_DATAFORMAT_PCM,<span class="comment">//播放pcm格式的数据</span></span><br><span class="line">            <span class="number">2</span>,<span class="comment">//2个声道（立体声）</span></span><br><span class="line">            SL_SAMPLINGRATE_44_1,<span class="comment">//44100hz的频率</span></span><br><span class="line">            SL_PCMSAMPLEFORMAT_FIXED_16,<span class="comment">//位数 16位</span></span><br><span class="line">            SL_PCMSAMPLEFORMAT_FIXED_16,<span class="comment">//和位数一致就行</span></span><br><span class="line">            SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT,<span class="comment">//立体声（前左前右）</span></span><br><span class="line">            SL_BYTEORDER_LITTLEENDIAN<span class="comment">//结束标志</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    SLDataSource slDataSource = &#123;&amp;android_queue, &amp;pcm&#125;;</span><br><span class="line">    SLDataSink audioSnk = &#123;&amp;outputMix, <span class="literal">NULL</span>&#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// SL_IID_BUFFERQUEUE:缓冲  SL_IID_VOLUME:音量  SL_IID_PLAYBACKRATE:微调功能 防止卡顿 微调功能 SL_IID_MUTESOLO:声道切换</span></span><br><span class="line">    <span class="keyword">const</span> SLInterfaceID ids[<span class="number">4</span>] = &#123;SL_IID_BUFFERQUEUE, SL_IID_VOLUME, SL_IID_PLAYBACKRATE, SL_IID_MUTESOLO&#125;;</span><br><span class="line">    <span class="keyword">const</span> SLboolean req[<span class="number">4</span>] = &#123;SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE&#125;;</span><br><span class="line"></span><br><span class="line">    result = (*engineEngine)-&gt;CreateAudioPlayer(engineEngine, &amp;pcmPlayerObject, &amp;slDataSource, &amp;audioSnk, <span class="number">3</span>, ids, req);</span><br><span class="line">    <span class="comment">// 初始化播放器</span></span><br><span class="line">    (*pcmPlayerObject)-&gt;Realize(pcmPlayerObject, SL_BOOLEAN_FALSE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//得到接口后调用  获取Player接口</span></span><br><span class="line">    (*pcmPlayerObject)-&gt;GetInterface(pcmPlayerObject, SL_IID_PLAY, &amp;pcmPlayerPlay);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第四步---------------------------------------</span></span><br><span class="line">    <span class="comment">// 创建缓冲区和回调函数</span></span><br><span class="line">    (*pcmPlayerObject)-&gt;GetInterface(pcmPlayerObject, SL_IID_BUFFERQUEUE, &amp;pcmBufferQueue);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//缓冲接口回调</span></span><br><span class="line">    (*pcmBufferQueue)-&gt;RegisterCallback(pcmBufferQueue, pcmBufferCallBack, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">//获取音量接口</span></span><br><span class="line">    (*pcmPlayerObject)-&gt;GetInterface(pcmPlayerObject, SL_IID_VOLUME, &amp;pcmPlayerVolume);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第五步----------------------------------------</span></span><br><span class="line">    <span class="comment">// 设置播放状态</span></span><br><span class="line">    (*pcmPlayerPlay)-&gt;SetPlayState(pcmPlayerPlay, SL_PLAYSTATE_PLAYING);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//第六步----------------------------------------</span></span><br><span class="line">    <span class="comment">// 主动调用回调函数开始工作</span></span><br><span class="line">    pcmBufferCallBack(pcmBufferQueue, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    env-&gt;ReleaseStringUTFChars(url_, url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol start="5">
+<li>暂停、继续、停止<br>使用播放控制接口 <code>SLPlayItf</code></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//暂停</span></span><br><span class="line"><span class="keyword">if</span> (pcmPlayerPlay != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    (*pcmPlayerPlay)-&gt;SetPlayState(pcmPlayerPlay, SL_PLAYSTATE_PAUSED);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//继续</span></span><br><span class="line"><span class="keyword">if</span> (pcmPlayerPlay != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    (*pcmPlayerPlay)-&gt;SetPlayState(pcmPlayerPlay, SL_PLAYSTATE_PLAYING);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//停止</span></span><br><span class="line"><span class="keyword">if</span> (pcmPlayerPlay != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    (*pcmPlayerPlay)-&gt;SetPlayState(pcmPlayerPlay, SL_PLAYSTATE_STOPPED);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>音量控制<br>使用音量控制接口 <code>SLVolumeItf</code></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化</span></span><br><span class="line">(*pcmPlayerObject)-&gt;GetInterface(pcmPlayerObject,SL_IID_VOLUME,&amp;pcmPlayerVolume);</span><br><span class="line"><span class="comment">//设置音量</span></span><br><span class="line">(*pcmPlayerVolume)-&gt;SetVolumeLevel(pcmPlayerVolume, (<span class="number">100</span> - percent) * <span class="number">-50</span>);</span><br></pre></td></tr></table></figure>
+<p>可用示例<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> WlAudio::setVolume(<span class="keyword">int</span> percent) &#123;</span><br><span class="line">    volumePercent = percent;</span><br><span class="line">    <span class="keyword">if</span>(pcmVolumePlay != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(percent &gt; <span class="number">30</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmVolumePlay)-&gt;SetVolumeLevel(pcmVolumePlay, (<span class="number">100</span> - percent) * <span class="number">-20</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(percent &gt; <span class="number">25</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmVolumePlay)-&gt;SetVolumeLevel(pcmVolumePlay, (<span class="number">100</span> - percent) * <span class="number">-22</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(percent &gt; <span class="number">20</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmVolumePlay)-&gt;SetVolumeLevel(pcmVolumePlay, (<span class="number">100</span> - percent) * <span class="number">-25</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(percent &gt; <span class="number">15</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmVolumePlay)-&gt;SetVolumeLevel(pcmVolumePlay, (<span class="number">100</span> - percent) * <span class="number">-28</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(percent &gt; <span class="number">10</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmVolumePlay)-&gt;SetVolumeLevel(pcmVolumePlay, (<span class="number">100</span> - percent) * <span class="number">-30</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(percent &gt; <span class="number">5</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmVolumePlay)-&gt;SetVolumeLevel(pcmVolumePlay, (<span class="number">100</span> - percent) * <span class="number">-34</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(percent &gt; <span class="number">3</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmVolumePlay)-&gt;SetVolumeLevel(pcmVolumePlay, (<span class="number">100</span> - percent) * <span class="number">-37</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(percent &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmVolumePlay)-&gt;SetVolumeLevel(pcmVolumePlay, (<span class="number">100</span> - percent) * <span class="number">-40</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            (*pcmVolumePlay)-&gt;SetVolumeLevel(pcmVolumePlay, (<span class="number">100</span> - percent) * <span class="number">-100</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol start="7">
+<li>声道控制</li>
+</ol>
+<p>采用声道控制接口<code>SLMuteSoloItf</code>接口</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  SLMuteSoloItf  pcmMutePlay = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//初始化</span></span><br><span class="line">  (*pcmPlayerObject)-&gt;GetInterface(pcmPlayerObject, SL_IID_MUTESOLO, &amp;pcmMutePlay);</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 设置声道：</span></span><br><span class="line">  (*pcmPlayPlayerMuteSolo)-&gt;SetChannelMute(</span><br><span class="line">		pcmPlayPlayerMuteSolo, </span><br><span class="line">		<span class="number">1</span>,  <span class="comment">//0右声道1左声道</span></span><br><span class="line">		<span class="literal">false</span> <span class="comment">//声道是否开启</span></span><br><span class="line">		);</span><br></pre></td></tr></table></figure>
+<p>有效示例:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"> SLMuteSoloItf  pcmMutePlay = <span class="literal">NULL</span>;</span><br><span class="line"> <span class="comment">//初始化</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">void</span> WlAudio::setMute(<span class="keyword">int</span> mute) &#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;mute = mute;</span><br><span class="line">    <span class="keyword">if</span>(pcmMutePlay != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(mute == <span class="number">0</span>)<span class="comment">//right</span></span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmMutePlay)-&gt;SetChannelMute(pcmMutePlay, <span class="number">1</span>, <span class="literal">false</span>);</span><br><span class="line">            (*pcmMutePlay)-&gt;SetChannelMute(pcmMutePlay, <span class="number">0</span>, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(mute == <span class="number">1</span>)<span class="comment">//left</span></span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmMutePlay)-&gt;SetChannelMute(pcmMutePlay, <span class="number">1</span>, <span class="literal">true</span>);</span><br><span class="line">            (*pcmMutePlay)-&gt;SetChannelMute(pcmMutePlay, <span class="number">0</span>, <span class="literal">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(mute == <span class="number">2</span>)<span class="comment">//center</span></span><br><span class="line">        &#123;</span><br><span class="line">            (*pcmMutePlay)-&gt;SetChannelMute(pcmMutePlay, <span class="number">1</span>, <span class="literal">false</span>);</span><br><span class="line">            (*pcmMutePlay)-&gt;SetChannelMute(pcmMutePlay, <span class="number">0</span>, <span class="literal">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol start="8">
+<li>录音</li>
+</ol>
+<p>有效示例:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"AndroidLog.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"RecordBuffer.h"</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SLES/OpenSLES.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SLES/OpenSLES_Android.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">bool</span> finish = <span class="literal">false</span>;</span><br><span class="line">FILE *recodeFile = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">static</span> <span class="keyword">int</span> RECORDER_BUFFER_SIZE = <span class="number">4096</span>;</span><br><span class="line"></span><br><span class="line">SLObjectItf engineObject = <span class="literal">NULL</span>;</span><br><span class="line">SLEngineItf engineItf = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">SLObjectItf recordObj = <span class="literal">NULL</span>;</span><br><span class="line">SLRecordItf recordItf = <span class="literal">NULL</span>;</span><br><span class="line">SLAndroidSimpleBufferQueueItf recorderBufferQueue = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">RecordBuffer *recordBuffer = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// this callback handler is called every time a buffer finishes recording</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bqRecorderCallback</span><span class="params">(SLAndroidSimpleBufferQueueItf bq, <span class="keyword">void</span> *context)</span> </span>&#123;</span><br><span class="line">    fwrite(recordBuffer-&gt;getNowBuffer(), <span class="number">1</span>, RECORDER_BUFFER_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">short</span>), recodeFile);</span><br><span class="line">    <span class="keyword">if</span> (finish) &#123;</span><br><span class="line">        LOGE(<span class="string">"录制完成"</span>);</span><br><span class="line">        <span class="comment">//设置停止</span></span><br><span class="line">        (*recordItf)-&gt;SetRecordState(recordItf, SL_RECORDSTATE_STOPPED);</span><br><span class="line"></span><br><span class="line">        fclose(recodeFile);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//释放资源</span></span><br><span class="line">        (*recordObj)-&gt;Destroy(recordObj);</span><br><span class="line">        recordObj = <span class="literal">NULL</span>;</span><br><span class="line">        recordItf = <span class="literal">NULL</span>;</span><br><span class="line">        (*engineObject)-&gt;Destroy(engineObject);</span><br><span class="line">        engineObject = <span class="literal">NULL</span>;</span><br><span class="line">        engineItf = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">delete</span> (recordBuffer);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        LOGE(<span class="string">"正在录制"</span>);</span><br><span class="line">        <span class="comment">// 入队</span></span><br><span class="line">        (*recorderBufferQueue)-&gt;Enqueue(recorderBufferQueue, recordBuffer-&gt;getRecordBuffer(),</span><br><span class="line">                                        RECORDER_BUFFER_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">short</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_openslesrecoder_MainActivity_startRecord(JNIEnv *env, jobject instance,</span><br><span class="line">                                                      jstring path_) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *path = env-&gt;GetStringUTFChars(path_, <span class="number">0</span>);</span><br><span class="line">    finish = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    recodeFile = fopen(path, <span class="string">"w+"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1. 创建引擎对象</span></span><br><span class="line">    slCreateEngine(&amp;engineObject, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 实现引擎对象</span></span><br><span class="line">    (*engineObject)-&gt;Realize(engineObject, SL_BOOLEAN_FALSE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 获取引擎接口</span></span><br><span class="line">    (*engineObject)-&gt;GetInterface(engineObject, SL_IID_ENGINE, &amp;engineItf);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// configure audio source</span></span><br><span class="line">    SLDataLocator_IODevice loc_dev = &#123;SL_DATALOCATOR_IODEVICE, SL_IODEVICE_AUDIOINPUT,</span><br><span class="line">                                      SL_DEFAULTDEVICEID_AUDIOINPUT, <span class="literal">NULL</span>&#125;;</span><br><span class="line">    SLDataSource audioSrc = &#123;&amp;loc_dev, <span class="literal">NULL</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// configure audio sink</span></span><br><span class="line">    SLDataLocator_AndroidSimpleBufferQueue loc_bq = &#123;SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, <span class="number">2</span>&#125;;</span><br><span class="line">    SLDataFormat_PCM format_pcm = &#123;SL_DATAFORMAT_PCM, <span class="comment">//PCM格式</span></span><br><span class="line">                                   <span class="number">2</span>,<span class="comment">//立体声</span></span><br><span class="line">                                   SL_SAMPLINGRATE_44_1,<span class="comment">//44100HZ</span></span><br><span class="line">                                   SL_PCMSAMPLEFORMAT_FIXED_16,<span class="comment">//</span></span><br><span class="line">                                   SL_PCMSAMPLEFORMAT_FIXED_16,</span><br><span class="line">                                   SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT, <span class="comment">//左右声道</span></span><br><span class="line">                                   SL_BYTEORDER_LITTLEENDIAN&#125;;<span class="comment">//小尾端</span></span><br><span class="line">    SLDataSink audioSnk = &#123;&amp;loc_bq, &amp;format_pcm&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// (requires the RECORD_AUDIO permission)</span></span><br><span class="line">    <span class="keyword">const</span> SLInterfaceID id[<span class="number">1</span>] = &#123;SL_IID_ANDROIDSIMPLEBUFFERQUEUE&#125;;</span><br><span class="line">    <span class="keyword">const</span> SLboolean req[<span class="number">1</span>] = &#123;SL_BOOLEAN_TRUE&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//4. 配置获取录音的引擎对象</span></span><br><span class="line">    (*engineItf)-&gt;CreateAudioRecorder(engineItf, &amp;recordObj, &amp;audioSrc,</span><br><span class="line">                                      &amp;audioSnk, <span class="number">1</span>, id, req);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//5. 实现录音的引擎对象</span></span><br><span class="line">    <span class="comment">// realize the audio recorder</span></span><br><span class="line">    (*recordObj)-&gt;Realize(recordObj, SL_BOOLEAN_FALSE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//6. 获取录音的引擎接口</span></span><br><span class="line">    <span class="comment">//get the record interface</span></span><br><span class="line">    (*recordObj)-&gt;GetInterface(recordObj, SL_IID_RECORD, &amp;recordItf);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//7. 获取缓冲队列接口</span></span><br><span class="line">    <span class="comment">//get the buffer queue interface</span></span><br><span class="line">    (*recordObj)-&gt;GetInterface(recordObj, SL_IID_ANDROIDSIMPLEBUFFERQUEUE,</span><br><span class="line">                               &amp;recorderBufferQueue);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//8. 设置录音回掉</span></span><br><span class="line">    (*recorderBufferQueue)-&gt;RegisterCallback(recorderBufferQueue, bqRecorderCallback,</span><br><span class="line">                                             <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    recordBuffer = <span class="keyword">new</span> RecordBuffer(RECORDER_BUFFER_SIZE);</span><br><span class="line">    <span class="comment">//9. 入队</span></span><br><span class="line">    (*recorderBufferQueue)-&gt;Enqueue(recorderBufferQueue, recordBuffer-&gt;getRecordBuffer(),</span><br><span class="line">                                    RECORDER_BUFFER_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">short</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//10. 设置状态开启录音</span></span><br><span class="line">    (*recordItf)-&gt;SetRecordState(recordItf, SL_RECORDSTATE_RECORDING);</span><br><span class="line">    env-&gt;ReleaseStringUTFChars(path_, path);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_openslesrecoder_MainActivity_stopRecord(JNIEnv *env, jobject instance) &#123;</span><br><span class="line"></span><br><span class="line">    finish = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>RecordBuffer.cpp:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"RecordBuffer.h"</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RecordBuffer::RecordBuffer(<span class="keyword">int</span> bufferSize) &#123;</span><br><span class="line">    buffer = <span class="keyword">new</span> <span class="keyword">short</span> *[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        buffer[i] = <span class="keyword">new</span> <span class="keyword">short</span>[bufferSize];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">short</span> *RecordBuffer::getRecordBuffer() &#123;</span><br><span class="line">    index++;</span><br><span class="line">    <span class="keyword">if</span> (index &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        index = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> buffer[index];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">RecordBuffer::~RecordBuffer() &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">delete</span> buffer[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">delete</span> buffer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">short</span> *RecordBuffer::getNowBuffer() &#123;</span><br><span class="line">    <span class="keyword">return</span> buffer[index];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>RecordBuffer.h</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RecordBuffer</span> &#123;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">short</span> **buffer;</span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    RecordBuffer(<span class="keyword">int</span> bufferSize);</span><br><span class="line">    ~RecordBuffer();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">short</span> *<span class="title">getRecordBuffer</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">short</span> * <span class="title">getNowBuffer</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/音视频/" rel="tag"><i class="fa fa-tag"></i> 音视频</a>
+          
+            <a href="/tags/OpenSLES/" rel="tag"><i class="fa fa-tag"></i> OpenSLES</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/生产者消费者模型.html" rel="next" title="生产者消费者模型">
+                <i class="fa fa-chevron-left"></i> 生产者消费者模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ffmpeg音频播放器相关.html" rel="prev" title="ffmpeg 音频播放器相关">
+                ffmpeg 音频播放器相关 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

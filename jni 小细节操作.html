@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,jni," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数组的细节处理1234567891011121314151617181920212223242526272829303132#include &amp;lt;jni.h&amp;gt;#include &amp;lt;string&amp;gt;#include &amp;lt;stdlib.h&amp;gt;int compare(const jint *a, const jint *b) &amp;#123;    return *a - *b;">
+<meta name="keywords" content="android,jni">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jni小细节操作">
+<meta property="og:url" content="http://www.zengzhaowen.cn/jni 小细节操作.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="数组的细节处理1234567891011121314151617181920212223242526272829303132#include &amp;lt;jni.h&amp;gt;#include &amp;lt;string&amp;gt;#include &amp;lt;stdlib.h&amp;gt;int compare(const jint *a, const jint *b) &amp;#123;    return *a - *b;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.106Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jni小细节操作">
+<meta name="twitter:description" content="数组的细节处理1234567891011121314151617181920212223242526272829303132#include &amp;lt;jni.h&amp;gt;#include &amp;lt;string&amp;gt;#include &amp;lt;stdlib.h&amp;gt;int compare(const jint *a, const jint *b) &amp;#123;    return *a - *b;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/jni 小细节操作.html"/>
+
+
+
+
+
+  <title>jni小细节操作 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/jni 小细节操作.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">jni小细节操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-16T09:55:57+08:00">
+                2018-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/jni/" itemprop="url" rel="index">
+                    <span itemprop="name">jni</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/jni 小细节操作.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/jni 小细节操作.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,403字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li>数组的细节处理<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">compare</span><span class="params">(<span class="keyword">const</span> jint *a, <span class="keyword">const</span> jint *b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> *a - *b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_jnidemo_ArrayUtils_sort(JNIEnv *env, jclass type, jintArray array_) &#123;</span><br><span class="line">    jint *intArray = env-&gt;GetIntArrayElements(array_, <span class="literal">NULL</span>);</span><br><span class="line">    jsize length = env-&gt;GetArrayLength(array_);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//排序</span></span><br><span class="line">    <span class="comment">//void *ptr	指向待排序的数组的指针</span></span><br><span class="line">    <span class="comment">//size_t count	数组的元素数目</span></span><br><span class="line">    <span class="comment">//size_t size  数组每个元素的字节大小</span></span><br><span class="line">    <span class="comment">// int (*comp)(const void *, const void *)  比较函数。若首个参数小于第二个，则返回负整数值，若首个参数大于第二个，</span></span><br><span class="line">    <span class="comment">// 则返回正整数值，若两参数相等，则返回零。</span></span><br><span class="line"><span class="comment">//    void qsort( void *ptr, size_t count, size_t size,int (*comp)(const void *, const void *) );</span></span><br><span class="line"></span><br><span class="line">    qsort(intArray, <span class="keyword">static_cast</span>&lt;<span class="keyword">size_t</span>&gt;(length), <span class="keyword">sizeof</span>(<span class="keyword">int</span>),</span><br><span class="line">          <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">int</span> (*)(<span class="keyword">const</span> <span class="keyword">void</span> *, <span class="keyword">const</span> <span class="keyword">void</span> *)&gt;(compare));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//mode =</span></span><br><span class="line">    <span class="comment">//0 表示 既要同步数据给jArray，又要释放intArray</span></span><br><span class="line">    <span class="comment">//JNI_COMMIT : copy content, do not free buffer ,会同步数据给jArray,但是不会释放intArray</span></span><br><span class="line">    <span class="comment">//JNI_ABORT : free buffer w/o copying back ,不会同步数据给jArray,但是会释放intArray</span></span><br><span class="line">    env-&gt;ReleaseIntArrayElements(array_, intArray, JNI_ABORT);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>2.局部引用和全局引用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//局部变量</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_jnidemo_ArrayUtils_localRef(JNIEnv *env, jclass type) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//在Native层侯建的Java对象，不用了该怎么管理? 需要手动回收</span></span><br><span class="line">    <span class="comment">//在Java层开辟的内存由谁管理(JavaGC管理)，能开辟多大内存?</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//字符串截取</span></span><br><span class="line">    jclass str_clz = env-&gt;FindClass(<span class="string">"java/lang/String"</span>);</span><br><span class="line">    jmethodID init_str = env-&gt;GetMethodID(str_clz, <span class="string">"&lt;init&gt;"</span>, <span class="string">"()V"</span>);</span><br><span class="line">    jobject j_str = env-&gt;NewObject(str_clz, init_str);</span><br><span class="line">    <span class="comment">//.....</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//jobject不使用了，需要回收。删除了就不能使用了</span></span><br><span class="line">    env-&gt;DeleteLocalRef(j_str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//全局变量,需要在合适的时机去释放 env-&gt;DeleteGlobalRef(globalStr);删除之后不能使用</span></span><br><span class="line">jstring globalStr;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_jnidemo_ArrayUtils_saveGlobalRef(JNIEnv *env, jclass type, jstring str_) &#123;</span><br><span class="line">    globalStr = <span class="keyword">static_cast</span>&lt;jstring&gt;(env-&gt;NewGlobalRef(str_));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_zzw_jnidemo_ArrayUtils_getStrGlobalRef(JNIEnv *env, jclass type) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> globalStr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.静态缓存策略<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//局部静态缓存</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_jnidemo_ArrayUtils_staticLcalCache(JNIEnv *env, jclass type, jstring name_) &#123;</span><br><span class="line"><span class="comment">//     jfieldID f_id =NULL;</span></span><br><span class="line">    <span class="keyword">static</span> jfieldID f_id = <span class="literal">NULL</span>;<span class="comment">//局部缓存 ,这个方法会被多次调用，不需要反复去获取jfieldID</span></span><br><span class="line">    <span class="keyword">if</span> (!f_id) &#123;</span><br><span class="line">        f_id = env-&gt;GetStaticFieldID(type, <span class="string">"name"</span>, <span class="string">"Ljava/lang/String;"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        LOGE(<span class="string">"f_id不为null"</span>);<span class="comment">//加上static将会缓存</span></span><br><span class="line">    &#125;</span><br><span class="line">    env-&gt;SetStaticObjectField(type, f_id, name_);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//全局静态缓存</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> jfieldID jfieldID1;</span><br><span class="line"><span class="keyword">static</span> jfieldID jfieldID2;</span><br><span class="line"><span class="keyword">static</span> jfieldID jfieldID3;</span><br><span class="line"><span class="comment">//一般初始化的时候调用</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_jnidemo_ArrayUtils_initStatic(JNIEnv *env, jclass type) &#123;</span><br><span class="line">    jfieldID1 = env-&gt;GetStaticFieldID(type, <span class="string">"name"</span>, <span class="string">"Ljava/lang/String;"</span>);</span><br><span class="line">    jfieldID2 = env-&gt;GetStaticFieldID(type, <span class="string">"name1"</span>, <span class="string">"Ljava/lang/String;"</span>);</span><br><span class="line">    jfieldID3 = env-&gt;GetStaticFieldID(type, <span class="string">"name2"</span>, <span class="string">"Ljava/lang/String;"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//如果反复调用设置值得函数，那么将不会每次都获取id</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setData</span><span class="params">(JNIEnv *env, jclass jclazz, jobject object)</span> </span>&#123;</span><br><span class="line">    env-&gt;SetStaticObjectField(jclazz, jfieldID1, object);</span><br><span class="line">    env-&gt;SetStaticObjectField(jclazz, jfieldID2, object);</span><br><span class="line">    env-&gt;SetStaticObjectField(jclazz, jfieldID3, object);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4.异常处理<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_jnidemo_ArrayUtils_exception2(JNIEnv *env, jclass cls) &#123;</span><br><span class="line">    jthrowable exc = <span class="literal">NULL</span>;</span><br><span class="line">    jmethodID mid = env-&gt;GetStaticMethodID(cls, <span class="string">"exceptionCallback"</span>, <span class="string">"()V"</span>);</span><br><span class="line">    <span class="keyword">if</span> (mid != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        env-&gt;CallStaticVoidMethod(cls, mid);</span><br><span class="line">    &#125;</span><br><span class="line">    LOGE(<span class="string">"In C: Java_com_zzw_jnidemo_ArrayUtils_exception2--&gt;called!!!!"</span>);</span><br><span class="line">    <span class="comment">//这种也是可以检测的</span></span><br><span class="line"><span class="comment">//    exc = env-&gt;ExceptionOccurred();  // 返回一个指向当前异常对象的引用</span></span><br><span class="line"><span class="comment">//    if (exc) &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (env-&gt;ExceptionCheck()) &#123;  <span class="comment">// 检查JNI调用是否有引发异常</span></span><br><span class="line">        env-&gt;ExceptionDescribe();<span class="comment">//打印错误信息</span></span><br><span class="line">        env-&gt;ExceptionClear();        <span class="comment">// 清除引发的异常，在Java层不会打印异常的堆栈信息</span></span><br><span class="line">        env-&gt;ThrowNew(env-&gt;FindClass(<span class="string">"java/lang/Exception"</span>), <span class="string">"JNI抛出的异常！"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//补救  。。。</span></span><br><span class="line">    mid = env-&gt;GetStaticMethodID(cls, <span class="string">"normalCallback"</span>, <span class="string">"()V"</span>);</span><br><span class="line">    <span class="keyword">if</span> (mid != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        env-&gt;CallStaticVoidMethod(cls, mid);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">     @Override</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ArrayUtils.exception();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();<span class="comment">//打印抛出的异常</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<ol start="5">
+<li>c++调用java: 这里需要分为在主线程调用还是在子线程调用，在主线程调用就直接通过函数的<code>env</code>调用即可，在子线程调用则需要<code>JavaVM -&gt;AttachCurrentThread</code>拿到<code>env</code>然后调用。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"JavaListener.h"</span></span></span><br><span class="line">JavaVM *jvm;</span><br><span class="line"></span><br><span class="line">JavaListener *javaListener;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_t</span> chidlThread;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">childCallback</span><span class="params">(<span class="keyword">void</span> *data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    JavaListener *javaListener1 = (JavaListener *) data;</span><br><span class="line">    <span class="comment">//子线程调用</span></span><br><span class="line">    javaListener1-&gt;onError(<span class="number">0</span>, <span class="number">101</span>, <span class="string">"c++ call java meid from child thread!"</span>);</span><br><span class="line">    pthread_exit(&amp;chidlThread);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_jnithread_ThreadDemo_callbackFromC(JNIEnv *env, jobject instance) &#123;</span><br><span class="line"></span><br><span class="line">    javaListener = <span class="keyword">new</span> JavaListener(jvm, env, env-&gt;NewGlobalRef(instance));</span><br><span class="line">    <span class="comment">//主线程调用</span></span><br><span class="line">    <span class="comment">//javaListener-&gt;onError(1, 100, "c++ call java meid from main thread!");</span></span><br><span class="line">    <span class="comment">//子线程调用</span></span><br><span class="line">    pthread_create(&amp;chidlThread, <span class="literal">NULL</span>, childCallback, javaListener);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">JNIEXPORT jint JNICALL <span class="title">JNI_OnLoad</span><span class="params">(JavaVM *vm, <span class="keyword">void</span>* reserved)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    JNIEnv *env;</span><br><span class="line">    jvm = vm;</span><br><span class="line">    <span class="keyword">if</span>(vm-&gt;GetEnv((<span class="keyword">void</span> **) &amp;env, JNI_VERSION_1_6) != JNI_OK)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> JNI_VERSION_1_6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>JavaListener.h<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"jni.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> JNITHREAD_JAVALISTENER_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> JNITHREAD_JAVALISTENER_H</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JavaListener</span> &#123;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    JavaVM *jvm;</span><br><span class="line">    _JNIEnv *jenv;</span><br><span class="line">    jobject jobj;</span><br><span class="line">    jmethodID jmid;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    JavaListener(JavaVM *vm, _JNIEnv *env, jobject obj);</span><br><span class="line">    ~JavaListener();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 1:主线程</span></span><br><span class="line"><span class="comment">     * 0：子线程</span></span><br><span class="line"><span class="comment">     * @param type</span></span><br><span class="line"><span class="comment">     * @param code</span></span><br><span class="line"><span class="comment">     * @param msg</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onError</span><span class="params">(<span class="keyword">int</span> type, <span class="keyword">int</span> code, <span class="keyword">const</span> <span class="keyword">char</span> *msg)</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">//JNITHREAD_JAVALISTENER_H</span></span></span><br></pre></td></tr></table></figure></p>
+<p>JavaListener.cpp<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"JavaListener.h"</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> JavaListener::onError(<span class="keyword">int</span> type, <span class="keyword">int</span> code, <span class="keyword">const</span> <span class="keyword">char</span> *msg) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(type == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        JNIEnv *env;</span><br><span class="line">        jvm-&gt;AttachCurrentThread(&amp;env, <span class="number">0</span>);</span><br><span class="line">        jstring jmsg = env-&gt;NewStringUTF(msg);</span><br><span class="line">        env-&gt;CallVoidMethod(jobj, jmid, code, jmsg);</span><br><span class="line">        env-&gt;DeleteLocalRef(jmsg);</span><br><span class="line"></span><br><span class="line">        jvm-&gt;DetachCurrentThread();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(type == <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        jstring jmsg = jenv-&gt;NewStringUTF(msg);</span><br><span class="line">        jenv-&gt;CallVoidMethod(jobj, jmid, code, jmsg);</span><br><span class="line">        jenv-&gt;DeleteLocalRef(jmsg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">JavaListener::JavaListener(JavaVM *vm, _JNIEnv *env, jobject obj) &#123;</span><br><span class="line"></span><br><span class="line">    jvm = vm;</span><br><span class="line">    jenv = env;</span><br><span class="line">    jobj = obj;</span><br><span class="line"></span><br><span class="line">    jclass clz = env-&gt;GetObjectClass(jobj);</span><br><span class="line">    <span class="keyword">if</span>(!clz)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    jmid = env-&gt;GetMethodID(clz, <span class="string">"onError"</span>, <span class="string">"(ILjava/lang/String;)V"</span>);</span><br><span class="line">    <span class="keyword">if</span>(!jmid)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>ThreadDemo.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span></span><br><span class="line">    &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"native-lib"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> OnErrerListener onErrerListener;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOnErrerListener</span><span class="params">(OnErrerListener onErrerListener)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.onErrerListener = onErrerListener;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(<span class="keyword">int</span> code, String msg)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(onErrerListener != <span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            onErrerListener.onError(code, msg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnErrerListener</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">onError</span><span class="params">(<span class="keyword">int</span> code, String msg)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span>  <span class="keyword">void</span> <span class="title">callbackFromC</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          
+            <a href="/tags/jni/" rel="tag"><i class="fa fa-tag"></i> jni</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/jni基础.html" rel="next" title="jni基础">
+                <i class="fa fa-chevron-left"></i> jni基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ffmpeg编译.html" rel="prev" title="ffmpeg编译">
+                ffmpeg编译 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

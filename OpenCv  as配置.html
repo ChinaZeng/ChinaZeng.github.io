@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,openCv,cmake," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用opencv4android的java库，这里说下怎么把OpencvManager去除，把copy到opencv的javalib里面当so运行就可，调用initDebug初始化即可，目录结构如下:   根据需要导入对应的动态库以及头文件自己编译so库，主要配置如下build.gradle  12345678910111213141516171819android &amp;#123;    defa">
+<meta name="keywords" content="android,openCv,cmake">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCv  as配置">
+<meta property="og:url" content="http://www.zengzhaowen.cn/OpenCv  as配置.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="使用opencv4android的java库，这里说下怎么把OpencvManager去除，把copy到opencv的javalib里面当so运行就可，调用initDebug初始化即可，目录结构如下:   根据需要导入对应的动态库以及头文件自己编译so库，主要配置如下build.gradle  12345678910111213141516171819android &amp;#123;    defa">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/8CA6E7EFA7234DEE82EE0073F268E47E?method=download&shareKey=121e8ba665f56c9a09a3f0cc0dfe6e6d">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/85260B74ED0047F19E2A5803AB65C1EF?method=download&shareKey=7ac3092a05e4f5d2eddbc640b693e4bf">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/AB870422A24C42B2B089DC3FC5CDD24D?method=download&shareKey=9d7d71fbb216da828b04d7873115f8a1">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/A533FE483D094BE2BE86F2762F4E214D?method=download&shareKey=f2ecae1339e0b28ed5f42fa6443841fe">
+<meta property="og:updated_time" content="2019-04-15T09:37:07.099Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenCv  as配置">
+<meta name="twitter:description" content="使用opencv4android的java库，这里说下怎么把OpencvManager去除，把copy到opencv的javalib里面当so运行就可，调用initDebug初始化即可，目录结构如下:   根据需要导入对应的动态库以及头文件自己编译so库，主要配置如下build.gradle  12345678910111213141516171819android &amp;#123;    defa">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/8CA6E7EFA7234DEE82EE0073F268E47E?method=download&shareKey=121e8ba665f56c9a09a3f0cc0dfe6e6d">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/OpenCv  as配置.html"/>
+
+
+
+
+
+  <title>OpenCv  as配置 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/OpenCv  as配置.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OpenCv  as配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-30T10:15:57+08:00">
+                2018-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cmake/" itemprop="url" rel="index">
+                    <span itemprop="name">cmake</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/OpenCv  as配置.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/OpenCv  as配置.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  751字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li>使用opencv4android的java库，这里说下怎么把OpencvManager去除，把<br><img src="https://note.youdao.com/yws/api/personal/file/8CA6E7EFA7234DEE82EE0073F268E47E?method=download&amp;shareKey=121e8ba665f56c9a09a3f0cc0dfe6e6d" alt="">copy到opencv的javalib里面当so运行就可，调用initDebug初始化即可<br><img src="https://note.youdao.com/yws/api/personal/file/85260B74ED0047F19E2A5803AB65C1EF?method=download&amp;shareKey=7ac3092a05e4f5d2eddbc640b693e4bf" alt="">，目录结构如下:<br><img src="https://note.youdao.com/yws/api/personal/file/AB870422A24C42B2B089DC3FC5CDD24D?method=download&amp;shareKey=9d7d71fbb216da828b04d7873115f8a1" alt=""></li>
+</ol>
+<ol start="2">
+<li>根据需要导入对应的动态库以及头文件自己编译so库，主要配置如下<br><code>build.gradle</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        externalNativeBuild &#123;</span><br><span class="line">            cmake &#123;</span><br><span class="line">                arguments &quot;-DANDROID_TOOLCHAIN=clang&quot;</span><br><span class="line">                cppFlags &quot;-std=c++11&quot;,&quot;-frtti&quot;, &quot;-fexceptions&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ndk&#123;</span><br><span class="line">            abiFilters &apos;armeabi-v7a&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    externalNativeBuild &#123;</span><br><span class="line">        cmake &#123;</span><br><span class="line">            path &quot;CMakeLists.txt&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>CMakeLists.txt</code>   注意<code>target_link_libraries</code>顺序。这里libopencv_java3其实已经包括了其他的了，我的理解是用了java3这个后面的动态库就可以不用添加了，我只是把可能用到的全部写了出来，以后好copy。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"># For more information about using CMake with Android Studio, read the</span><br><span class="line"># documentation: https://d.android.com/studio/projects/add-native-code.html</span><br><span class="line"></span><br><span class="line"># Sets the minimum version of CMake required to build the native library.</span><br><span class="line"></span><br><span class="line">cmake_minimum_required(VERSION 3.4.1)</span><br><span class="line"></span><br><span class="line">set(CMAKE_VERBOSE_MAKEFILE on)</span><br><span class="line">set(libs &quot;$&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs&quot;)</span><br><span class="line">include_directories($&#123;CMAKE_SOURCE_DIR&#125;/src/main/cpp/include)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_java3 SHARED IMPORTED )</span><br><span class="line">set_target_properties(libopencv_java3 PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_java3.so&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_calib3d STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_calib3d PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_calib3d.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_core STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_core PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_core.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_features2d STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_features2d PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_features2d.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_flann STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_flann PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_flann.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_highgui STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_highgui PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_highgui.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_imgcodecs STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_imgcodecs PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_imgcodecs.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_imgproc STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_imgproc PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_imgproc.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_ml STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_ml PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_ml.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_objdetect STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_objdetect PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_objdetect.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_photo STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_photo PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_photo.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_shape STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_shape PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_shape.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_stitching STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_stitching PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_stitching.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_superres STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_superres PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_superres.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_video STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_video PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_video.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_videoio STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_videoio PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_videoio.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_videostab STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_videostab PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_videostab.a&quot;)</span><br><span class="line"></span><br><span class="line">add_library(libopencv_ts STATIC IMPORTED )</span><br><span class="line">set_target_properties(libopencv_ts PROPERTIES</span><br><span class="line">    IMPORTED_LOCATION &quot;$&#123;libs&#125;/$&#123;ANDROID_ABI&#125;/libopencv_ts.a&quot;)</span><br><span class="line"></span><br><span class="line">#set(CMAKE_CXX_FLAGS &quot;$&#123;CMAKE_CXX_FLAGS&#125; -std=gnu++11 -fexceptions -frtti&quot;)</span><br><span class="line">#支持-std=gnu++11</span><br><span class="line">set(CMAKE_VERBOSE_MAKEFILE on)</span><br><span class="line">set(CMAKE_CXX_FLAGS &quot;$&#123;CMAKE_CXX_FLAGS&#125; -std=gnu++11 -Wall -DGLM_FORCE_SIZE_T_LENGTH&quot;)</span><br><span class="line">set(CMAKE_CXX_FLAGS &quot;$&#123;CMAKE_CXX_FLAGS&#125; -DGLM_FORCE_RADIANS&quot;)</span><br><span class="line"></span><br><span class="line">#include_directories(D:/Projects/Android/CLMAndroid/OpenCV-android-sdk/sdk/native/jni/include )</span><br><span class="line">#set(OpenCV_DIR D:/Projects/Android/CLMAndroid/OpenCV-android-sdk/sdk/native/jni)</span><br><span class="line">#find_package(OpenCV REQUIRED)</span><br><span class="line">#target_link_libraries($&#123;OpenCV_LIBS&#125;)</span><br><span class="line"></span><br><span class="line">add_library( # Sets the name of the library.</span><br><span class="line">             native-lib</span><br><span class="line"></span><br><span class="line">             # Sets the library as a shared library.</span><br><span class="line">             SHARED</span><br><span class="line"></span><br><span class="line">             # Provides a relative path to your source file(s).</span><br><span class="line">             # Associated headers in the same location as their source</span><br><span class="line">             # file are automatically included.</span><br><span class="line">             src/main/cpp/native-lib.cpp )</span><br><span class="line"></span><br><span class="line">find_library( # Sets the name of the path variable.</span><br><span class="line">              log-lib</span><br><span class="line"></span><br><span class="line">              # Specifies the name of the NDK library that</span><br><span class="line">              # you want CMake to locate.</span><br><span class="line">              log)</span><br><span class="line"></span><br><span class="line">target_link_libraries(native-lib log</span><br><span class="line">    libopencv_java3 libopencv_calib3d libopencv_core libopencv_features2d libopencv_flann libopencv_highgui libopencv_imgcodecs</span><br><span class="line">    libopencv_imgproc libopencv_ml libopencv_objdetect libopencv_photo libopencv_shape libopencv_stitching libopencv_superres</span><br><span class="line">    libopencv_video libopencv_videoio libopencv_videostab</span><br><span class="line">    $&#123;log-lib&#125;</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>目录结构：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/A533FE483D094BE2BE86F2762F4E214D?method=download&amp;shareKey=f2ecae1339e0b28ed5f42fa6443841fe" alt="目录结构"></p>
+<ol start="3">
+<li>通过opencv 的源码，重新编译成 Android sdk 库，很复杂，好处就是可以实时的弄到新功能。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"><i class="fa fa-tag"></i> android</a>
+          
+            <a href="/tags/openCv/" rel="tag"><i class="fa fa-tag"></i> openCv</a>
+          
+            <a href="/tags/cmake/" rel="tag"><i class="fa fa-tag"></i> cmake</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/zygote篇.html" rel="next" title="zygote篇">
+                <i class="fa fa-chevron-left"></i> zygote篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Glide v3.7源码分析(1)-----Glide.with().html" rel="prev" title="Glide v3.7源码分析(1)-----Glide.with()">
+                Glide v3.7源码分析(1)-----Glide.with() <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
