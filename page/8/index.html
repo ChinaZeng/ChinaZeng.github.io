@@ -292,6 +292,198 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/自定义View（3） -- 字母索引.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/自定义View（3） -- 字母索引.html" itemprop="url">自定义View（3） -- 字母索引</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-08T09:52:57+08:00">
+                2018-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/自定义view/" itemprop="url" rel="index">
+                    <span itemprop="name">自定义view</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/自定义View（3） -- 字母索引.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/自定义View（3） -- 字母索引.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  788字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>效果图:<br><img src="http://upload-images.jianshu.io/upload_images/4658633-a66ad0b9d75308ac.gif?imageMogr2/auto-orient/strip" alt="字母索引"></p>
+<p>自定义<code>view</code>的流程，具体请点此查看：<a href="&quot;http://www.jianshu.com/p/9e57d84b4497&quot;">自定义view套路</a><br>我们先重写构造器，然后重写<code>onMeasure</code>函数进行测量设置宽高，在本例中，宽我是根据<code>padding</code>和测量一个字母<code>w</code>的宽度来设置的，高度就是默认的，因为一般是设置为<code>match_parent</code>.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AlphabeticalIndexView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">AlphabeticalIndexView</span><span class="params">(Context context, @Nullable AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">this</span>(context, attrs, <span class="number">0</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">AlphabeticalIndexView</span><span class="params">(Context context, @Nullable AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">       init(context);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">       <span class="keyword">int</span> w = (<span class="keyword">int</span>) (getPaddingLeft() + getPaddingRight() + DisplayUtil.getTextWidth(<span class="string">"W"</span>, mPaint));</span><br><span class="line">       <span class="keyword">int</span> h = getMeasuredHeight();</span><br><span class="line">       setMeasuredDimension(w, h);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">       mPaint = <span class="keyword">new</span> Paint();</span><br><span class="line">       mPaint.setAntiAlias(<span class="keyword">true</span>);</span><br><span class="line">       mPaint.setTextSize(DisplayUtil.sp2px(context, <span class="number">15</span>));</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>因为不是<code>viewGroup</code>，所以不必重写<code>onLayout</code>函数,我们直接进入<code>onDraw</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">        <span class="comment">// 每个字母所占用的高度</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mLetters.length; i++) &#123;</span><br><span class="line">            String letter = mLetters[i];</span><br><span class="line">            <span class="keyword">if</span> (letter.equals(mCurrentTouchLetter))</span><br><span class="line">                mPaint.setColor(Color.BLUE);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                mPaint.setColor(Color.GRAY);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 获取字体的宽度</span></span><br><span class="line">            <span class="keyword">float</span> measureTextWidth = mPaint.measureText(letter);</span><br><span class="line">            <span class="comment">// 获取内容的宽度</span></span><br><span class="line">            <span class="keyword">int</span> contentWidth = getWidth() - getPaddingLeft() - getPaddingRight();</span><br><span class="line"></span><br><span class="line">            canvas.drawText(letter, getPaddingLeft() + (contentWidth - measureTextWidth) / <span class="number">2</span>, getPaddingTop()  + mSingLetterHeight * i + DisplayUtil.getTextBaseLine(mPaint), mPaint);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里可能有点疑惑，为什么要用内容的宽度减去字体的宽度然后除于<code>2</code>，这是因为每个字母的宽度都不一样，如果不这样做的画，那么比如<code>I</code>就会和<code>A W</code>等字母左对齐，我们这样做的目的就是为了都居中。<br>这样我们就实现了一个静态的页面没我们要让他触摸改变，我们就重写<code>onTouchEvent</code>进行操作，并且添加相应的回调。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent ev)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">switch</span> (ev.getAction()) &#123;</span><br><span class="line">           <span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">           <span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">               <span class="comment">// 获取当前手指触摸的Y位置</span></span><br><span class="line">               <span class="keyword">float</span> fingerY = ev.getY();</span><br><span class="line">               <span class="keyword">int</span> pos = (<span class="keyword">int</span>) (fingerY / mSingLetterHeight);</span><br><span class="line">               <span class="keyword">if</span> (pos &gt; -<span class="number">1</span> &amp;&amp; pos &lt; mLetters.length &amp;&amp; !mLetters[pos].equals(mCurrentTouchLetter)) &#123;</span><br><span class="line">                   mCurrentTouchLetter = mLetters[pos];</span><br><span class="line">                   triggerTouchListener(<span class="keyword">true</span>);</span><br><span class="line">                   invalidate();</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">break</span>;</span><br><span class="line">           <span class="keyword">case</span> MotionEvent.ACTION_UP:</span><br><span class="line">               triggerTouchListener(<span class="keyword">false</span>);</span><br><span class="line">               <span class="keyword">break</span>;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">triggerTouchListener</span><span class="params">(<span class="keyword">boolean</span> isTouch)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (mTouchListener != <span class="keyword">null</span>)</span><br><span class="line">           mTouchListener.onTouch(mCurrentTouchLetter, isTouch);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 设置触摸监听</span></span><br><span class="line">   <span class="keyword">private</span> SideBarTouchListener mTouchListener;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOnSideBarTouchListener</span><span class="params">(SideBarTouchListener touchListener)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">this</span>.mTouchListener = touchListener;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SideBarTouchListener</span> </span>&#123;</span><br><span class="line">       <span class="function"><span class="keyword">void</span> <span class="title">onTouch</span><span class="params">(String letter, <span class="keyword">boolean</span> isTouch)</span></span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样我们就可以实现了这个功能点。<br><strong>优化思路</strong><br>一个<code>view</code>绘制出来我们还需要进行优化，这一步是非常重要的。在本例中，我们的优化主要是在 <code>onTouchEvent</code>里面，因为我们知道，<code>invalidate</code>函数是一个一个做了很多事情的函数，具体请看:<a href="http://www.jianshu.com/p/e1fcec79249b" target="_blank" rel="noopener">Android invalidate流程分析</a>   我们要减少它的调用，所以我们应该先判断一下，如果当前的这个索引和触摸的这个不一样的话才调用<code>invalidate</code>，这样的话就优雅很多了。在本例中我没有将需要改变的属性，比如字体大小、选中颜色、默认颜色等提取在<code>attr</code>里面，需要的请自行添加。<br>参考:<a href="http://www.jianshu.com/p/1dc41a770f64" target="_blank" rel="noopener">Android字母索引列表</a></p>
+<p>源码github下载地址:<br><a href="https://github.com/ChinaZeng/CustomView" target="_blank" rel="noopener">https://github.com/ChinaZeng/CustomView</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+    <div>
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/自定义View（2） -- 58同城加载动画.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2337,7 +2529,7 @@ LM是相互的兄弟节点  ）</code>；</li>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">79</span>
+                  <span class="site-state-item-count">80</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

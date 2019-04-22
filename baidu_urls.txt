@@ -1,3 +1,4 @@
+http://www.zengzhaowen.cn/Android配置EGL环境C++版.html
 http://www.zengzhaowen.cn/Android使用libRtmp直播推流.html
 http://www.zengzhaowen.cn/Android集成libRtmp.html
 http://www.zengzhaowen.cn/MediaCodec录制音视频并将合成为一个文件.html
@@ -54,8 +55,8 @@ http://www.zengzhaowen.cn/ThreadLocal源码分析.html
 http://www.zengzhaowen.cn/OkHttp系统拦截器.html
 http://www.zengzhaowen.cn/Android EventBus3.0源码分析.html
 http://www.zengzhaowen.cn/Android ClassLoader流程解读并简单方式实现热更新.html
-http://www.zengzhaowen.cn/Android View绘制流程分析.html
 http://www.zengzhaowen.cn/Android invalidate流程分析.html
+http://www.zengzhaowen.cn/Android View绘制流程分析.html
 http://www.zengzhaowen.cn/Android 通过自己创建Resources加载非身生apk的资源.html
 http://www.zengzhaowen.cn/Android setContentView()源码流程分析.html
 http://www.zengzhaowen.cn/Android LayoutInflater.inflate()源码流程分析.html

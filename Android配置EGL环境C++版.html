@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<!--添加头部进度条-->
+<!-- <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style> -->
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="OpenGLES,c/c++," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="android搭建opengles 的egl环境之前使用java已经写过，但是一般实际开发opengles的相关代码都在native层，因为native的话效率会比java高很多，步骤都是一致的，只是换一种语言写而已。之前使用java写的opengles egl环境搭建点击下面链接:https://www.jianshu.com/p/ce3496ab9e02 本文demo下载地址:https://">
+<meta name="keywords" content="OpenGLES,c&#x2F;c++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android配置EGL环境C++版">
+<meta property="og:url" content="http://www.zengzhaowen.cn/Android配置EGL环境C++版.html">
+<meta property="og:site_name" content="曾大稳丶">
+<meta property="og:description" content="android搭建opengles 的egl环境之前使用java已经写过，但是一般实际开发opengles的相关代码都在native层，因为native的话效率会比java高很多，步骤都是一致的，只是换一种语言写而已。之前使用java写的opengles egl环境搭建点击下面链接:https://www.jianshu.com/p/ce3496ab9e02 本文demo下载地址:https://">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB4a3d53c592b822848e0fcb7db0595bed?method=download&shareKey=a82ef39457fce5127c000f62d2314067">
+<meta property="og:updated_time" content="2019-04-22T10:24:29.521Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android配置EGL环境C++版">
+<meta name="twitter:description" content="android搭建opengles 的egl环境之前使用java已经写过，但是一般实际开发opengles的相关代码都在native层，因为native的话效率会比java高很多，步骤都是一致的，只是换一种语言写而已。之前使用java写的opengles egl环境搭建点击下面链接:https://www.jianshu.com/p/ce3496ab9e02 本文demo下载地址:https://">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEB4a3d53c592b822848e0fcb7db0595bed?method=download&shareKey=a82ef39457fce5127c000f62d2314067">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zengzhaowen.cn/Android配置EGL环境C++版.html"/>
+
+
+
+
+
+  <title>Android配置EGL环境C++版 | 曾大稳丶</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ccc0cac4d5d9e6f8efec9c129ada134d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">曾大稳丶</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zengzhaowen.cn/Android配置EGL环境C++版.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="曾大稳丶">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="曾大稳丶">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android配置EGL环境C++版</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-22T17:44:04+08:00">
+                2019-04-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenGLES/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenGLES</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Android配置EGL环境C++版.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Android配置EGL环境C++版.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,405字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>android搭建opengles 的egl环境之前使用java已经写过，但是一般实际开发opengles的相关代码都在native层，因为native的话效率会比java高很多，步骤都是一致的，只是换一种语言写而已。之前使用java写的opengles egl环境搭建点击下面链接:<br><a href="https://www.jianshu.com/p/ce3496ab9e02" target="_blank" rel="noopener">https://www.jianshu.com/p/ce3496ab9e02</a></p>
+<p>本文demo下载地址:<br><a href="https://github.com/ChinaZeng/NativeEglDemo" target="_blank" rel="noopener">https://github.com/ChinaZeng/NativeEglDemo</a></p>
+<p>步骤都是一样的：</p>
+<blockquote>
+<p>1、得到Egl实例<br>2、得到默认的显示设备（就是窗口）<br>3、初始化默认显示设备<br>4、设置显示设备的属性<br>5、从系统中获取对应属性的配置<br>6、创建EglContext<br>7、创建渲染的Surface<br>8、绑定EglContext和Surface到显示设备中<br>9、刷新数据，显示渲染场景</p>
+</blockquote>
+<p>代码目录:</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB4a3d53c592b822848e0fcb7db0595bed?method=download&amp;shareKey=a82ef39457fce5127c000f62d2314067" alt="代码目录"></p>
+<ol>
+<li><p>首先配置android ndk开发环境，我使用的是cmake</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.4</span>.<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_library</span>( <span class="comment"># Sets the name of the library.</span></span><br><span class="line">        native-lib</span><br><span class="line">        SHARED</span><br><span class="line">        native-lib.cpp</span><br><span class="line">        egl/EglHelper.cpp</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="keyword">target_link_libraries</span>(</span><br><span class="line">        native-lib</span><br><span class="line">        EGL</span><br><span class="line">        GLESv2</span><br><span class="line">        android</span><br><span class="line">        log</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>书写EglHelper，这个类主要负责egl的环境初始化，绘制和销毁</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//环境搭建初始化</span></span><br><span class="line"><span class="keyword">int</span> EglHelper::initEgl(EGLNativeWindowType window) &#123;</span><br><span class="line">    <span class="comment">//1.得到默认的显示设备（就是窗口） -- eglGetDisplay</span></span><br><span class="line">    mEglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);</span><br><span class="line">    <span class="keyword">if</span> (mEglDisplay == EGL_NO_DISPLAY) &#123;</span><br><span class="line">        LOGE(<span class="string">"eglGetDisplay error"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 初始化默认显示设备 -- eglInitialize</span></span><br><span class="line">    EGLint *version = <span class="keyword">new</span> EGLint[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">if</span> (!eglInitialize(mEglDisplay, &amp;version[<span class="number">0</span>], &amp;version[<span class="number">1</span>])) &#123;</span><br><span class="line">        LOGE(<span class="string">"eglInitialize error"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 设置显示设备的属性</span></span><br><span class="line">    <span class="keyword">const</span> EGLint attrib_config_list[] = &#123;</span><br><span class="line">            EGL_RED_SIZE, <span class="number">8</span>,</span><br><span class="line">            EGL_GREEN_SIZE, <span class="number">8</span>,</span><br><span class="line">            EGL_BLUE_SIZE, <span class="number">8</span>,</span><br><span class="line">            EGL_ALPHA_SIZE, <span class="number">8</span>,</span><br><span class="line">            EGL_DEPTH_SIZE, <span class="number">8</span>,</span><br><span class="line">            EGL_STENCIL_SIZE, <span class="number">8</span>,<span class="comment">// 眼睛屏幕的距离</span></span><br><span class="line">            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,<span class="comment">//版本号</span></span><br><span class="line">            EGL_NONE</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3.1 根据所需的参数获取符合该参数的config_size，主要是解决有些手机eglChooseConfig失败的兼容性问题</span></span><br><span class="line">    EGLint num_config;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!eglChooseConfig(mEglDisplay, attrib_config_list, <span class="literal">NULL</span>, <span class="number">1</span>, &amp;num_config)) &#123;</span><br><span class="line">        LOGE(<span class="string">"eglChooseConfig error"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//3.2 根据获取到的config_size得到eglConfig</span></span><br><span class="line">    EGLConfig eglConfig;</span><br><span class="line">    <span class="keyword">if</span> (!eglChooseConfig(mEglDisplay, attrib_config_list, &amp;eglConfig, num_config, &amp;num_config)) &#123;</span><br><span class="line">        LOGE(<span class="string">"eglChooseConfig error"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//4. 创建egl上下文 eglCreateContext</span></span><br><span class="line">    <span class="keyword">const</span> EGLint attrib_ctx_list[] = &#123;</span><br><span class="line">            EGL_CONTEXT_CLIENT_VERSION, <span class="number">2</span>,</span><br><span class="line">            EGL_NONE</span><br><span class="line">    &#125;;</span><br><span class="line">    mEglContext = eglCreateContext(mEglDisplay, eglConfig, <span class="literal">NULL</span>, attrib_ctx_list);</span><br><span class="line">    <span class="keyword">if</span> (mEglContext == EGL_NO_CONTEXT) &#123;</span><br><span class="line">        LOGE(<span class="string">"eglCreateContext  error"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//5.创建渲染的surface</span></span><br><span class="line">    mEglSurface = eglCreateWindowSurface(mEglDisplay, eglConfig, window, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (mEglSurface == EGL_NO_SURFACE) &#123;</span><br><span class="line">        LOGE(<span class="string">"eglCreateWindowSurface  error"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//6. 绑定eglContext和surface到display</span></span><br><span class="line">    <span class="keyword">if</span> (!eglMakeCurrent(mEglDisplay, mEglSurface, mEglSurface, mEglContext)) &#123;</span><br><span class="line">        LOGE(<span class="string">"eglMakeCurrent  error"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//7. 刷新数据，显示渲染场景 -- eglSwapBuffers</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//交换缓冲 绘制</span></span><br><span class="line"><span class="keyword">int</span> EglHelper::swapBuffers() &#123;</span><br><span class="line">    <span class="keyword">if</span> (mEglDisplay != EGL_NO_DISPLAY &amp;&amp; mEglSurface != EGL_NO_SURFACE &amp;&amp;</span><br><span class="line">        eglSwapBuffers(mEglDisplay, mEglSurface)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//销毁</span></span><br><span class="line"><span class="keyword">void</span> EglHelper::destroyEgl() &#123;</span><br><span class="line">    <span class="keyword">if</span> (mEglDisplay != EGL_NO_DISPLAY) &#123;</span><br><span class="line">        <span class="comment">//解绑display上的eglContext和surface</span></span><br><span class="line">        eglMakeCurrent(mEglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//销毁surface 和 eglContext</span></span><br><span class="line">        <span class="keyword">if</span> (mEglSurface != EGL_NO_SURFACE) &#123;</span><br><span class="line">            eglDestroySurface(mEglDisplay, mEglSurface);</span><br><span class="line">            mEglSurface = EGL_NO_SURFACE;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mEglContext != EGL_NO_CONTEXT) &#123;</span><br><span class="line">            eglDestroyContext(mEglDisplay, mEglContext);</span><br><span class="line">            mEglContext = EGL_NO_CONTEXT;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mEglDisplay != EGL_NO_DISPLAY) &#123;</span><br><span class="line">            eglTerminate(mEglDisplay);</span><br><span class="line">            mEglDisplay = EGL_NO_DISPLAY;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>书写EglThread，顾名思义，这个类主要负责开启一个线程然后根据外部的生命周期调用EglHelper完成egl的环境搭建，并且和外部交互。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">EglThread::EglThread() &#123;</span><br><span class="line">    pthread_mutex_init(&amp;pthread_mutex, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_cond_init(&amp;pthread_cond, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">EglThread::~EglThread() &#123;</span><br><span class="line">    pthread_mutex_destroy(&amp;pthread_mutex);</span><br><span class="line">    pthread_cond_destroy(&amp;pthread_cond);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">eglThreadImpl</span><span class="params">(<span class="keyword">void</span> *context)</span> </span>&#123;</span><br><span class="line">    EglThread *eglThread = <span class="keyword">static_cast</span>&lt;EglThread *&gt;(context);</span><br><span class="line">    <span class="keyword">if</span> (!eglThread) &#123;</span><br><span class="line">        LOGE(<span class="string">"eglThreadImpl eglThread is null"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    EglHelper *eglHelper = <span class="keyword">new</span> EglHelper();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (eglHelper-&gt;initEgl(eglThread-&gt;mANativeWindow) != <span class="number">0</span>) &#123;</span><br><span class="line">        LOGE(<span class="string">"eglHelper initEgl error"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    eglThread-&gt;isExit = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">while</span> (!eglThread-&gt;isExit) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (eglThread-&gt;isCreate) &#123;</span><br><span class="line">            eglThread-&gt;isCreate = <span class="literal">false</span>;</span><br><span class="line">            eglThread-&gt;onCreate();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (eglThread-&gt;isChange) &#123;</span><br><span class="line">            eglThread-&gt;isChange = <span class="literal">false</span>;</span><br><span class="line">            eglThread-&gt;isStart = <span class="literal">true</span>;</span><br><span class="line">            eglThread-&gt;onChange(eglThread-&gt;surfaceWidth, eglThread-&gt;surfaceHeight);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (eglThread-&gt;isStart) &#123;</span><br><span class="line">            eglThread-&gt;onDraw();</span><br><span class="line">            <span class="comment">//切换缓冲区，显示</span></span><br><span class="line">            eglHelper-&gt;swapBuffers();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (eglThread-&gt;mRenderType == RENDER_MODULE_AUTO) &#123;</span><br><span class="line">                usleep(<span class="number">1000000</span> / <span class="number">60</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                pthread_mutex_lock(&amp;eglThread-&gt;pthread_mutex);</span><br><span class="line">                pthread_cond_wait(&amp;eglThread-&gt;pthread_cond, &amp;eglThread-&gt;pthread_mutex);</span><br><span class="line">                pthread_mutex_unlock(&amp;eglThread-&gt;pthread_mutex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    eglHelper-&gt;destroyEgl();</span><br><span class="line">    <span class="keyword">delete</span> eglHelper;</span><br><span class="line">    eglHelper = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="comment">//return 0表示线程结束</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> EglThread::onSurfaceCreate(EGLNativeWindowType window) &#123;</span><br><span class="line">    <span class="keyword">if</span> (mEglThread == <span class="number">-1</span>) &#123;</span><br><span class="line">        isCreate = <span class="literal">true</span>;</span><br><span class="line">        mANativeWindow = window;</span><br><span class="line">        pthread_create(&amp;mEglThread, <span class="literal">NULL</span>, eglThreadImpl, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> EglThread::onSurfaceChange(<span class="keyword">int</span> width, <span class="keyword">int</span> height) &#123;</span><br><span class="line">    <span class="keyword">if</span> (mEglThread != <span class="number">-1</span>) &#123;</span><br><span class="line">        surfaceWidth = width;</span><br><span class="line">        surfaceHeight = height;</span><br><span class="line">        isChange = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        notifyRender();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> EglThread::setRenderModule(<span class="keyword">int</span> renderType) &#123;</span><br><span class="line">    mRenderType = renderType;</span><br><span class="line">    notifyRender();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> EglThread::notifyRender() &#123;</span><br><span class="line">    pthread_mutex_lock(&amp;pthread_mutex);</span><br><span class="line">    pthread_cond_signal(&amp;pthread_cond);</span><br><span class="line">    pthread_mutex_unlock(&amp;pthread_mutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> EglThread::callBackOnCreate(EglThread::OnCreate onCreate) &#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;onCreate = onCreate;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> EglThread::callBackOnChange(EglThread::OnChange onChange) &#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;onChange = onChange;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> EglThread::callBackOnDraw(EglThread::OnDraw onDraw) &#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;onDraw = onDraw;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>书写java层和native层交互，对应生命周期回调即可<br>NationOpenGL.java<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NationOpenGL</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"native-lib"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">nativeSurfaceCreate</span><span class="params">(Surface surface)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">nativeSurfaceChanged</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">nativeSurfaceDestroyed</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>NativeGLSurfaceView.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NativeGLSurfaceView</span> <span class="keyword">extends</span> <span class="title">SurfaceView</span> <span class="keyword">implements</span> <span class="title">SurfaceHolder</span>.<span class="title">Callback</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> NationOpenGL mNationOpenGL;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NativeGLSurfaceView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NativeGLSurfaceView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, attrs, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NativeGLSurfaceView</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">        mNationOpenGL = <span class="keyword">new</span> NationOpenGL();</span><br><span class="line">        getHolder().addCallback(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">surfaceCreated</span><span class="params">(SurfaceHolder holder)</span> </span>&#123;</span><br><span class="line">        mNationOpenGL.nativeSurfaceCreate(holder.getSurface());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">surfaceChanged</span><span class="params">(SurfaceHolder holder, <span class="keyword">int</span> format, <span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">        mNationOpenGL.nativeSurfaceChanged(width, height);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">surfaceDestroyed</span><span class="params">(SurfaceHolder holder)</span> </span>&#123;</span><br><span class="line">        mNationOpenGL.nativeSurfaceDestroyed();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>native-lib.cpp<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">EglThread *eglThread = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">callBackOnCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    LOGE(<span class="string">"callBackOnCreate"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">callBackOnChange</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">    glViewport(<span class="number">0</span>, <span class="number">0</span>, width, height);</span><br><span class="line">    LOGE(<span class="string">"callBackOnChange"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">callBackOnDraw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    glClearColor(<span class="number">0.0f</span>, <span class="number">1.0f</span>, <span class="number">1.0f</span>, <span class="number">1.0f</span>);</span><br><span class="line">    glClear(GL_COLOR_BUFFER_BIT);</span><br><span class="line">    LOGE(<span class="string">"callBackOnDraw"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_nativeopnegldemo_opengl_NationOpenGL_nativeSurfaceCreate(JNIEnv *env, jobject instance,</span><br><span class="line">                                                                      jobject surface) &#123;</span><br><span class="line"></span><br><span class="line">    eglThread = <span class="keyword">new</span> EglThread();</span><br><span class="line">    eglThread-&gt;callBackOnCreate(callBackOnCreate);</span><br><span class="line">    eglThread-&gt;callBackOnChange(callBackOnChange);</span><br><span class="line">    eglThread-&gt;callBackOnDraw(callBackOnDraw);</span><br><span class="line">    eglThread-&gt;setRenderModule(RENDER_MODULE_MANUAL);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    ANativeWindow *nativeWindow = ANativeWindow_fromSurface(env, surface);</span><br><span class="line">    eglThread-&gt;onSurfaceCreate(nativeWindow);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_nativeopnegldemo_opengl_NationOpenGL_nativeSurfaceChanged(JNIEnv *env,</span><br><span class="line">                                                                       jobject instance, jint width,</span><br><span class="line">                                                                       jint height) &#123;</span><br><span class="line">    <span class="keyword">if</span> (eglThread) &#123;</span><br><span class="line">        eglThread-&gt;onSurfaceChange(width, height);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_zzw_nativeopnegldemo_opengl_NationOpenGL_nativeSurfaceDestroyed(JNIEnv *env,</span><br><span class="line">                                                                         jobject instance) &#123;</span><br><span class="line">    <span class="keyword">if</span> (eglThread) &#123;</span><br><span class="line">        eglThread-&gt;isExit = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">delete</span> (eglThread);</span><br><span class="line">        eglThread = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+    <div>
+    
+      <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenGLES/" rel="tag"><i class="fa fa-tag"></i> OpenGLES</a>
+          
+            <a href="/tags/c-c/" rel="tag"><i class="fa fa-tag"></i> c/c++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Android使用libRtmp直播推流.html" rel="next" title="Android使用libRtmp直播推流">
+                <i class="fa fa-chevron-left"></i> Android使用libRtmp直播推流
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="曾大稳丶" />
+            
+              <p class="site-author-name" itemprop="name">曾大稳丶</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">80</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">曾大稳丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: '5mOx5QUSJWyNMHeGUeqhG6uH-gzGzoHsz',
+        appKey: '1gJRAgpCvNnFBWXPBRwEPmAM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
